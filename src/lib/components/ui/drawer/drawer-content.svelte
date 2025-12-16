@@ -33,7 +33,7 @@
 		{...restProps}
 	>
 		<div
-			class="bg-[#5c4d3c] mx-auto mt-1 hidden h-1 w-[50px] shrink-0 rounded-none group-data-[vaul-drawer-direction=bottom]/drawer-content:block"
+			class="bg-secondary mx-auto mt-1 hidden h-1 w-[50px] shrink-0 rounded-none group-data-[vaul-drawer-direction=bottom]/drawer-content:block"
 		></div>
 		{@render children?.()}
 	</DrawerPrimitive.Content>

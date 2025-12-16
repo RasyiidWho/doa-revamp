@@ -1,6 +1,7 @@
 * {
 	scrollbar-width: none;
 	font-kerning: none;
+	cursor: default;
 	/* overscroll-behavior: none; */
 	/* cursor: default !important; */
 	/* overflow-x: hidden;
@@ -39,3 +40,163 @@ input::-webkit-inner-spin-button {
 html {
 	filter: saturate(2);
 }
+
+	.cloud {
+		background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 40%, transparent 70%);
+	}
+
+	/* Cloud 1: Top-right - fast */
+	.cloud-1 {
+		animation: cloudFloat1 10s linear infinite;
+		animation-delay: -2s;
+	}
+
+	/* Cloud 2: Top-center - medium */
+	.cloud-2 {
+		animation: cloudFloat2 14s linear infinite;
+		animation-delay: -8s;
+	}
+
+	/* Cloud 3: Middle-right - slow */
+	.cloud-3 {
+		animation: cloudFloat3 18s linear infinite;
+		animation-delay: -5s;
+	}
+
+	/* Cloud 4: Top-left - medium-fast */
+	.cloud-4 {
+		animation: cloudFloat4 12s linear infinite;
+		animation-delay: -3s;
+	}
+
+	/* Cloud 5: Bottom-right - fast */
+	.cloud-5 {
+		animation: cloudFloat5 9s linear infinite;
+		animation-delay: -1s;
+	}
+
+	/* Cloud 6: Center - medium */
+	.cloud-6 {
+		animation: cloudFloat6 16s linear infinite;
+		animation-delay: -10s;
+	}
+
+	.cloud::before {
+		content: '';
+		position: absolute;
+		width: 60%;
+		height: 60%;
+		background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+		border-radius: 50%;
+		top: -20px;
+		left: 30px;
+		filter: blur(6px);
+	}
+
+	.cloud::after {
+		content: '';
+		position: absolute;
+		width: 75%;
+		height: 70%;
+		background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+		border-radius: 50%;
+		top: 10px;
+		right: 20px;
+		filter: blur(7px);
+	}
+
+	/* Cloud 1: 45deg diagonal - starts top-right */
+	@keyframes cloudFloat1 {
+		0% {
+			top: -20%;
+			right: -20%;
+			opacity: 0;
+		}
+		5% { opacity: 0.85; }
+		95% { opacity: 0.85; }
+		100% {
+			top: 120%;
+			right: 120%;
+			opacity: 0;
+		}
+	}
+
+	/* Cloud 2: 45deg diagonal - starts top, offset right */
+	@keyframes cloudFloat2 {
+		0% {
+			top: -25%;
+			right: 20%;
+			opacity: 0;
+		}
+		5% { opacity: 0.6; }
+		95% { opacity: 0.6; }
+		100% {
+			top: 115%;
+			right: 160%;
+			opacity: 0;
+		}
+	}
+
+	/* Cloud 3: 45deg diagonal - starts far right */
+	@keyframes cloudFloat3 {
+		0% {
+			top: 10%;
+			right: -30%;
+			opacity: 0;
+		}
+		5% { opacity: 0.7; }
+		95% { opacity: 0.7; }
+		100% {
+			top: 140%;
+			right: 100%;
+			opacity: 0;
+		}
+	}
+
+	/* Cloud 4: 45deg diagonal - starts top-center */
+	@keyframes cloudFloat4 {
+		0% {
+			top: -20%;
+			right: 50%;
+			opacity: 0;
+		}
+		5% { opacity: 0.75; }
+		95% { opacity: 0.75; }
+		100% {
+			top: 120%;
+			right: 190%;
+			opacity: 0;
+		}
+	}
+
+	/* Cloud 5: 45deg diagonal - starts upper-right */
+	@keyframes cloudFloat5 {
+		0% {
+			top: -15%;
+			right: -10%;
+			opacity: 0;
+		}
+		5% { opacity: 0.8; }
+		95% { opacity: 0.8; }
+		100% {
+			top: 125%;
+			right: 130%;
+			opacity: 0;
+		}
+	}
+
+	/* Cloud 6: 45deg diagonal - starts mid-right edge */
+	@keyframes cloudFloat6 {
+		0% {
+			top: 30%;
+			right: -25%;
+			opacity: 0;
+		}
+		5% { opacity: 0.55; }
+		95% { opacity: 0.55; }
+		100% {
+			top: 150%;
+			right: 95%;
+			opacity: 0;
+		}
+	}
