@@ -1,0 +1,41 @@
+* {
+	scrollbar-width: none;
+	font-kerning: none;
+	/* overscroll-behavior: none; */
+	/* cursor: default !important; */
+	/* overflow-x: hidden;
+	font-kerning: none;
+	overscroll-behavior: none;
+	/* font-family: 'Outfit', sans-serif; */
+	/* overflow: hidden; */
+	/* user-select: none; */
+    color: #5C4D3C;
+	outline: none !important;
+	/* --eek: var(--primary); */
+	/* filter: saturate(1.25) */
+}
+
+* {
+	@apply !ring-0 !ring-offset-0 focus:!ring-0 focus:!ring-transparent focus:!ring-offset-0;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+::-moz-selection {
+	color: #fff;
+	background: #5C4D3C;
+}
+
+::selection {
+	color: #fff;
+	background: #5C4D3C;
+}
+
+html {
+	filter: saturate(2);
+}

@@ -1,0 +1,1110 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "5",
+  "dialect": "mysql",
+  "tables": {
+    "form": {
+      "name": "form",
+      "columns": {
+        "no": {
+          "autoincrement": true,
+          "name": "no",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "autoincrement": false,
+          "name": "type",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nmpath": {
+          "autoincrement": false,
+          "name": "nmpath",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number": {
+          "autoincrement": false,
+          "name": "number",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pdf": {
+          "autoincrement": false,
+          "name": "pdf",
+          "type": "varchar(40)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revision": {
+          "autoincrement": false,
+          "name": "revision",
+          "type": "varchar(2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date": {
+          "autoincrement": false,
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category": {
+          "autoincrement": false,
+          "name": "category",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "control_sheet": {
+          "autoincrement": false,
+          "name": "control_sheet",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "remark": {
+          "autoincrement": false,
+          "name": "remark",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "form_no": {
+          "name": "form_no",
+          "columns": [
+            "no"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "history": {
+      "name": "history",
+      "columns": {
+        "no": {
+          "autoincrement": true,
+          "name": "no",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Judul": {
+          "autoincrement": false,
+          "name": "Judul",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "username": {
+          "autoincrement": false,
+          "name": "username",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nama": {
+          "autoincrement": false,
+          "name": "nama",
+          "type": "varchar(40)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nmdoc": {
+          "autoincrement": false,
+          "name": "nmdoc",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Tanggal": {
+          "autoincrement": false,
+          "name": "Tanggal",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "remark": {
+          "autoincrement": false,
+          "name": "remark",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "history_no": {
+          "name": "history_no",
+          "columns": [
+            "no"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "standard": {
+      "name": "standard",
+      "columns": {
+        "no": {
+          "autoincrement": true,
+          "name": "no",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "autoincrement": false,
+          "name": "type",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nmpath": {
+          "autoincrement": false,
+          "name": "nmpath",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number": {
+          "autoincrement": false,
+          "name": "number",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pdf": {
+          "autoincrement": false,
+          "name": "pdf",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revision": {
+          "autoincrement": false,
+          "name": "revision",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date": {
+          "autoincrement": false,
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date2": {
+          "autoincrement": false,
+          "name": "date2",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category": {
+          "autoincrement": false,
+          "name": "category",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "control_sheet": {
+          "autoincrement": false,
+          "name": "control_sheet",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "remark": {
+          "autoincrement": false,
+          "name": "remark",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "panel": {
+          "autoincrement": false,
+          "name": "panel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nik": {
+          "autoincrement": false,
+          "name": "nik",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nama": {
+          "autoincrement": false,
+          "name": "nama",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "standard_no": {
+          "name": "standard_no",
+          "columns": [
+            "no"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "standard091224": {
+      "name": "standard091224",
+      "columns": {
+        "no": {
+          "autoincrement": true,
+          "name": "no",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "autoincrement": false,
+          "name": "type",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nmpath": {
+          "autoincrement": false,
+          "name": "nmpath",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number": {
+          "autoincrement": false,
+          "name": "number",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pdf": {
+          "autoincrement": false,
+          "name": "pdf",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revision": {
+          "autoincrement": false,
+          "name": "revision",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date": {
+          "autoincrement": false,
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date2": {
+          "autoincrement": false,
+          "name": "date2",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category": {
+          "autoincrement": false,
+          "name": "category",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "control_sheet": {
+          "autoincrement": false,
+          "name": "control_sheet",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "remark": {
+          "autoincrement": false,
+          "name": "remark",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "panel": {
+          "autoincrement": false,
+          "name": "panel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nik": {
+          "autoincrement": false,
+          "name": "nik",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nama": {
+          "autoincrement": false,
+          "name": "nama",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "standard091224_no": {
+          "name": "standard091224_no",
+          "columns": [
+            "no"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "standard150425": {
+      "name": "standard150425",
+      "columns": {
+        "no": {
+          "autoincrement": true,
+          "name": "no",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "autoincrement": false,
+          "name": "type",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nmpath": {
+          "autoincrement": false,
+          "name": "nmpath",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number": {
+          "autoincrement": false,
+          "name": "number",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pdf": {
+          "autoincrement": false,
+          "name": "pdf",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revision": {
+          "autoincrement": false,
+          "name": "revision",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date": {
+          "autoincrement": false,
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date2": {
+          "autoincrement": false,
+          "name": "date2",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category": {
+          "autoincrement": false,
+          "name": "category",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "control_sheet": {
+          "autoincrement": false,
+          "name": "control_sheet",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "remark": {
+          "autoincrement": false,
+          "name": "remark",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "panel": {
+          "autoincrement": false,
+          "name": "panel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nik": {
+          "autoincrement": false,
+          "name": "nik",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nama": {
+          "autoincrement": false,
+          "name": "nama",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "standard150425_no": {
+          "name": "standard150425_no",
+          "columns": [
+            "no"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "standard210425": {
+      "name": "standard210425",
+      "columns": {
+        "no": {
+          "autoincrement": true,
+          "name": "no",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "autoincrement": false,
+          "name": "type",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nmpath": {
+          "autoincrement": false,
+          "name": "nmpath",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number": {
+          "autoincrement": false,
+          "name": "number",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pdf": {
+          "autoincrement": false,
+          "name": "pdf",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revision": {
+          "autoincrement": false,
+          "name": "revision",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date": {
+          "autoincrement": false,
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date2": {
+          "autoincrement": false,
+          "name": "date2",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category": {
+          "autoincrement": false,
+          "name": "category",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "control_sheet": {
+          "autoincrement": false,
+          "name": "control_sheet",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "remark": {
+          "autoincrement": false,
+          "name": "remark",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "panel": {
+          "autoincrement": false,
+          "name": "panel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nik": {
+          "autoincrement": false,
+          "name": "nik",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nama": {
+          "autoincrement": false,
+          "name": "nama",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "standard210425_no": {
+          "name": "standard210425_no",
+          "columns": [
+            "no"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "standard_061125": {
+      "name": "standard_061125",
+      "columns": {
+        "no": {
+          "autoincrement": true,
+          "name": "no",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "autoincrement": false,
+          "name": "type",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nmpath": {
+          "autoincrement": false,
+          "name": "nmpath",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number": {
+          "autoincrement": false,
+          "name": "number",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pdf": {
+          "autoincrement": false,
+          "name": "pdf",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revision": {
+          "autoincrement": false,
+          "name": "revision",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date": {
+          "autoincrement": false,
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date2": {
+          "autoincrement": false,
+          "name": "date2",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category": {
+          "autoincrement": false,
+          "name": "category",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "control_sheet": {
+          "autoincrement": false,
+          "name": "control_sheet",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "remark": {
+          "autoincrement": false,
+          "name": "remark",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "panel": {
+          "autoincrement": false,
+          "name": "panel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nik": {
+          "autoincrement": false,
+          "name": "nik",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nama": {
+          "autoincrement": false,
+          "name": "nama",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "standard_061125_no": {
+          "name": "standard_061125_no",
+          "columns": [
+            "no"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "standardbu": {
+      "name": "standardbu",
+      "columns": {
+        "no": {
+          "autoincrement": true,
+          "name": "no",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "autoincrement": false,
+          "name": "type",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nmpath": {
+          "autoincrement": false,
+          "name": "nmpath",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number": {
+          "autoincrement": false,
+          "name": "number",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pdf": {
+          "autoincrement": false,
+          "name": "pdf",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revision": {
+          "autoincrement": false,
+          "name": "revision",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date": {
+          "autoincrement": false,
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date2": {
+          "autoincrement": false,
+          "name": "date2",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category": {
+          "autoincrement": false,
+          "name": "category",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "control_sheet": {
+          "autoincrement": false,
+          "name": "control_sheet",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "remark": {
+          "autoincrement": false,
+          "name": "remark",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "panel": {
+          "autoincrement": false,
+          "name": "panel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nik": {
+          "autoincrement": false,
+          "name": "nik",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nama": {
+          "autoincrement": false,
+          "name": "nama",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "standardbu_no": {
+          "name": "standardbu_no",
+          "columns": [
+            "no"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "useraccounts": {
+      "name": "useraccounts",
+      "columns": {
+        "username": {
+          "autoincrement": false,
+          "name": "username",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kuid": {
+          "autoincrement": false,
+          "name": "kuid",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "autoincrement": false,
+          "name": "password",
+          "type": "varchar(35)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userlevel": {
+          "autoincrement": false,
+          "name": "userlevel",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Provinsi": {
+          "autoincrement": false,
+          "name": "Provinsi",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Config_penghasil": {
+          "autoincrement": false,
+          "name": "Config_penghasil",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Activated": {
+          "default": "'N'",
+          "autoincrement": false,
+          "name": "Activated",
+          "type": "enum('Y','N')",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "useraccounts_username": {
+          "name": "useraccounts_username",
+          "columns": [
+            "username"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "useraccounts170325": {
+      "name": "useraccounts170325",
+      "columns": {
+        "username": {
+          "autoincrement": false,
+          "name": "username",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kuid": {
+          "autoincrement": false,
+          "name": "kuid",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "autoincrement": false,
+          "name": "password",
+          "type": "varchar(35)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userlevel": {
+          "autoincrement": false,
+          "name": "userlevel",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Provinsi": {
+          "autoincrement": false,
+          "name": "Provinsi",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Config_penghasil": {
+          "autoincrement": false,
+          "name": "Config_penghasil",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Activated": {
+          "default": "'N'",
+          "autoincrement": false,
+          "name": "Activated",
+          "type": "enum('Y','N')",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "useraccounts170325_username": {
+          "name": "useraccounts170325_username",
+          "columns": [
+            "username"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "username": {
+          "autoincrement": false,
+          "name": "username",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "autoincrement": false,
+          "name": "password",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userid": {
+          "autoincrement": false,
+          "name": "userid",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userlevel": {
+          "autoincrement": false,
+          "name": "userlevel",
+          "type": "tinyint unsigned",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "autoincrement": false,
+          "name": "email",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "int unsigned",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parent_directory": {
+          "autoincrement": false,
+          "name": "parent_directory",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "users_username": {
+          "name": "users_username",
+          "columns": [
+            "username"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    }
+  },
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {},
+    "indexes": {}
+  }
+}
