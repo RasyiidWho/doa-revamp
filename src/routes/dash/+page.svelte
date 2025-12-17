@@ -6,21 +6,35 @@
 	let mbukakDoa = $state(false);
 	let mbukakTambahDoa = $state(false);
 	let mbukakUsers = $state(true);
+	let mbukakEditUser = $state(false);
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import * as Select from '$lib/components/ui/select/index.js';
+	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
+	import { Label } from '$lib/components/ui/label/index.js';
+	import * as ToggleGroup from '$lib/components/ui/toggle-group/index.js';
+	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 
 	const types = [
 		{ icon: 'plane.svg', value: 'aircraft', label: 'Aircraft' },
 		{ icon: 'helic.svg', value: 'non-aircraft', label: 'Non Aircraft' }
 	];
 
+	const userlevels = [
+		{ value: '-1', label: 'Administrator' },
+		{ value: '1', label: 'PMO/PPC' },
+		{ value: '2', label: 'Managemen' },
+		{ value: '3', label: 'PM dan PE' },
+		{ value: '4', label: 'Eksekutif' },
+		{ value: '5', label: 'Controller' }
+	];
+
 	let value = $state('aircraft');
 	let search = $state('');
-
-	const triggerContent = $derived(types.find((t) => t.value === value) ?? { label: 'Aircraft', value: 'aircraft', icon: 'plane.svg' });
+	let selectedUser = $state('');
+	let selectedUserLevel = $state('0');
 
 	import { gsap } from 'gsap';
 	import { onMount } from 'svelte';
@@ -158,22 +172,19 @@
 			alt=""
 		/> -->
 			<div class="flex items-center plane opacity-0">
-				<!-- <img src={triggerContent.icon} class="{triggerContent.value === 'aircraft' ? 'w-6' : 'w-7'} group-hover:rotate-[-45deg] transition-all duration-500" alt="" /> -->
-
-				{#if triggerContent.value === 'aircraft'}
+				{#if types.find((t) => t.value === value)?.value === 'aircraft'}
 					<img src="plane.svg?v=2" class="w-6 mr-1 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
 				{:else}
 					<img src="helic.svg?v=3" class="w-7 group-hover:rotate-[45deg] transition-all duration-500 scale-x-[-1]" alt="" />
 				{/if}
 			</div>
-			<p class="text-base">{triggerContent.label}</p>
-			<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
+			<p class="text-base">{types.find((t) => t.value === value)?.label}</p>
 		</Select.Trigger>
-		<Select.Content class="mb-2 rounded-none shadow-none border-0 bg-[#e1d5c5] p-1">
+		<Select.Content class="mb-2 rounded-none shadow-none border-0 bg-[#fef8f0] border-1 border-[#e1d5c5] p-1">
 			<Select.Group>
 				<!-- <Select.Label>Fruits</Select.Label> -->
 				{#each types as type (type.value)}
-					<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-[#fef8f0]! bg-[#fef8f0] active:bg-[#fef8f0]!" value={type.value} label={type.label}>
+					<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={type.value} label={type.label}>
 						{#if type.value === 'aircraft'}
 							<img src="plane.svg?v=2" class="w-6 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
 						{:else}
@@ -503,9 +514,9 @@
 							<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 							<div class="bg-secondary w-2 h-2 absolute -right-0.5 -top-0.5"></div>
 						</div> -->
-						<div class="relative w-full items-center group">
+						<div class="relative w-full items-center group h-full">
 							<img src="search.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
-							<Input type="text" placeholder="Cari..." class="w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 py-[1.2	rem]! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={search} />
+							<Input type="text" placeholder="Cari..." class="w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={search} />
 						</div>
 					</div>
 				</div>
@@ -523,7 +534,7 @@
 					</Table.Header>
 					<Table.Body>
 						{#if data.users}
-							{#each data.users.filter((user) => !search || user.username.toLowerCase().includes(search.toLowerCase()) || user.activated.toLowerCase().includes(search.toLowerCase()) || user.userlevel_name.toLowerCase().includes(search.toLowerCase()) || user.configPenghasil.toLowerCase().includes(search.toLowerCase()))  as user (user.kuid)}
+							{#each data.users.filter((user) => !search || user.username.toLowerCase().includes(search.toLowerCase()) || user.activated.toLowerCase().includes(search.toLowerCase()) || user.userlevel_name.toLowerCase().includes(search.toLowerCase()) || user.configPenghasil.toLowerCase().includes(search.toLowerCase())) as user (user.kuid)}
 								<!-- {"username":"160238","kuid":"c054e296693e2c4eb00c371ad632fdc4","password":"6d2f4baaaee3f763980805bad0363546","userlevel":1,"provinsi":"","configPenghasil":"Dimas Septa","activated":"Y"}, -->
 								<Table.Row class="group relative border-0">
 									<Table.Cell class="font-medium pl-4 w-1! justify-center items-center">
@@ -554,7 +565,15 @@
 									{/if}</Table.Cell
 								> -->
 									<Table.Cell class="w-1/6">{user.userlevel_name}</Table.Cell>
-									<div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all">
+									<div
+										class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all"
+										onclick={() => {
+											selectedUser = user;
+											// selectedUserLevel = user.userlevel.toString();
+											selectedUserLevel = '0';
+											mbukakEditUser = true;
+										}}
+									>
 										{#if user.userlevel}
 											<!-- <img src="copy.svg" class="w-3" alt="" /> -->
 											<img src="edit.svg" class="w-3" alt="" />
@@ -567,6 +586,113 @@
 						{/if}
 					</Table.Body>
 				</Table.Root>
+			</div>
+		</div>
+	</Drawer.Content>
+</Drawer.Root>
+
+<!-- @b tambah doa -->
+<Drawer.Root bind:open={mbukakEditUser} direction="right">
+	<Drawer.Content class="bg-[#FAF8F4] !min-h-0 z-[100]!">
+		<ScrollArea scrollbarYClasses="hidden" class="el relative flex items-center px-4 gap-2 h-full !min-h-0 flex-col" orientation="vertical" type="scroll">
+			<div class="w-full flex justify-between pt-4">
+				<div>
+					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
+						<img src="user.svg?f" class="w-4" alt="" />
+						<p class="font-medium">Edit User</p>
+					</div>
+				</div>
+
+				<div
+					class="flex gap-2"
+					onclick={() => {
+						mbukakTambahDoa = false;
+					}}
+				>
+					<div>
+						<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
+							<img src="plus.svg" class="w-3 rotate-[45deg]" alt="" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="w-full pt-4 flex flex-col gap-2 pb-4">
+				<div class="flex flex-col gap-1">
+					<p class="font-medium">NIK</p>
+					<div class="relative w-full items-center">
+						<img src="cert.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+						<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} value={selectedUser.username} disabled />
+					</div>
+				</div>
+
+				<div class="flex flex-col gap-1">
+					<p class="font-medium">Nama</p>
+					<div class="relative w-full items-center">
+						<img src="clip.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+						<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" value={selectedUser.configPenghasil} autofocus={false} disabled />
+					</div>
+				</div>
+
+				<div class="flex flex-col gap-1">
+					<p class="font-medium">User Level</p>
+					<!-- <div class="relative w-full items-center">
+						<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+						<Input type="text" placeholder="Pilih Tipe" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+					</div> -->
+					<Select.Root type="single" name="favoriteFruit" bind:value={selectedUserLevel}>
+						<Select.Trigger placeholder="Pilih Tipe" class="flex relative pl-11! flex-row bg-primary/50 py-7 px-3 w-full gap-3 group shadow-none overflow-hidden border-0 rounded-none">
+							<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+							<p class="text-base {selectedUserLevel === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{userlevels.find((t) => t.value === selectedUserLevel)?.label || 'Pilih Tipe'}</p>
+							<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
+						</Select.Trigger>
+						<Select.Content class="mb-2 rounded-none shadow-none border-0 bg-[#f4efe7] border-1 border-[#e1d5c5] p-0 z-[100]">
+							<Select.Group>
+								<!-- <Select.Label>Fruits</Select.Label> -->
+								{#each userlevels as userlevels (userlevels.value)}
+									<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={userlevels.value} label={userlevels.label}>
+										<img src="type.svg" class="w-3 ml-2 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
+										<p class="text-base">{userlevels.label}</p>
+									</Select.Item>
+								{/each}
+							</Select.Group>
+						</Select.Content>
+					</Select.Root>
+				</div>
+
+				<div class="flex flex-col gap-1">
+					<p class="font-medium">Password</p>
+					<div class="relative w-full items-center">
+						<img src="beat.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+						<Input type="password" placeholder="Masukkan Password Baru" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+					</div>
+				</div>
+
+				<div class="flex w-full flex-col justify-center gap-1 text-left">
+					<p class="font-medium">Status Akun</p>
+					<RadioGroup.Root value={selectedUser.activated}>
+						<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
+							<RadioGroup.Item value="Aktif" id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-full" />
+							<div class="grid gap-1.5 font-normal">
+								<p class="text-sm leading-none font-medium">Aktif</p>
+								<p class="text-secondary/75! text-sm">Status akun menjadi aktif memungkinkan pengguna untuk login dan menggunakan semua fitur aplikasi DOA.</p>
+							</div>
+						</Label>
+
+						<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-aria-checked:border-secondary has-aria-checked:bg-primary/50">
+							<RadioGroup.Item value="Nonaktif" id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-full" />
+							<div class="grid gap-1.5 font-normal">
+								<p class="text-sm leading-none font-medium">Nonaktif</p>
+								<p class="text-secondary/75! text-sm">Status akun menjadi nonaktif pengguna tidak dapat login dan tidak dapat menggunakan fitur aplikasi DOA.</p>
+							</div>
+						</Label>
+					</RadioGroup.Root>
+				</div>
+			</div>
+		</ScrollArea>
+		<div>
+			<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
+				<p class="font-medium !text-white">Tambah</p>
 			</div>
 		</div>
 	</Drawer.Content>

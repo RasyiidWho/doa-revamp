@@ -229,9 +229,7 @@
 				</div>
 			</div>
 
-			<p class="p-3 bg-primary mt-3">
-				Permohonan akses website/portal Design Organization	
-			</p>
+			<p class="p-3 bg-primary mt-3">Permohonan akses website/portal Design Organization</p>
 
 			<div class="w-full pt-4 flex flex-col gap-2 pb-4">
 				<div class="flex flex-col gap-1">
