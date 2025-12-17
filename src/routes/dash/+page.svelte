@@ -692,7 +692,7 @@
 		</ScrollArea>
 		<div>
 			<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
-				<p class="font-medium !text-white">Tambah</p>
+				<p class="font-medium !text-white">Ubah</p>
 			</div>
 		</div>
 	</Drawer.Content>
