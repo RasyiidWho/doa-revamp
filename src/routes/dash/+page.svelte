@@ -450,7 +450,7 @@
 					<div class={selectedDoaGroup ? 'flex' : 'hidden'}>
 						<div class="plane-img flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
 							<img src={selectedDoaGroup === 'aircraft' ? 'plane.svg?v=2' : 'helic.svg?v=3'} class="w-4 {selectedDoaGroup === 'aircraft' ? 'w-4' : 'w-5'}" alt="" />
-							<p class="font-medium">{selectedDoaGroup.toUpperCase()}</p>
+							<p class="font-medium">{selectedDoaGroup.toUpperCase().replace('-', ' ')}</p>
 						</div>
 					</div>
 

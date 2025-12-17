@@ -181,12 +181,12 @@ export const POST: RequestHandler = async ({ request }) => {
 			{
 				name: 'WORKING ARRANGEMENT',
 				type: 'wa',
-				total: fmt(getCount('wa'))
+				total: fmt(getCount('wa') + getCount('WA') + getCount('WA '))
 			},
 			{
 				name: 'QUALITY PLAN',
 				type: 'qp1',
-				total: fmt(getCount('qp1'))
+				total: fmt(getCount('qp1') + getCount('QP1'))
 			},
 			{
 				name: 'LIBRARY',
@@ -238,7 +238,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			{
 				name: 'WORKING ARRANGEMENT & QUALITY PLAN',
 				type: 'qp2', // Combined in label, but type=qp2
-				total: fmt(getCount('qp2'))
+				total: fmt(getCount('qp2') + getCount('QP2'))
 			},
 			{
 				name: 'ENGINEERING STANDARD',
