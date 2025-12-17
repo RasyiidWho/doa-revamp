@@ -378,7 +378,7 @@
 	<div class="bg-white/25 flex items-center justify-center w-11/12 h-3/4">
 		<div class="bg-white/50 h-full w-full mx-4 my-4 flex flex-col">
 			<div class="p-4">
-				<div class="flex justify-between w-full bg-[#F3EBE0] p-4 px-6">
+				<div class="flex justify-between w-full bg-[#F3EBE0] p-4 px-6 mb-2">
 					<p class="font-medium">Daftar DOA</p>
 					<p class="font-medium">Jumlah</p>
 				</div>
@@ -395,7 +395,7 @@
 								</div>
 								{#each item.sub as sub (sub.name)}
 									<div
-										class="flex hover:underline cursor-pointer justify-between w-full p-0 px-6 text-secondary opacity-75"
+										class="flex hover:underline cursor-pointer justify-between w-full p-0 px-6 text-secondary opacity-75 group"
 										onclick={async () => {
 											await fDoa('', sub.type);
 											search = '';
@@ -409,15 +409,15 @@
 											<div class="pl-2 pr-2 flex justify-center">
 												<div class="w-0.5 h-7 border-l border-dashed border-secondary" />
 											</div>
-											<p class="">{sub.name}</p>
+											<p class="group-hover:scale-[101.5%] transition-all">{sub.name}</p>
 										</div>
-										<p class="">{sub.total}</p>
+										<p class="group-hover:scale-[101.5%] transition-all">{sub.total}</p>
 									</div>
 								{/each}
 							</div>
 						{:else}
 							<div
-								class="nonsub flex justify-between w-full p-2 px-6 hover:underline cursor-pointer"
+								class="nonsub flex justify-between w-full p-2 px-6 hover:underline cursor-pointer hover:scale-[100.5%] transition-all"
 								onclick={async () => {
 									await fDoa('', item.type);
 									search = '';
@@ -505,14 +505,14 @@
 					<Table.Body>
 						{#if data.doa_selected}
 							{#each data.doa_selected.filter((doa) => !search || (doa.number && doa.number.toLowerCase().includes(search.toLowerCase())) || (doa.nik && doa.nik.toLowerCase().includes(search.toLowerCase())) || (doa.nama && doa.nama.toLowerCase().includes(search.toLowerCase())) || (doa.revision && doa.revision.toLowerCase().includes(search.toLowerCase())) || (doa.date && doa.date.toLowerCase().includes(search.toLowerCase())) || (doa.date2 && doa.date2.toLowerCase().includes(search.toLowerCase())) || (doa.title && doa.title.toLowerCase().includes(search.toLowerCase()))) as doa (doa.no)}
-								<Table.Row class="group relative border-0">
+								<Table.Row class="group relative border-0 hover:bg-secondary/10 hover:scale-[100.5%] transition-all">
 									<Table.Cell class="font-medium py-3 pl-4 w-1">{doa.number || '-'}</Table.Cell>
 									<Table.Cell class="w-1">{doa.nik || '-'}</Table.Cell>
 									<Table.Cell>{doa.nama || '-'}</Table.Cell>
 									<Table.Cell class="w-1">{doa.revision || '-'}</Table.Cell>
 									<Table.Cell class="w-1">{doa.date && !doa.date.includes('0000') ? doa.date : '-'}</Table.Cell>
 									<Table.Cell class="w-1">{doa.date2 && !doa.date2.includes('0000') ? doa.date2 : '-'}</Table.Cell>
-									<Table.Cell>{doa.title ? (doa.title.length > 100 ? doa.title.substring(0, 90) + '...' : doa.title) : '-'}</Table.Cell>
+									<Table.Cell>{doa.title ? (doa.title.length > 70 ? doa.title.substring(0, 70) + '...' : doa.title) : '-'}</Table.Cell>
 									<div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all">
 										<img src="edit.svg" class="w-3" alt="" />
 										<img src="download.svg" class="w-4" alt="" />
