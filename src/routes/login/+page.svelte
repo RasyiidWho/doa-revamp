@@ -210,8 +210,8 @@
 			<div class="w-full flex justify-between pt-4">
 				<div>
 					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
-						<img src="plus.svg?f" class="w-4" alt="" />
-						<p class="font-medium">Tambah DOA</p>
+						<img src="user.svg?f" class="w-4" alt="" />
+						<p class="font-medium">Surat Pernyataan</p>
 					</div>
 				</div>
 
@@ -228,6 +228,10 @@
 					</div>
 				</div>
 			</div>
+
+			<p class="p-3 bg-primary mt-3">
+				Permohonan akses website/portal Design Organization	
+			</p>
 
 			<div class="w-full pt-4 flex flex-col gap-2 pb-4">
 				<div class="flex flex-col gap-1">
@@ -318,7 +322,7 @@
 
 					<div class="flex w-full flex-col justify-center gap-1 text-left pt-4">
 						<p class="font-medium">Dengan ini, saya tidak akan:</p>
-						<Label class="flex items-start gap-3 rounded-none border p-3 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
+						<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
 							<Checkbox id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-none" />
 							<div class="grid gap-1.5 font-normal">
 								<p class="text-sm leading-none font-medium">Duplikasi Data</p>
@@ -326,7 +330,7 @@
 							</div>
 						</Label>
 
-						<Label class="flex items-start gap-3 rounded-none border p-3 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
+						<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
 							<Checkbox id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-none" />
 							<div class="grid gap-1.5 font-normal">
 								<p class="text-sm leading-none font-medium">Sharing Akun</p>
@@ -334,7 +338,7 @@
 							</div>
 						</Label>
 
-						<Label class="flex items-start gap-3 rounded-none border p-3 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
+						<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
 							<Checkbox id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-none" />
 							<div class="grid gap-1.5 font-normal">
 								<p class="text-sm leading-none font-medium">Distribusi Data</p>

@@ -5,7 +5,7 @@
 	let { data }: PageProps = $props();
 	let mbukakDoa = $state(false);
 	let mbukakTambahDoa = $state(false);
-	let mbukakUsers = $state(false);
+	let mbukakUsers = $state(true);
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
@@ -13,12 +13,12 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 
 	const types = [
-		{ icon: 'plane.svg', value: 'aircraft', label: 'With Aircraft' },
-		{ icon: 'helic.svg', value: 'non-aircraft', label: 'Non Aircraft' },
+		{ icon: 'plane.svg', value: 'aircraft', label: 'Aircraft' },
+		{ icon: 'helic.svg', value: 'non-aircraft', label: 'Non Aircraft' }
 	];
 
-
 	let value = $state('aircraft');
+	let search = $state('');
 
 	const triggerContent = $derived(types.find((t) => t.value === value) ?? { label: 'Aircraft', value: 'aircraft', icon: 'plane.svg' });
 
@@ -48,7 +48,34 @@
 				ease: 'power3.out'
 			}
 		);
+		fUsers();
 	});
+
+	const fUsers = async () => {
+		const response = await fetch('/-users/v', {
+			method: 'GET'
+		});
+
+		if (response) {
+			response.json().then((res) => {
+				const transformedUsers = res.map((user) => ({
+					...user,
+					userlevel_name: (() => {
+						if (user.userlevel == '-1') return 'Administrator';
+						if (user.userlevel == '1') return 'PMO/PPC';
+						if (user.userlevel == '2') return 'Managemen';
+						if (user.userlevel == '3') return 'PM dan PE';
+						if (user.userlevel == '4') return 'Eksekutif';
+						if (user.userlevel == '5') return 'Controller';
+						return '-';
+					})(),
+					activated: user.userlevel == '0' ? 'Aktivasi' : user.activated === 'Y' ? 'Aktif' : user.activated === 'N' ? 'Nonaktif' : user.activated
+				}));
+				data = { ...data, users: transformedUsers };
+				console.log(data.users[0]);
+			});
+		}
+	};
 
 	let mebur = () => {
 		gsap.to('.plane', {
@@ -108,7 +135,7 @@
 <img class="fixed top-0 right-0 -z-50 h-1/2 -rotate-180" src="grad.svg" alt="" />
 
 <!-- @b floating button -->
-<div class="fixed flex flex-row gap-2 bottom-5 left-1/2 -translate-x-1/2 p-2 bg-[#F8EAD9] !drop-shadow-[0px_0px_10px_rgba(0,0,0,0.1)]">
+<div class="fixed flex flex-row gap-2 bottom-5 left-1/2 -translate-x-1/2 p-2 bg-[#e1d5c5] !drop-shadow-[0px_0px_10px_rgba(0,0,0,0.1)]">
 	<!--<div class="flex flex-row bg-white/50 p-2 px-3 gap-3 group w-auto overflow-hidden">
 		<!~~ <img
 			src="helic.svg?v=3"
@@ -123,30 +150,30 @@
 	</div>
 -->
 	<Select.Root type="single" name="favoriteFruit" bind:value>
-		<Select.Trigger class="flex flex-row bg-white/50 py-5 px-3 w-48 gap-3 group shadow-none overflow-hidden border-0 rounded-none">
+		<Select.Trigger class="flex flex-row bg-[#fef8f0] py-5 px-3 w-48 gap-3 group shadow-none overflow-hidden border-0 rounded-none">
 			<!-- {triggerContent} -->
-		<!-- <img
+			<!-- <img
 			src="helic.svg?v=3"
 			class="w-7 group-hover:rotate-[-45deg] transition-all duration-500"
 			alt=""
 		/> -->
-		<div class="flex items-center plane opacity-0">
-			<!-- <img src={triggerContent.icon} class="{triggerContent.value === 'aircraft' ? 'w-6' : 'w-7'} group-hover:rotate-[-45deg] transition-all duration-500" alt="" /> -->
+			<div class="flex items-center plane opacity-0">
+				<!-- <img src={triggerContent.icon} class="{triggerContent.value === 'aircraft' ? 'w-6' : 'w-7'} group-hover:rotate-[-45deg] transition-all duration-500" alt="" /> -->
 
-			{#if triggerContent.value === 'aircraft'}
-				<img src="plane.svg?v=2" class="w-6 mr-1 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
-			{:else}
-				<img src="helic.svg?v=3" class="w-7 group-hover:rotate-[-45deg] transition-all duration-500 scale-x-[-1]" alt="" />
-			{/if}
-		</div>
-		<p class="text-base">{triggerContent.label}</p>
-		<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
+				{#if triggerContent.value === 'aircraft'}
+					<img src="plane.svg?v=2" class="w-6 mr-1 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
+				{:else}
+					<img src="helic.svg?v=3" class="w-7 group-hover:rotate-[45deg] transition-all duration-500 scale-x-[-1]" alt="" />
+				{/if}
+			</div>
+			<p class="text-base">{triggerContent.label}</p>
+			<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
 		</Select.Trigger>
-		<Select.Content class="mb-2 rounded-none shadow-none border-0 bg-[#F8EAD9] p-1">
+		<Select.Content class="mb-2 rounded-none shadow-none border-0 bg-[#e1d5c5] p-1">
 			<Select.Group>
 				<!-- <Select.Label>Fruits</Select.Label> -->
 				{#each types as type (type.value)}
-					<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-white/50! bg-white/50 active:bg-white/50!" value={type.value} label={type.label}>
+					<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-[#fef8f0]! bg-[#fef8f0] active:bg-[#fef8f0]!" value={type.value} label={type.label}>
 						{#if type.value === 'aircraft'}
 							<img src="plane.svg?v=2" class="w-6 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
 						{:else}
@@ -159,7 +186,7 @@
 		</Select.Content>
 	</Select.Root>
 	<div
-		class="flex flex-row bg-white/50 p-2 px-3 gap-2 group"
+		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group"
 		onclick={() => {
 			mbukakTambahDoa = true;
 		}}
@@ -168,18 +195,19 @@
 		<p class="">Tambah</p>
 	</div>
 	<div
-		class="flex flex-row bg-white/50 p-2 px-3 gap-2 group aspect-squre"
+		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group aspect-squre"
 		onclick={() => {
+			fUsers();
 			mbukakUsers = true;
 		}}
 	>
 		<img src="users2.svg?c" class="w-5 group-hover:rotate-[24deg] transition-all duration-500" alt="" />
 	</div>
-	<div class="flex flex-row bg-white/50 p-2 px-3 gap-2 group">
+	<div class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group">
 		<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 	</div>
 	<div
-		class="flex flex-row bg-white/50 p-2 px-3 gap-2 group"
+		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group"
 		onclick={() => {
 			mebur();
 		}}
@@ -188,10 +216,10 @@
 	</div>
 </div>
 
-<div class="h-full w-full flex z-50 flex-col justify-center items-center gap-4 pt-4">
+<div class="h-full w-full flex z-50 flex-col justify-center items-center gap-4 pt-12">
 	<div class="w-11/12 h-1/4 flex justify-between">
 		<div class="flex flex-row w-1/2 gap-2">
-			<div class="w-20 flex items-center justify-center aspect-square bg-white/25 p-4">
+			<div class="w-20 flex items-center justify-center aspect-square bg-white/0 p-4">
 				<img src="logo.png" class="" />
 			</div>
 		</div>
@@ -465,61 +493,81 @@
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] items-center group">
 							<div class="bg-secondary p-2 px-3">
-								<p class="text-white!">12</p>
+								<p class="text-white!">{data.users ? data.users.length : 0}</p>
 							</div>
 							<p class="font-medium px-3">Total User</p>
 						</div>
 					</div>
 					<div>
-						<div class="relative flex flex-row bg-[#F3EBE0] p-3 group">
+						<!-- <div class="relative flex flex-row bg-[#F3EBE0] p-3 group">
 							<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 							<div class="bg-secondary w-2 h-2 absolute -right-0.5 -top-0.5"></div>
+						</div> -->
+						<div class="relative w-full items-center group">
+							<img src="search.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
+							<Input type="text" placeholder="Cari..." class="w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 py-[1.2	rem]! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={search} />
 						</div>
 					</div>
 				</div>
 			</div>
-			<Table.Root>
-				<Table.Header class="">
-					<Table.Row class="bg-[#F3EBE0]">
-						<Table.Head class="py-4 pl-4">Status</Table.Head>
-						<Table.Head class="text-center">NIK</Table.Head>
-						<Table.Head>Nama</Table.Head>
-						<Table.Head>Organisasi</Table.Head>
-						<Table.Head>User Level</Table.Head>
-					</Table.Row>
-				</Table.Header>
-				<Table.Body>
-					{#each users as user (user)}
-						<Table.Row class="group relative border-0">
-							<Table.Cell class="font-medium pl-4 w-1 text-center">
-								{#if user.a === 'Y'}
-									<p class="!text-green-500 !leading-[0] !tracking-[0] text-4xl">•</p>
-								{:else}
-									<p class="!text-gray-400 !leading-[0] !tracking-[0] text-4xl">•</p>
-								{/if}
-							</Table.Cell>
-							<Table.Cell class="text-center w-1/8">{user.b.length > 20 ? user.b.substring(0, 20) + '...' : user.b}</Table.Cell>
-							<Table.Cell class="">{user.c.length > 20 ? user.c.substring(0, 20) + '...' : user.c}</Table.Cell>
-							<Table.Cell class="w-1/6"
-								>{#if user.d}
-									{user.d.length > 20 ? user.d.substring(0, 20) + '...' : user.d}
-								{:else}
-									-
-								{/if}</Table.Cell
-							>
-							<Table.Cell class="w-1/6">{user.e.length > 20 ? user.e.substring(0, 20) + '...' : user.e}</Table.Cell>
-							<div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all">
-								{#if user.e}
-									<!-- <img src="copy.svg" class="w-3" alt="" /> -->
-									<img src="edit.svg" class="w-3" alt="" />
-								{:else}
-									<p class="text-xs font-medium bg-primary px-2 py-1 rounded-none">Aktivasi</p>
-								{/if}
-							</div>
+			<div class="[&_[data-slot=table-container]]:max-h-[80vh] [&_[data-slot=table-container]]:overflow-y-auto">
+				<Table.Root>
+					<Table.Header class="shadow-none">
+						<Table.Row class="bg-[#F3EBE0] sticky top-0 z-20">
+							<Table.Head class="py-4 pl-4">Status</Table.Head>
+							<Table.Head class="text-center">NIK</Table.Head>
+							<Table.Head>Nama</Table.Head>
+							<!-- <Table.Head>Organisasi</Table.Head> -->
+							<Table.Head>User Level</Table.Head>
 						</Table.Row>
-					{/each}
-				</Table.Body>
-			</Table.Root>
+					</Table.Header>
+					<Table.Body>
+						{#if data.users}
+							{#each data.users.filter((user) => !search || user.username.toLowerCase().includes(search.toLowerCase()) || user.activated.toLowerCase().includes(search.toLowerCase()) || user.userlevel_name.toLowerCase().includes(search.toLowerCase()) || user.configPenghasil.toLowerCase().includes(search.toLowerCase()))  as user (user.kuid)}
+								<!-- {"username":"160238","kuid":"c054e296693e2c4eb00c371ad632fdc4","password":"6d2f4baaaee3f763980805bad0363546","userlevel":1,"provinsi":"","configPenghasil":"Dimas Septa","activated":"Y"}, -->
+								<Table.Row class="group relative border-0">
+									<Table.Cell class="font-medium pl-4 w-1! justify-center items-center">
+										{#if user.userlevel == '0'}
+											<div class="bg-orange-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
+												<div class="bg-orange-600! rounded-full w-1 h-1"></div>
+												<span class="text-[10px] text-orange-600!">Aktivasi</span>
+											</div>
+										{:else if user.activated === 'Aktif'}
+											<div class="bg-green-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
+												<div class="bg-green-600! rounded-full w-1 h-1"></div>
+												<span class="text-[10px] text-green-600!">Aktif</span>
+											</div>
+										{:else}
+											<div class="bg-gray-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
+												<div class="bg-gray-600! rounded-full w-1 h-1"></div>
+												<span class="text-[10px] text-gray-600!">Nonaktif</span>
+											</div>
+										{/if}
+									</Table.Cell>
+									<Table.Cell class="text-center w-1/8">{user.username.length > 20 ? user.username.substring(0, 20) + '...' : user.username}</Table.Cell>
+									<Table.Cell class="">{user.configPenghasil.length > 20 ? user.configPenghasil.substring(0, 20) + '...' : user.configPenghasil}</Table.Cell>
+									<!-- <Table.Cell class="w-1/6"
+									>{#if user.d}
+										{user.d.length > 20 ? user.d.substring(0, 20) + '...' : user.d}
+									{:else}
+										-
+									{/if}</Table.Cell
+								> -->
+									<Table.Cell class="w-1/6">{user.userlevel_name}</Table.Cell>
+									<div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all">
+										{#if user.userlevel}
+											<!-- <img src="copy.svg" class="w-3" alt="" /> -->
+											<img src="edit.svg" class="w-3" alt="" />
+										{:else}
+											<p class="text-xs font-medium bg-primary px-2 py-1 rounded-none">Aktivasi</p>
+										{/if}
+									</div>
+								</Table.Row>
+							{/each}
+						{/if}
+					</Table.Body>
+				</Table.Root>
+			</div>
 		</div>
 	</Drawer.Content>
 </Drawer.Root>
