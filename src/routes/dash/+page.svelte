@@ -16,8 +16,10 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group/index.js';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
+	import * as Popover from '$lib/components/ui/popover/index.js';
 
-	const types = [
+	let showSearch = $state(false);
+	const group = [
 		{ icon: 'plane.svg', value: 'aircraft', label: 'Aircraft' },
 		{ icon: 'helic.svg', value: 'non-aircraft', label: 'Non Aircraft' }
 	];
@@ -76,8 +78,11 @@
 
 	let value = $state('aircraft');
 	let search = $state('');
+	let searchDoa = $state('');
 	let selectedUser = $state<any>({});
 	let selectedUserLevel = $state('0');
+	let selectedDoaGroup = $state('');
+	let selectedDoaIcon = $state('');
 	let selectedDoaTitle = $state('');
 
 	import { gsap } from 'gsap';
@@ -137,6 +142,7 @@
 	};
 
 	const fDoa = async (s: string, t: string) => {
+		data = { ...data, doa_selected: [] };
 		const response = await fetch('/-doa/v', {
 			method: 'POST',
 			body: JSON.stringify({ s: s, t: t })
@@ -201,25 +207,25 @@
 			alt=""
 		/> -->
 			<div class="flex items-center plane opacity-0">
-				{#if types.find((t) => t.value === value)?.value === 'aircraft'}
+				{#if group.find((t) => t.value === value)?.value === 'aircraft'}
 					<img src="plane.svg?v=2" class="w-6 mr-1 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
 				{:else}
 					<img src="helic.svg?v=3" class="w-7 group-hover:rotate-[45deg] transition-all duration-500 scale-x-[-1]" alt="" />
 				{/if}
 			</div>
-			<p class="text-base">{types.find((t) => t.value === value)?.label}</p>
+			<p class="text-base">{group.find((t) => t.value === value)?.label}</p>
 		</Select.Trigger>
 		<Select.Content class="mb-2 rounded-none shadow-none border-0 bg-[#fef8f0] border-1 border-[#e1d5c5] p-1">
 			<Select.Group>
 				<!-- <Select.Label>Fruits</Select.Label> -->
-				{#each types as type (type.value)}
-					<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={type.value} label={type.label}>
-						{#if type.value === 'aircraft'}
+				{#each group as group (group.value)}
+					<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={group.value} label={group.label}>
+						{#if group.value === 'aircraft'}
 							<img src="plane.svg?v=2" class="w-6 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
 						{:else}
 							<img src="helic.svg?v=3" class="w-7 mr-2 group-hover:rotate-[-45deg] transition-all duration-500 scale-x-[-1]" alt="" />
 						{/if}
-						<p class="text-base">{type.label}</p>
+						<p class="text-base">{group.label}</p>
 					</Select.Item>
 				{/each}
 			</Select.Group>
@@ -243,9 +249,47 @@
 	>
 		<img src="users2.svg?c" class="w-5 group-hover:rotate-[24deg] transition-all duration-500" alt="" />
 	</div>
-	<div class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group">
-		<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
-	</div>
+	<Popover.Root>
+		<Popover.Trigger class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group">
+			<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
+		</Popover.Trigger>
+		<Popover.Content class="mb-3 rounded-none shadow-none border-0 bg-[#fef8f0] border-1 border-[#e1d5c5] p-2">
+			<div class="relative w-full items-center group h-full">
+				<img src="search.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
+				<Input
+					type="text"
+					placeholder="Cari..."
+					class="w-full rounded-none bg-transparent border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0"
+					autofocus={false}
+					bind:value={searchDoa}
+					onkeydown={async (event) => {
+						if (event.key === 'Enter') {
+							await fDoa(searchDoa, '');
+							search = '';
+							selectedDoaGroup = '';
+							selectedDoaIcon = 'search';
+							selectedDoaTitle = 'Hasil Pencarian';
+							mbukakDoa = true;
+						}
+					}}
+				/>
+				<img
+					src="enter.svg"
+					class=" absolute top-1/2 right-3 h-4! w-4! -translate-y-1/2 cursor-pointer"
+					alt=""
+					onclick={async () => {
+						await fDoa(searchDoa, '');
+						search = '';
+						selectedDoaGroup = '';
+						selectedDoaIcon = 'search';
+						selectedDoaTitle = 'Hasil Pencarian';
+						mbukakDoa = true;
+					}}
+				/>
+			</div>
+		</Popover.Content>
+	</Popover.Root>
+
 	<div
 		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group"
 		onclick={() => {
@@ -304,7 +348,7 @@
 							<div class="withsub">
 								<div class="flex justify-between w-full p-2 px-6">
 									<div class="flex gap-1.5">
-										<img src={getIcon(item.name)} class="w-5" alt="" />
+										<img src={item.name.toLowerCase() + '.svg'} class="w-5" alt="" />
 										<p class="font-medium">{item.name}</p>
 									</div>
 									<p class="font-medium">{item.total}</p>
@@ -315,7 +359,9 @@
 										onclick={async () => {
 											await fDoa('', sub.type);
 											search = '';
-											selectedDoaTitle = `${value.toUpperCase()} - ${sub.name}`;
+											selectedDoaGroup = value.toUpperCase() + ' - ';
+											selectedDoaIcon = item.name.toLowerCase();
+											selectedDoaTitle = sub.name;
 											mbukakDoa = true;
 										}}
 									>
@@ -335,12 +381,14 @@
 								onclick={async () => {
 									await fDoa('', item.type);
 									search = '';
-									selectedDoaTitle = `${value.toUpperCase()} - ${item.name}`;
+									selectedDoaGroup = value.toUpperCase() + ' - ';
+									selectedDoaIcon = item.name.toLowerCase();
+									selectedDoaTitle = item.name;
 									mbukakDoa = true;
 								}}
 							>
 								<div class="flex gap-1.5">
-									<img src={getIcon(item.name)} class="w-5" alt="" />
+									<img src={item.name.toLowerCase() + '.svg'} class="w-5" alt="" />
 									<p class="font-medium">{item.name}</p>
 								</div>
 								<p class="font-medium">{item.total}</p>
@@ -360,8 +408,8 @@
 			<div class="w-full flex justify-between">
 				<div>
 					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
-						<img src="case.svg?f" class="w-4" alt="" />
-						<p class="font-medium">{selectedDoaTitle}</p>
+						<img src={selectedDoaIcon + '.svg'} class="w-4" alt="" />
+						<p class="font-medium">{selectedDoaGroup}{selectedDoaTitle}</p>
 					</div>
 				</div>
 
@@ -413,8 +461,8 @@
 									<Table.Cell class="w-1">{doa.nik || '-'}</Table.Cell>
 									<Table.Cell>{doa.nama || '-'}</Table.Cell>
 									<Table.Cell class="w-1">{doa.revision || '-'}</Table.Cell>
-									<Table.Cell class="w-1">{doa.date || '-'}</Table.Cell>
-									<Table.Cell class="w-1">{doa.date2 || '-'}</Table.Cell>
+									<Table.Cell class="w-1">{doa.date && !doa.date.includes('0000') ? doa.date : '-'}</Table.Cell>
+									<Table.Cell class="w-1">{doa.date2 && !doa.date2.includes('0000') ? doa.date2 : '-'}</Table.Cell>
 									<Table.Cell>{doa.title ? (doa.title.length > 100 ? doa.title.substring(0, 90) + '...' : doa.title) : '-'}</Table.Cell>
 									<div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all">
 										<img src="edit.svg" class="w-3" alt="" />
