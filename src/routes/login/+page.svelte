@@ -4,7 +4,7 @@
 
 	let { data }: PageProps = $props();
 	let mbukakDoa = $state(false);
-	let mbukakTambahUser = $state(true);
+	let mbukakTambahUser = $state(false);
 	let mbukakUsers = $state(false);
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Input } from '$lib/components/ui/input';
@@ -25,8 +25,8 @@
 	onMount(() => {
 		VanillaTilt.init(document.querySelectorAll('.planex'), {
 			// reverse: true,
-			// max: 5,
-			// glare: false,
+			max: 30,
+			// glare: true,
 			'full-page-listening': true
 			// gyroscope: false
 		});

@@ -5,7 +5,7 @@
 	let { data }: PageProps = $props();
 	let mbukakDoa = $state(false);
 	let mbukakTambahDoa = $state(false);
-	let mbukakUsers = $state(true);
+	let mbukakUsers = $state(false);
 	let mbukakEditUser = $state(false);
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Input } from '$lib/components/ui/input';
@@ -22,6 +22,49 @@
 		{ icon: 'helic.svg', value: 'non-aircraft', label: 'Non Aircraft' }
 	];
 
+	const subtypes = [
+		{ value: '', label: 'Pilih Type' },
+		{ value: '41A', label: 'PART 41A Design Standard Manual (NDM)' },
+		{ value: '41B', label: 'PART 41B Drafting Standard Manual (NDS)' },
+		{ value: '41C-1', label: 'PART 41C NPS-Mark & Label' },
+		{ value: '41C-2', label: 'PART 41C NPS-Part' },
+		{ value: '41C-3', label: 'PART 41C NPS-Profile' },
+		{ value: '41D', label: 'PART 41D Process Specification Manual (PS20)' },
+		{ value: '41E', label: 'PART 41E Material Standard Manual (IMS)-Metallic' },
+		{ value: '41F', label: 'PART 41F Design Checklist Standard Manual (DCL)' },
+		{ value: '41G', label: 'PART 41G Computation/Software Standard Manual (NCS)' },
+		{ value: '41H', label: 'PART 41H Material Specification Standard Manual (NMS)' },
+		{ value: '41I', label: 'PART 41I Support Specification Standard Manual (NSS)' },
+		{ value: '41N', label: '41 N Standard (Non Aircraft)' },
+		{ value: 'AIA-NAS', label: 'AIA-NAS' },
+		{ value: 'ANSI', label: 'ANSI' },
+		{ value: 'AWO', label: 'Personnel Assignment - AWO' },
+		{ value: 'cer', label: 'Certificate' },
+		{ value: 'cer2', label: 'Certificate - Non Aircraft' },
+		{ value: 'cmd', label: 'Command Media' },
+		{ value: 'cp', label: 'Certification Procedure - Non Aircraft' },
+		{ value: 'CVE', label: 'Personnel Assignment - CVE' },
+		{ value: 'doc', label: 'Documment' },
+		{ value: 'doc2', label: 'Documment - Non Aircraft' },
+		{ value: 'form', label: 'FORM' },
+		{ value: 'form2', label: 'FORM - Non Aircraft' },
+		{ value: 'ISO', label: 'ISO' },
+		{ value: 'lib', label: 'Library' },
+		{ value: 'man', label: 'Manual' },
+		{ value: 'man2', label: 'Manual - Non Aircraft' },
+		{ value: 'MILSTD', label: 'MILSTD' },
+		{ value: 'mtm', label: 'Material Test Method (MTM)' },
+		{ value: 'pro', label: 'Procedure' },
+		{ value: 'pro2', label: 'Procedure - Non Aircraft' },
+		{ value: 'RTCA', label: 'RTCA' },
+		{ value: 'SAE', label: 'SAE' },
+		{ value: 'standard', label: 'Standard' },
+		{ value: 'tm', label: 'Test Method - Non Aircraft' },
+		{ value: 'WA', label: 'Working Arrangement - Non Aircraft' },
+		{ value: 'wi', label: 'Work Instruction' },
+		{ value: 'wi2', label: 'Work Instruction - Non Aircraft' }
+	];
+
 	const userlevels = [
 		{ value: '-1', label: 'Administrator' },
 		{ value: '1', label: 'PMO/PPC' },
@@ -33,8 +76,9 @@
 
 	let value = $state('aircraft');
 	let search = $state('');
-	let selectedUser = $state('');
+	let selectedUser = $state<any>({});
 	let selectedUserLevel = $state('0');
+	let selectedDoaTitle = $state('');
 
 	import { gsap } from 'gsap';
 	import { onMount } from 'svelte';
@@ -63,6 +107,7 @@
 			}
 		);
 		fUsers();
+		fDoa();
 	});
 
 	const fUsers = async () => {
@@ -86,7 +131,24 @@
 					activated: user.userlevel == '0' ? 'Aktivasi' : user.activated === 'Y' ? 'Aktif' : user.activated === 'N' ? 'Nonaktif' : user.activated
 				}));
 				data = { ...data, users: transformedUsers };
-				console.log(data.users[0]);
+				// console.log(data.users[0]);
+			});
+		}
+	};
+
+	const fDoa = async (s: string, t: string) => {
+		const response = await fetch('/-doa/v', {
+			method: 'POST',
+			body: JSON.stringify({ s: s, t: t })
+		});
+
+		if (response) {
+			response.json().then((res) => {
+				if (s || t) {
+					data = { ...data, doa_selected: res };
+				} else {
+					data = { ...data, doa: res };
+				}
 			});
 		}
 	};
@@ -104,52 +166,19 @@
 		}, 500);
 	};
 
-	const doas = [
-		{
-			a: 'PANEL 0',
-			b: '246002',
-			c: 'MEISAR SUPRIYATNO ',
-			d: 'A',
-			e: '2025-12-15',
-			f: '2026-12-15',
-			g: 'System Engineering',
-			h: ''
-		},
-		{
-			a: 'PANEL 0',
-			b: '246002',
-			c: 'MEISAR SUPRIYATNO ',
-			d: 'A',
-			e: '2025-12-15',
-			f: '2026-12-15',
-			g: 'System Engineering',
-			h: ''
-		}
-	];
-
-	const users = [
-		{
-			a: 'Y',
-			b: '246002',
-			c: 'MEISAR SUPRIYATNO ',
-			d: '',
-			e: 'PMO/PPC'
-		},
-		{
-			a: 'N',
-			b: '246002',
-			c: 'MEISAR SUPRIYATNO ',
-			d: '',
-			e: ''
-		}
-	];
+	const getIcon = (name: string) => {
+		const lower = name.toLowerCase();
+		if (lower.includes('personnel')) return 'users.svg?f';
+		if (lower.includes('working') || lower.includes('quality') || lower.includes('library')) return 'case.svg?f';
+		return 'cert.svg?f';
+	};
 </script>
 
 <img class="fixed bottom-0 left-0 -z-50 h-1/2 opacity-75" src="grad.svg" alt="" />
 <img class="fixed top-0 right-0 -z-50 h-1/2 -rotate-180" src="grad.svg" alt="" />
 
 <!-- @b floating button -->
-<div class="fixed flex flex-row gap-2 bottom-5 left-1/2 -translate-x-1/2 p-2 bg-[#e1d5c5] !drop-shadow-[0px_0px_10px_rgba(0,0,0,0.1)]">
+<div class="fixed flex flex-row gap-2 bottom-5 left-1/2 -translate-x-1/2 p-2 bg-[#e1d5c5] !drop-shadow-[0px_0px_10px_rgba(0,0,0,0.1)] z-[10]">
 	<!--<div class="flex flex-row bg-white/50 p-2 px-3 gap-3 group w-auto overflow-hidden">
 		<!~~ <img
 			src="helic.svg?v=3"
@@ -269,59 +298,56 @@
 					<p class="font-medium">Daftar DOA</p>
 					<p class="font-medium">Jumlah</p>
 				</div>
-				<div class="flex justify-between w-full p-2 px-6">
-					<div class="flex gap-1.5">
-						<img src="cert.svg?f" class="w-5" alt="" />
-						<p class="font-medium">Certificate</p>
-					</div>
-					<p class="font-medium">15</p>
-				</div>
-				<div class="flex justify-between w-full p-2 px-6">
-					<div class="flex gap-1.5">
-						<img src="users.svg?f" class="w-5" alt="" />
-						<p class="font-medium">Personnel Assignment</p>
-					</div>
-					<p class="font-medium">21</p>
-				</div>
-				<div class="flex justify-between w-full p-0 px-6 text-secondary opacity-75">
-					<div class="flex gap-1.5 items-center">
-						<div class="pl-2 pr-2 flex justify-center">
-							<div class="w-0.5 h-7 border-l border-dashed border-secondary" />
-						</div>
-						<p class="">CVE</p>
-					</div>
-					<p class="">10</p>
-				</div>
-				<div class="flex justify-between w-full p-0 px-6 text-secondary opacity-75">
-					<div class="flex gap-1.5 items-center">
-						<div class="pl-2 pr-2 flex justify-center">
-							<div class="w-0.5 h-7 border-l border-dashed border-secondary" />
-						</div>
-						<p class="">AWO</p>
-					</div>
-					<p class="">10</p>
-				</div>
-				<div class="flex justify-between w-full p-0 px-6 text-secondary opacity-75">
-					<div class="flex gap-1.5 items-center">
-						<div class="pl-2 pr-2 flex justify-center">
-							<div class="w-0.5 h-7 border-l border-dashed border-secondary" />
-						</div>
-						<p class="">Project CVE dan AWO</p>
-					</div>
-					<p class="">1</p>
-				</div>
-				<div
-					class="flex justify-between w-full p-2 px-6 group"
-					onclick={() => {
-						mbukakDoa = true;
-					}}
-				>
-					<div class="flex gap-1.5">
-						<img src="case.svg?f" class="w-4" alt="" />
-						<p class="font-medium group-hover:underline cursor-pointer!">Working Arrangement</p>
-					</div>
-					<p class="font-medium">43</p>
-				</div>
+				{#if data.doa}
+					{#each data.doa[value === 'non-aircraft' ? 'non_aircraft' : 'aircraft'] || [] as item (item.name)}
+						{#if item.sub}
+							<div class="withsub">
+								<div class="flex justify-between w-full p-2 px-6">
+									<div class="flex gap-1.5">
+										<img src={getIcon(item.name)} class="w-5" alt="" />
+										<p class="font-medium">{item.name}</p>
+									</div>
+									<p class="font-medium">{item.total}</p>
+								</div>
+								{#each item.sub as sub (sub.name)}
+									<div
+										class="flex hover:underline cursor-pointer justify-between w-full p-0 px-6 text-secondary opacity-75"
+										onclick={async () => {
+											await fDoa('', sub.type);
+											search = '';
+											selectedDoaTitle = `${value.toUpperCase()} - ${sub.name}`;
+											mbukakDoa = true;
+										}}
+									>
+										<div class="flex gap-1.5 items-center">
+											<div class="pl-2 pr-2 flex justify-center">
+												<div class="w-0.5 h-7 border-l border-dashed border-secondary" />
+											</div>
+											<p class="">{sub.name}</p>
+										</div>
+										<p class="">{sub.total}</p>
+									</div>
+								{/each}
+							</div>
+						{:else}
+							<div
+								class="nonsub flex justify-between w-full p-2 px-6 hover:underline cursor-pointer"
+								onclick={async () => {
+									await fDoa('', item.type);
+									search = '';
+									selectedDoaTitle = `${value.toUpperCase()} - ${item.name}`;
+									mbukakDoa = true;
+								}}
+							>
+								<div class="flex gap-1.5">
+									<img src={getIcon(item.name)} class="w-5" alt="" />
+									<p class="font-medium">{item.name}</p>
+								</div>
+								<p class="font-medium">{item.total}</p>
+							</div>
+						{/if}
+					{/each}
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -335,7 +361,7 @@
 				<div>
 					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
 						<img src="case.svg?f" class="w-4" alt="" />
-						<p class="font-medium">Working Arrangement</p>
+						<p class="font-medium">{selectedDoaTitle}</p>
 					</div>
 				</div>
 
@@ -343,15 +369,15 @@
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] items-center group">
 							<div class="bg-secondary p-2 px-3">
-								<p class="text-white!">50</p>
+								<p class="text-white!">{data.doa_selected ? data.doa_selected.length : 0}</p>
 							</div>
 							<p class="font-medium px-3">Total Dokumen</p>
 						</div>
 					</div>
 					<div>
-						<div class="relative flex flex-row bg-[#F3EBE0] p-3 group">
-							<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
-							<div class="bg-secondary w-2 h-2 absolute -right-0.5 -top-0.5"></div>
+						<div class="relative w-full items-center group h-full">
+							<img src="search.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
+							<Input type="text" placeholder="Cari..." class="w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={search} />
 						</div>
 					</div>
 					<div
@@ -365,41 +391,41 @@
 					</div>
 				</div>
 			</div>
-			<Table.Root>
-				<Table.Header class="">
-					<Table.Row class="bg-[#F3EBE0]">
-						<Table.Head class="py-4 pl-4">PA Number</Table.Head>
-						<Table.Head>NIK</Table.Head>
-						<Table.Head>Nama</Table.Head>
-						<Table.Head>Rev</Table.Head>
-						<Table.Head>Tanggal</Table.Head>
-						<Table.Head>Valid</Table.Head>
-						<Table.Head>Judul</Table.Head>
-						<!-- <Table.Head class="text-end pr-4">-</Table.Head> -->
-					</Table.Row>
-				</Table.Header>
-				<Table.Body>
-					{#each doas as doa (doa)}
-						<Table.Row class="group relative border-0">
-							<Table.Cell class="font-medium py-3 pl-4 w-1">{doa.a.length > 20 ? doa.a.substring(0, 20) + '...' : doa.a}</Table.Cell>
-							<Table.Cell class="w-1">{doa.b.length > 20 ? doa.b.substring(0, 20) + '...' : doa.b}</Table.Cell>
-							<Table.Cell>{doa.c.length > 20 ? doa.c.substring(0, 20) + '...' : doa.c}</Table.Cell>
-							<Table.Cell class="w-1">{doa.d.length > 20 ? doa.d.substring(0, 20) + '...' : doa.d}</Table.Cell>
-							<Table.Cell class="w-1">{doa.e.length > 20 ? doa.e.substring(0, 20) + '...' : doa.e}</Table.Cell>
-							<Table.Cell class="w-1">{doa.f.length > 20 ? doa.f.substring(0, 20) + '...' : doa.f}</Table.Cell>
-							<Table.Cell>{doa.g.length > 20 ? doa.g.substring(0, 20) + '...' : doa.g}</Table.Cell>
-							<!-- <Table.Cell class="flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all">
-								<img src="edit.svg" class="w-3" alt="" />
-								<img src="download.svg" class="w-4" alt="" />
-							</Table.Cell> -->
-							<div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all">
-								<img src="edit.svg" class="w-3" alt="" />
-								<img src="download.svg" class="w-4" alt="" />
-							</div>
+			<div class="[&_[data-slot=table-container]]:max-h-[80vh] [&_[data-slot=table-container]]:overflow-y-auto">
+				<Table.Root>
+					<Table.Header class="shadow-none">
+						<Table.Row class="bg-[#F3EBE0] sticky top-0 z-20">
+							<Table.Head class="py-4 pl-4">Nomor</Table.Head>
+							<Table.Head>NIK</Table.Head>
+							<Table.Head>Nama</Table.Head>
+							<Table.Head>Rev</Table.Head>
+							<Table.Head>Tanggal</Table.Head>
+							<Table.Head>Valid</Table.Head>
+							<Table.Head>Judul</Table.Head>
+							<!-- <Table.Head class="text-end pr-4">-</Table.Head> -->
 						</Table.Row>
-					{/each}
-				</Table.Body>
-			</Table.Root>
+					</Table.Header>
+					<Table.Body>
+						{#if data.doa_selected}
+							{#each data.doa_selected.filter((doa) => !search || (doa.number && doa.number.toLowerCase().includes(search.toLowerCase())) || (doa.nik && doa.nik.toLowerCase().includes(search.toLowerCase())) || (doa.nama && doa.nama.toLowerCase().includes(search.toLowerCase())) || (doa.revision && doa.revision.toLowerCase().includes(search.toLowerCase())) || (doa.date && doa.date.toLowerCase().includes(search.toLowerCase())) || (doa.date2 && doa.date2.toLowerCase().includes(search.toLowerCase())) || (doa.title && doa.title.toLowerCase().includes(search.toLowerCase()))) as doa (doa.no)}
+								<Table.Row class="group relative border-0">
+									<Table.Cell class="font-medium py-3 pl-4 w-1">{doa.number || '-'}</Table.Cell>
+									<Table.Cell class="w-1">{doa.nik || '-'}</Table.Cell>
+									<Table.Cell>{doa.nama || '-'}</Table.Cell>
+									<Table.Cell class="w-1">{doa.revision || '-'}</Table.Cell>
+									<Table.Cell class="w-1">{doa.date || '-'}</Table.Cell>
+									<Table.Cell class="w-1">{doa.date2 || '-'}</Table.Cell>
+									<Table.Cell>{doa.title ? (doa.title.length > 100 ? doa.title.substring(0, 90) + '...' : doa.title) : '-'}</Table.Cell>
+									<div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all">
+										<img src="edit.svg" class="w-3" alt="" />
+										<img src="download.svg" class="w-4" alt="" />
+									</div>
+								</Table.Row>
+							{/each}
+						{/if}
+					</Table.Body>
+				</Table.Root>
+			</div>
 		</div>
 	</Drawer.Content>
 </Drawer.Root>
@@ -569,8 +595,9 @@
 										class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all"
 										onclick={() => {
 											selectedUser = user;
-											// selectedUserLevel = user.userlevel.toString();
-											selectedUserLevel = '0';
+											selectedUserLevel = user.userlevel.toString();
+											// selectedUserLevel = '0';
+											search = '';
 											mbukakEditUser = true;
 										}}
 									>
@@ -690,8 +717,11 @@
 				</div>
 			</div>
 		</ScrollArea>
-		<div>
-			<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
+		<div class="flex">
+			<div class="flex w-1/3 justify-center items-center py-4 text-center bg-red-900 p-2 px-3 gap-2 group">
+				<p class="font-medium !text-white">Hapus</p>
+			</div>
+			<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
 				<p class="font-medium !text-white">Ubah</p>
 			</div>
 		</div>
