@@ -257,7 +257,7 @@
 			<Select.Group>
 				<!-- <Select.Label>Fruits</Select.Label> -->
 				{#each group as group (group.value)}
-					<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={group.value} label={group.label}>
+					<Select.Item class="rounded-none shadow-none px-3 py-2 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={group.value} label={group.label}>
 						{#if group.value === 'aircraft'}
 							<img src="plane.svg?v=2" class="w-6 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
 						{:else}
