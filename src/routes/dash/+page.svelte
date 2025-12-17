@@ -664,17 +664,17 @@
 										{#if user.userlevel == '0'}
 											<div class="bg-orange-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
 												<div class="bg-orange-600! rounded-full w-1 h-1"></div>
-												<span class="text-[10px] text-orange-600!">Aktivasi</span>
+												<span class="text-xs text-orange-600!">Aktivasi</span>
 											</div>
 										{:else if user.activated === 'Aktif'}
 											<div class="bg-green-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
 												<div class="bg-green-600! rounded-full w-1 h-1"></div>
-												<span class="text-[10px] text-green-600!">Aktif</span>
+												<span class="text-xs text-green-600!">Aktif</span>
 											</div>
 										{:else}
 											<div class="bg-gray-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
 												<div class="bg-gray-600! rounded-full w-1 h-1"></div>
-												<span class="text-[10px] text-gray-600!">Nonaktif</span>
+												<span class="text-xs text-gray-600!">Nonaktif</span>
 											</div>
 										{/if}
 									</Table.Cell>
