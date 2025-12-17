@@ -132,21 +132,19 @@
 			ease: 'power1.inOut'
 		});
 
-
-
 		fUsers();
 		fDoa();
 	});
 
 	$effect(() => {
-	  		const headroom = new Headroom(navbar, {
+		const headroom = new Headroom(navbar, {
 			tolerance: {
 				up: 0,
 				down: 0
 			}
 			// scroller: scroller
 		}).init();
-	})
+	});
 
 	const fUsers = async () => {
 		const response = await fetch('/-users/v', {
@@ -486,6 +484,19 @@
 							<img src="plus.svg" class="w-3 group-hover:rotate-[180deg] transition-all duration-1000" alt="" />
 						</div>
 					</div>
+
+										<div
+						class="flex gap-2"
+						onclick={() => {
+							mbukakDoa = false;
+						}}
+					>
+						<div>
+							<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
+								<img src="plus.svg" class="w-3 rotate-[45deg]" alt="" />
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="[&_[data-slot=table-container]]:max-h-[80vh] [&_[data-slot=table-container]]:overflow-y-auto">
@@ -640,6 +651,18 @@
 						<div class="relative w-full items-center group h-full">
 							<img src="search.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 							<Input type="text" placeholder="Cari..." class="w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={search} />
+						</div>
+					</div>
+					<div
+						class="flex gap-2"
+						onclick={() => {
+							mbukakUsers = false;
+						}}
+					>
+						<div>
+							<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
+								<img src="plus.svg" class="w-3 rotate-[45deg]" alt="" />
+							</div>
 						</div>
 					</div>
 				</div>
