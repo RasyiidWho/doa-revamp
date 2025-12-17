@@ -111,6 +111,25 @@
 				ease: 'power3.out'
 			}
 		);
+
+		gsap.to('.plane-img', {
+			x: 3,
+			y: 3,
+			duration: 1,
+			repeat: -1,
+			yoyo: true,
+			ease: 'power1.inOut'
+		});
+
+		gsap.to('.heli-img', {
+			x: 3,
+			// y: 5,
+			duration: 1,
+			repeat: -1,
+			yoyo: true,
+			ease: 'power1.inOut'
+		});
+
 		fUsers();
 		fDoa();
 	});
@@ -207,11 +226,18 @@
 			alt=""
 		/> -->
 			<div class="flex items-center plane opacity-0">
-				{#if group.find((t) => t.value === value)?.value === 'aircraft'}
-					<img src="plane.svg?v=2" class="w-6 mr-1 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
+				<!-- {#if group.find((t) => t.value === value)?.value === 'aircraft'}
+					<img src="plane.svg?v=2" class="w-6 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
 				{:else}
 					<img src="helic.svg?v=3" class="w-7 group-hover:rotate-[45deg] transition-all duration-500 scale-x-[-1]" alt="" />
-				{/if}
+				{/if} -->
+
+				<div class="plane-img {group.find((t) => t.value === value)?.value === 'aircraft' ? 'block' : 'hidden'}">
+					<img src="plane.svg?v=2" class="w-6 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
+				</div>
+				<div class="heli-img {group.find((t) => t.value === value)?.value === 'aircraft' ? 'hidden' : 'block'}">
+					<img src="helic.svg?v=3" class="w-7 group-hover:rotate-[45deg] transition-all duration-500 scale-x-[-1]" alt="" />
+				</div>
 			</div>
 			<p class="text-base">{group.find((t) => t.value === value)?.label}</p>
 		</Select.Trigger>
@@ -359,7 +385,7 @@
 										onclick={async () => {
 											await fDoa('', sub.type);
 											search = '';
-											selectedDoaGroup = value.toUpperCase() + ' - ';
+											selectedDoaGroup = value.toUpperCase();
 											selectedDoaIcon = item.name.toLowerCase();
 											selectedDoaTitle = sub.name;
 											mbukakDoa = true;
@@ -381,7 +407,7 @@
 								onclick={async () => {
 									await fDoa('', item.type);
 									search = '';
-									selectedDoaGroup = value.toUpperCase() + ' - ';
+									selectedDoaGroup = value.toUpperCase();
 									selectedDoaIcon = item.name.toLowerCase();
 									selectedDoaTitle = item.name;
 									mbukakDoa = true;
@@ -406,10 +432,19 @@
 	<Drawer.Content class="bg-[#FAF8F4] min-h-[95dvh] flex items-center">
 		<div class="w-11/12 pt-12 gap-2 flex flex-col">
 			<div class="w-full flex justify-between">
-				<div>
-					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
-						<img src={selectedDoaIcon + '.svg'} class="w-4" alt="" />
-						<p class="font-medium">{selectedDoaGroup}{selectedDoaTitle}</p>
+				<div class="flex gap-2">
+					<div class="{selectedDoaGroup ? 'flex' : 'hidden'}">
+						<div class="plane-img flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
+							<img src={selectedDoaGroup === 'aircraft' ? 'plane.svg?v=2' : 'helic.svg?v=3'} class="w-4 {selectedDoaGroup === 'aircraft' ? 'w-4' : 'w-5'}" alt="" />
+							<p class="font-medium">{selectedDoaGroup.toUpperCase()}</p>
+						</div>
+					</div>
+	
+					<div>
+						<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
+							<img src={selectedDoaIcon + '.svg'} class="w-4" alt="" />
+							<p class="font-medium">{selectedDoaTitle}</p>
+						</div>
 					</div>
 				</div>
 
