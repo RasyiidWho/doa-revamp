@@ -306,7 +306,7 @@
 							search = '';
 							selectedDoaGroup = '';
 							selectedDoaIcon = 'search';
-							selectedDoaTitle = 'Hasil Pencarian';
+							selectedDoaTitle = 'Hasil Pencarian: ' + searchDoa;
 							mbukakDoa = true;
 						}
 					}}
@@ -320,7 +320,7 @@
 						search = '';
 						selectedDoaGroup = '';
 						selectedDoaIcon = 'search';
-						selectedDoaTitle = 'Hasil Pencarian';
+						selectedDoaTitle = 'Hasil Pencarian: ' + searchDoa;
 						mbukakDoa = true;
 					}}
 				/>
