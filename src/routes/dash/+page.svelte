@@ -1,12 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import * as Drawer from '$lib/components/ui/drawer/index.js';
-
-	let { data }: PageProps = $props();
-	let mbukakDoa = $state(false);
-	let mbukakTambahDoa = $state(false);
-	let mbukakUsers = $state(false);
-	let mbukakEditUser = $state(false);
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
@@ -17,8 +11,16 @@
 	import * as ToggleGroup from '$lib/components/ui/toggle-group/index.js';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
+	import Headroom from 'headroom.js';
 
 	let showSearch = $state(false);
+	let { data }: PageProps = $props();
+	let mbukakDoa = $state(false);
+	let mbukakTambahDoa = $state(false);
+	let mbukakUsers = $state(false);
+	let mbukakEditUser = $state(false);
+	let navbar = $state();
+
 	const group = [
 		{ icon: 'plane.svg', value: 'aircraft', label: 'Aircraft' },
 		{ icon: 'helic.svg', value: 'non-aircraft', label: 'Non Aircraft' }
@@ -130,9 +132,21 @@
 			ease: 'power1.inOut'
 		});
 
+
+
 		fUsers();
 		fDoa();
 	});
+
+	$effect(() => {
+	  		const headroom = new Headroom(navbar, {
+			tolerance: {
+				up: 0,
+				down: 0
+			}
+			// scroller: scroller
+		}).init();
+	})
 
 	const fUsers = async () => {
 		const response = await fetch('/-users/v', {
@@ -203,7 +217,7 @@
 <img class="fixed top-0 right-0 -z-50 h-1/2 -rotate-180" src="grad.svg" alt="" />
 
 <!-- @b floating button -->
-<div class="fixed flex flex-row gap-2 bottom-5 left-1/2 -translate-x-1/2 p-2 bg-[#e1d5c5] !drop-shadow-[0px_0px_10px_rgba(0,0,0,0.1)] z-[10]">
+<div bind:this={navbar} class="fixed flex flex-row gap-2 bottom-5 left-1/2 -translate-x-1/2 p-2 bg-[#e1d5c5] !drop-shadow-[0px_0px_10px_rgba(0,0,0,0.1)] z-[10]">
 	<!--<div class="flex flex-row bg-white/50 p-2 px-3 gap-3 group w-auto overflow-hidden">
 		<!~~ <img
 			src="helic.svg?v=3"
@@ -326,7 +340,7 @@
 	</div>
 </div>
 
-<div class="h-full w-full flex z-50 flex-col justify-center items-center gap-4 pt-12">
+<div class="h-full w-full flex z-50 flex-col justify-center items-center gap-4 pt-12 pb-12">
 	<div class="w-11/12 h-1/4 flex justify-between">
 		<div class="flex flex-row w-1/2 gap-2">
 			<div class="w-20 flex items-center justify-center aspect-square bg-white/0 p-4">
@@ -433,13 +447,13 @@
 		<div class="w-11/12 pt-12 gap-2 flex flex-col">
 			<div class="w-full flex justify-between">
 				<div class="flex gap-2">
-					<div class="{selectedDoaGroup ? 'flex' : 'hidden'}">
+					<div class={selectedDoaGroup ? 'flex' : 'hidden'}>
 						<div class="plane-img flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
 							<img src={selectedDoaGroup === 'aircraft' ? 'plane.svg?v=2' : 'helic.svg?v=3'} class="w-4 {selectedDoaGroup === 'aircraft' ? 'w-4' : 'w-5'}" alt="" />
 							<p class="font-medium">{selectedDoaGroup.toUpperCase()}</p>
 						</div>
 					</div>
-	
+
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
 							<img src={selectedDoaIcon + '.svg'} class="w-4" alt="" />
