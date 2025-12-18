@@ -138,7 +138,7 @@
 	<!-- @b list doa -->
 	<div class="bg-white/25 flex items-center justify-center w-8/12">
 		<div class="bg-white/50 h-full w-auto mx-4 my-4 flex flex-row">
-			<div class="w-1/3 m-12 flex items-center">
+			<div class="w-1/3 m-[3vw] flex items-center">
 				<div class="w-full pt-4 flex items-center flex-col gap-2 pb-4">
 					<div class="w-20 flex items-center justify-center aspect-square mb-6">
 						<img src="logo.png" class="" />
@@ -146,7 +146,7 @@
 					<div class="flex flex-col gap-1 w-full">
 						<p class="font-medium">NIK/Username</p>
 						<div class="relative w-full items-center">
-							<img src="cert.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+							<img src="nik.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 							<Input type="text" placeholder="Masukkan Judul" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 						</div>
 					</div>
@@ -154,7 +154,7 @@
 					<div class="flex flex-col gap-1 w-full">
 						<p class="font-medium">Password</p>
 						<div class="relative w-full items-center">
-							<img src="clip.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+							<img src="pass.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 							<Input type="password" placeholder="Upload Dokumen" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 						</div>
 					</div>
@@ -229,7 +229,7 @@
 				</div>
 			</div>
 
-			<p class="p-3 bg-primary mt-3">Permohonan akses website/portal Design Organization</p>
+			<p class="p-3 bg-primary mt-3">Form proposal permohonan akses ke aplikasi Design Organization.</p>
 
 			<div class="w-full pt-4 flex flex-col gap-2 pb-4">
 				<div class="flex flex-col gap-1">
@@ -238,7 +238,7 @@
 						<div class="flex flex-col gap-1">
 							<p class="font-medium">Email</p>
 							<div class="relative w-full items-center">
-								<img src="cert.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+								<img src="mail.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 								<Input type="text" placeholder="Masukkan Email" class="w-full rounded-none border-transparent! bg-primary/75 placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
@@ -246,7 +246,7 @@
 						<div class="flex flex-col gap-1">
 							<p class="font-medium">Nama</p>
 							<div class="relative w-full items-center">
-								<img src="clip.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+								<img src="name.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 								<Input type="text" placeholder="Masukkan Nama" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
@@ -254,7 +254,7 @@
 						<div class="flex flex-col gap-1">
 							<p class="font-medium">Password</p>
 							<div class="relative w-full items-center">
-								<img src="clip.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+								<img src="pass.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 								<Input type="password" placeholder="Masukkan Password" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
@@ -267,7 +267,7 @@
 						<div class="flex flex-col gap-1">
 							<p class="font-medium">NIK</p>
 							<div class="relative w-full items-center">
-								<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+								<img src="nik.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 								<Input type="text" placeholder="Masukkan NIK" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
@@ -275,7 +275,7 @@
 						<div class="flex flex-col gap-1">
 							<p class="font-medium">Kode Organisasi</p>
 							<div class="relative w-full items-center">
-								<img src="beat.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+								<img src="engineering standard.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 								<Input type="text" placeholder="Masukkan Kode Organisasi" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
@@ -283,7 +283,7 @@
 						<div class="flex flex-col gap-1">
 							<p class="font-medium">Lokasi Kerja</p>
 							<div class="relative w-full items-center">
-								<img src="number.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+								<img src="case.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
 								<Input type="text" placeholder="Masukkan Lokasi Kerja" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
@@ -296,7 +296,7 @@
 						<div class="flex flex-col gap-1">
 							<p class="font-medium">Nama Manager</p>
 							<div class="relative w-full items-center">
-								<img src="number.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+								<img src="name.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 								<Input type="text" placeholder="Masukkan Nama Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
@@ -304,7 +304,7 @@
 						<div class="flex flex-col gap-1">
 							<p class="font-medium">NIK Manager</p>
 							<div class="relative w-full items-center">
-								<img src="number.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+								<img src="nik.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 								<Input type="text" placeholder="Masukkan NIK Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
@@ -312,7 +312,7 @@
 						<div class="flex flex-col gap-1">
 							<p class="font-medium">Email Manager</p>
 							<div class="relative w-full items-center">
-								<img src="number.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+								<img src="mail.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 								<Input type="text" placeholder="Masukkan Email Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>

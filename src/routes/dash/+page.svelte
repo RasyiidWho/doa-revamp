@@ -566,9 +566,9 @@
 
 			<div class="w-full pt-4 flex flex-col gap-2 pb-4">
 				<div class="flex flex-col gap-1">
-					<p class="font-medium">Masukkan Judul</p>
+					<p class="font-medium">Judul</p>
 					<div class="relative w-full items-center">
-						<img src="cert.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+						<img src="document.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 						<Input type="text" placeholder="Masukkan Judul" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 					</div>
 				</div>
@@ -605,13 +605,13 @@
 					</div>
 				</div>
 
-				<div class="flex w-full flex-col justify-center gap-1 text-left">
+				<!-- <div class="flex w-full flex-col justify-center gap-1 text-left">
 					<p class="font-medium">Remarks</p>
 					<div class="relative w-full items-center">
 						<img src="note.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
 						<Textarea placeholder="Tambahkan Remarks" class="resize-none! bg-primary/50 border-transparent! rounded-none placeholder:text-secondary/35 py-4! pr-4! pl-12! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0   xl:text-base" autofocus={false} />
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</ScrollArea>
 		<div>
@@ -768,7 +768,7 @@
 				<div class="flex flex-col gap-1">
 					<p class="font-medium">NIK</p>
 					<div class="relative w-full items-center">
-						<img src="cert.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+						<img src="nik.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 						<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} value={selectedUser.username} disabled />
 					</div>
 				</div>
@@ -776,7 +776,7 @@
 				<div class="flex flex-col gap-1">
 					<p class="font-medium">Nama</p>
 					<div class="relative w-full items-center">
-						<img src="clip.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+						<img src="name.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 						<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" value={selectedUser.configPenghasil} autofocus={false} disabled />
 					</div>
 				</div>
@@ -810,8 +810,8 @@
 				<div class="flex flex-col gap-1">
 					<p class="font-medium">Password</p>
 					<div class="relative w-full items-center">
-						<img src="beat.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-						<Input type="password" placeholder="Masukkan Password Baru" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+						<img src="pass.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+						<Input type="password" placeholder="Tidak Diubah" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 					</div>
 				</div>
 
