@@ -165,6 +165,9 @@
 	});
 
 	onMount(() => {
+		if (data.user) {
+			console.log(data.user);
+		}
 		updateTime();
 		gsap.fromTo(
 			'.plane',
@@ -299,17 +302,23 @@
 		}
 	};
 
-	let mebur = () => {
-		gsap.to('.plane', {
-			duration: 2,
-			x: 100,
-			y: -100,
-			ease: 'power3.out'
+	let fLogout = async () => {
+		const response = await fetch('/-logout', {
+			method: 'POST'
 		});
 
-		setTimeout(async () => {
-			await goto('/login');
-		}, 500);
+		if (response.ok) {
+			gsap.to('.plane', {
+				duration: 2,
+				x: 100,
+				y: -100,
+				ease: 'power3.out'
+			});
+
+			setTimeout(async () => {
+				await goto('/login', { replaceState: true, invalidateAll: true });
+			}, 500);
+		}
 	};
 
 	const getIcon = (name: string) => {
@@ -333,17 +342,7 @@
 
 	let filteredDoa = $derived(
 		(data.doa_selected || [])
-			.filter(
-				(doa: any) =>
-					!search ||
-					(doa.number && doa.number.toLowerCase().includes(search.toLowerCase())) ||
-					(doa.nik && doa.nik.toLowerCase().includes(search.toLowerCase())) ||
-					(doa.nama && doa.nama.toLowerCase().includes(search.toLowerCase())) ||
-					(doa.revision && doa.revision.toLowerCase().includes(search.toLowerCase())) ||
-					(doa.date && doa.date.toLowerCase().includes(search.toLowerCase())) ||
-					(doa.date2 && doa.date2.toLowerCase().includes(search.toLowerCase())) ||
-					(doa.title && doa.title.toLowerCase().includes(search.toLowerCase()))
-			)
+			.filter((doa: any) => !search || (doa.number && doa.number.toLowerCase().includes(search.toLowerCase())) || (doa.nik && doa.nik.toLowerCase().includes(search.toLowerCase())) || (doa.nama && doa.nama.toLowerCase().includes(search.toLowerCase())) || (doa.revision && doa.revision.toLowerCase().includes(search.toLowerCase())) || (doa.date && doa.date.toLowerCase().includes(search.toLowerCase())) || (doa.date2 && doa.date2.toLowerCase().includes(search.toLowerCase())) || (doa.title && doa.title.toLowerCase().includes(search.toLowerCase())))
 			.sort((a: any, b: any) => {
 				if (!sortColumn) return 0;
 				const aValue = a[sortColumn] ? a[sortColumn].toString().toLowerCase() : '';
@@ -368,14 +367,7 @@
 
 	let filteredUsers = $derived(
 		(data.users || [])
-			.filter(
-				(user: any) =>
-					!search ||
-					user.username.toLowerCase().includes(search.toLowerCase()) ||
-					user.activated.toLowerCase().includes(search.toLowerCase()) ||
-					user.userlevel_name.toLowerCase().includes(search.toLowerCase()) ||
-					user.configPenghasil.toLowerCase().includes(search.toLowerCase())
-			)
+			.filter((user: any) => !search || user.username.toLowerCase().includes(search.toLowerCase()) || user.activated.toLowerCase().includes(search.toLowerCase()) || user.userlevel_name.toLowerCase().includes(search.toLowerCase()) || user.configPenghasil.toLowerCase().includes(search.toLowerCase()))
 			.sort((a: any, b: any) => {
 				if (!sortColumnUser) return 0;
 				const aValue = a[sortColumnUser] ? a[sortColumnUser].toString().toLowerCase() : '';
@@ -391,7 +383,7 @@
 <img class="fixed top-0 right-0 -z-50 h-1/2 -rotate-180" src="grad.svg" alt="" />
 
 <!-- @b floating button -->
-<div bind:this={navbar} class="fixed flex flex-row gap-2 bottom-5 left-1/2 -translate-x-1/2 p-2 bg-[#e1d5c5] !drop-shadow-[0px_0px_10px_rgba(0,0,0,0.1)] z-[10]">
+<div bind:this={navbar} class="fixed flex flex-row gap-2 bottom-3 left-1/2 -translate-x-1/2 p-2 bg-[#e1d5c5] !drop-shadow-[0px_0px_10px_rgba(0,0,0,0.1)] z-[10]">
 	<!--<div class="flex flex-row bg-white/50 p-2 px-3 gap-3 group w-auto overflow-hidden">
 		<!~~ <img
 			src="helic.svg?v=3"
@@ -508,7 +500,7 @@
 	<div
 		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group"
 		onclick={() => {
-			mebur();
+			fLogout();
 		}}
 	>
 		<img src="power.svg?d" class="w-4 pt-0 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
@@ -530,7 +522,13 @@
 					<img src="user.svg" class="w-4" alt="" />
 					<p class="text-secondary opacity-75">User</p>
 				</div>
-				<p class="font-medium text-lg whitespace-nowrap overflow-hidden text-ellipsis">Kevin Galang, 155160</p>
+				<p class="font-medium text-lg whitespace-nowrap overflow-hidden text-ellipsis">
+					{#if data.user}
+						{data.user.configPenghasil}, {data.user.id}
+					{:else}
+						Tamu
+					{/if}
+				</p>
 			</div>
 			<div class="w-fit bg-white/25 p-4 px-6">
 				<div class="flex gap-1.5">
@@ -681,10 +679,7 @@
 				<Table.Root>
 					<Table.Header class="shadow-none!">
 						<Table.Row class="bg-[#F3EBE0]! sticky! top-0! z-20!">
-							<Table.Head
-								class="py-4! pl-4! cursor-pointer "
-								onclick={() => handleSort('number')}
-							>
+							<Table.Head class="py-4! pl-4! cursor-pointer " onclick={() => handleSort('number')}>
 								<div class="flex items-center gap-2 relative">
 									Nomor
 									{#if sortColumn === 'number'}
@@ -1007,33 +1002,19 @@
 				<Table.Root>
 					<Table.Header class="shadow-none!">
 						<Table.Row class="bg-[#F3EBE0]! sticky! top-0! z-20!">
-							<Table.Head
-								class="py-4! pl-4! cursor-pointer "
-								onclick={() => handleSortUser('activated')}
-							>
+							<Table.Head class="py-4! pl-4! cursor-pointer " onclick={() => handleSortUser('activated')}>
 								<div class="flex items-center gap-2 relative">
 									Status
 									{#if sortColumnUser === 'activated'}
-										<img
-											src="down.svg"
-											class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}"
-											alt=""
-										/>
+										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
 									{/if}
 								</div>
 							</Table.Head>
-							<Table.Head
-								class="text-center! cursor-pointer "
-								onclick={() => handleSortUser('username')}
-							>
+							<Table.Head class="text-center! cursor-pointer " onclick={() => handleSortUser('username')}>
 								<div class="flex items-center justify-center gap-2 relative">
 									NIK
 									{#if sortColumnUser === 'username'}
-										<img
-											src="down.svg"
-											class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}"
-											alt=""
-										/>
+										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
 									{/if}
 								</div>
 							</Table.Head>
@@ -1041,11 +1022,7 @@
 								<div class="flex items-center gap-2 relative">
 									Nama
 									{#if sortColumnUser === 'configPenghasil'}
-										<img
-											src="down.svg"
-											class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}"
-											alt=""
-										/>
+										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
 									{/if}
 								</div>
 							</Table.Head>
@@ -1054,11 +1031,7 @@
 								<div class="flex items-center gap-2 relative">
 									User Level
 									{#if sortColumnUser === 'userlevel_name'}
-										<img
-											src="down.svg"
-											class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}"
-											alt=""
-										/>
+										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
 									{/if}
 								</div>
 							</Table.Head>

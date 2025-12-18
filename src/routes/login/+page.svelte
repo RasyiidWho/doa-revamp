@@ -2,7 +2,6 @@
 	import type { PageProps } from './$types';
 	import * as Drawer from '$lib/components/ui/drawer/index.js';
 
-	let { data }: PageProps = $props();
 	let mbukakDoa = $state(false);
 	let mbukakTambahUser = $state(false);
 	let mbukakUsers = $state(false);
@@ -77,25 +76,43 @@
 		});
 	});
 
-	let mebur = () => {
-		gsap.to('.plane', {
-			duration: 1,
-			x: 500,
-			y: -500,
-			ease: 'power3.out'
+	let username = $state('');
+	let password = $state('');
+	let errorMessage = $state('');
+
+	let fLogin = async () => {
+		errorMessage = '';
+		const response = await fetch('/-login', {
+			method: 'POST',
+			body: JSON.stringify({ username, password }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
 		});
 
-		setTimeout(async () => {
-			await goto('/dash');
-		}, 500);
-	};
+		const res = await response.json();
 
+		if (response.ok) {
+			gsap.to('.plane', {
+				duration: 1,
+				x: 500,
+				y: -500,
+				ease: 'power3.out'
+			});
+
+			setTimeout(async () => {
+				await goto('/dash', { replaceState: true, invalidateAll: true });
+			}, 500);
+		} else {
+			errorMessage = res.message || 'Login failed';
+		}
+	};
 </script>
 
 <img class="fixed bottom-0 left-0 -z-50 h-1/2 opacity-75" src="grad.svg" alt="" />
 <img class="fixed top-0 right-0 -z-50 h-1/2 -rotate-180" src="grad.svg" alt="" />
 
-<div class="relative flex !min-h-dvh w-dvw flex-col items-center justify-center py-10">
+<div class="relative flex min-h-dvh! w-dvw flex-col items-center justify-center py-10">
 	<!-- @b list doa -->
 	<div class="bg-white/25 flex items-center justify-center w-8/12">
 		<div class="bg-white/50 h-full w-auto mx-4 my-4 flex flex-row">
@@ -104,38 +121,41 @@
 					<div class="w-20 flex items-center justify-center aspect-square mb-6">
 						<img src="logo.png" class="" />
 					</div>
-					<div class="flex flex-col gap-1 w-full">
-						<p class="font-medium">NIK</p>
-						<div class="relative w-full items-center">
-							<img src="nik.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-							<Input type="text" placeholder="Masukkan NIK" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+					<div class="flex w-full flex-col gap-2">
+						{#if errorMessage}
+							<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+								<strong class="font-bold">Error!</strong>
+								<span class="block sm:inline">{errorMessage}</span>
+							</div>
+						{/if}
+						<div class="flex w-full flex-col gap-1">
+							<p class="font-medium">NIK</p>
+							<div class="relative w-full items-center">
+								<img src="nik.svg" class=" h-5! w-5! absolute left-3 top-1/2 -translate-y-1/2" alt="" />
+								<Input type="text" bind:value={username} placeholder="Masukkan NIK" class="text-base! shadow-none! w-full rounded-none border-transparent! bg-primary/50 py-7! pl-11! placeholder:text-secondary/35 focus:!border-transparent focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+							</div>
 						</div>
-					</div>
 
-					<div class="flex flex-col gap-1 w-full">
-						<p class="font-medium">Password</p>
-						<div class="relative w-full items-center">
-							<img src="pass.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-							<Input type="password" placeholder="Masukkan Password" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+						<div class="flex w-full flex-col gap-1">
+							<p class="font-medium">Password</p>
+							<div class="relative w-full items-center">
+								<img src="pass.svg" class=" h-5! w-5! absolute left-3 top-1/2 -translate-y-1/2" alt="" />
+								<Input type="password" bind:value={password} placeholder="Masukkan Password" class="text-base! shadow-none! w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! focus:!border-transparent focus:!ring-transparent focus:!ring-offset-0" autofocus={false} onkeydown={(e) => e.key === 'Enter' && fLogin()} />
+							</div>
 						</div>
-					</div>
 
-					<div class="flex gap-1 w-full">
-						<div
-							class="flex w-1/3 justify-center items-center py-4 text-center bg-primary p-2 px-3 gap-2 group"
-							onclick={() => {
-								mbukakTambahUser = true;
-							}}
-						>
-							<p class="font-medium">Daftar</p>
-						</div>
-						<div
-							class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group"
-							onclick={() => {
-								mebur();
-							}}
-						>
-							<p class="font-medium !text-white">Login</p>
+						<div class="flex w-full gap-1">
+							<div
+								class="group flex w-1/3 items-center justify-center bg-primary p-2 px-3 py-4 text-center cursor-pointer"
+								onclick={() => {
+									mbukakTambahUser = true;
+								}}
+							>
+								<p class="font-medium">Daftar</p>
+							</div>
+							<div class="group flex w-2/3 items-center justify-center gap-2 bg-secondary p-2 px-3 py-4 text-center cursor-pointer" onclick={fLogin}>
+								<p class="font-medium !text-white">Login</p>
+							</div>
 						</div>
 					</div>
 				</div>

@@ -1,4 +1,4 @@
-import { mysqlTable, primaryKey, int, varchar, date, text, mysqlEnum, tinyint } from "drizzle-orm/mysql-core"
+import { mysqlTable, primaryKey, int, varchar, date, text, mysqlEnum, tinyint, datetime } from "drizzle-orm/mysql-core"
 
 export const form = mysqlTable("form", {
 	no: int().autoincrement().notNull(),
@@ -206,4 +206,13 @@ export const users = mysqlTable("users", {
 },
 (table) => [
 	primaryKey({ columns: [table.username], name: "users_username"}),
+]);
+
+export const session = mysqlTable("session", {
+	id: varchar({ length: 255 }).notNull(),
+	userId: varchar("user_id", { length: 50 }).notNull(),
+	expiresAt: datetime("expires_at", { mode: "date" }).notNull(),
+},
+(table) => [
+	primaryKey({ columns: [table.id], name: "session_id"}),
 ]);

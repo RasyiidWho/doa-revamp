@@ -11,6 +11,7 @@
 
 import { createPool } from 'mysql2/promise';
 import { drizzle } from 'drizzle-orm/mysql2';
+import * as schema from './schema';
 
 export const db = drizzle(
   createPool({
@@ -19,5 +20,6 @@ export const db = drizzle(
     user: 'doa-revamp',
     password: 'ab8382bt',
     database: 'standard'
-  })
+  }),
+  { schema, mode: 'default' }
 );

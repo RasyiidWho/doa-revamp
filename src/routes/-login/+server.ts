@@ -1,0 +1,44 @@
+import { lucia } from "$lib/server/auth";
+import { db } from "$lib/server/db";
+import { useraccounts } from "$lib/server/db/schema";
+import { eq } from "drizzle-orm";
+import crypto from "crypto";
+import { json } from "@sveltejs/kit";
+import type { RequestHandler } from "./$types";
+
+export const POST: RequestHandler = async ({ request, cookies }) => {
+	const { username, password } = await request.json();
+
+	if (
+		typeof username !== "string" ||
+		username.length < 1 ||
+		typeof password !== "string" ||
+		password.length < 1
+	) {
+		return json({ message: "Invalid input" }, { status: 400 });
+	}
+
+	const existingUser = await db.select().from(useraccounts).where(eq(useraccounts.username, username)).limit(1);
+
+	if (existingUser.length === 0) {
+		return json({ message: "Incorrect username or password" }, { status: 400 });
+	}
+
+	const user = existingUser[0];
+
+	// MD5 hash check
+	const hashedPassword = crypto.createHash('md5').update(password).digest('hex');
+
+	if (hashedPassword !== user.password) {
+		return json({ message: "Incorrect username or password" }, { status: 400 });
+	}
+
+	const session = await lucia.createSession(user.username, {});
+	const sessionCookie = lucia.createSessionCookie(session.id);
+	cookies.set(sessionCookie.name, sessionCookie.value, {
+		path: ".",
+		...sessionCookie.attributes
+	});
+
+	return json({ success: true });
+};
