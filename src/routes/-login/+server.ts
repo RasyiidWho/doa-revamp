@@ -15,13 +15,13 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		typeof password !== "string" ||
 		password.length < 1
 	) {
-		return json({ message: "Invalid input" }, { status: 400 });
+		return json({ message: "Masukkan NIK Dan Password." }, { status: 400 });
 	}
 
 	const existingUser = await db.select().from(useraccounts).where(eq(useraccounts.username, username)).limit(1);
 
 	if (existingUser.length === 0) {
-		return json({ message: "Incorrect username or password" }, { status: 400 });
+		return json({ message: "NIK Atau Password Salah." }, { status: 400 });
 	}
 
 	const user = existingUser[0];
@@ -30,7 +30,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const hashedPassword = crypto.createHash('md5').update(password).digest('hex');
 
 	if (hashedPassword !== user.password) {
-		return json({ message: "Incorrect username or password" }, { status: 400 });
+		return json({ message: "NIK Atau Password Salah." }, { status: 400 });
 	}
 
 	const session = await lucia.createSession(user.username, {});

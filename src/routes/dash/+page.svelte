@@ -321,13 +321,6 @@
 		}
 	};
 
-	const getIcon = (name: string) => {
-		const lower = name.toLowerCase();
-		if (lower.includes('personnel')) return 'users.svg?f';
-		if (lower.includes('working') || lower.includes('quality') || lower.includes('library')) return 'case.svg?f';
-		return 'cert.svg?f';
-	};
-
 	let sortColumn = $state('date');
 	let sortDirection = $state('desc');
 

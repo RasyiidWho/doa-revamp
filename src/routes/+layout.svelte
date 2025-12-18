@@ -2,9 +2,9 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import '$lib/global.css';
+	import Tos from '$lib/tos.svelte';
 
 	let { children } = $props();
-
 </script>
 
 <svelte:head>
