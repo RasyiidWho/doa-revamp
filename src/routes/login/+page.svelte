@@ -90,45 +90,6 @@
 		}, 500);
 	};
 
-	const doas = [
-		{
-			a: 'PANEL 0',
-			b: '246002',
-			c: 'MEISAR SUPRIYATNO ',
-			d: 'A',
-			e: '2025-12-15',
-			f: '2026-12-15',
-			g: 'System Engineering',
-			h: ''
-		},
-		{
-			a: 'PANEL 0',
-			b: '246002',
-			c: 'MEISAR SUPRIYATNO ',
-			d: 'A',
-			e: '2025-12-15',
-			f: '2026-12-15',
-			g: 'System Engineering',
-			h: ''
-		}
-	];
-
-	const users = [
-		{
-			a: 'Y',
-			b: '246002',
-			c: 'MEISAR SUPRIYATNO ',
-			d: '',
-			e: 'PMO/PPC'
-		},
-		{
-			a: 'N',
-			b: '246002',
-			c: 'MEISAR SUPRIYATNO ',
-			d: '',
-			e: ''
-		}
-	];
 </script>
 
 <img class="fixed bottom-0 left-0 -z-50 h-1/2 opacity-75" src="grad.svg" alt="" />
@@ -207,7 +168,7 @@
 <Drawer.Root bind:open={mbukakTambahUser} direction="right">
 	<Drawer.Content class="bg-[#FAF8F4]! !min-h-0">
 		<ScrollArea scrollbarYClasses="hidden" class="el relative flex items-center px-4 gap-2 h-full !min-h-0 flex-col " orientation="vertical" type="scroll">
-			<div class="w-full flex justify-between pt-4">
+			<div class="w-full flex justify-between pt-4" data-vaul-no-drag>
 				<div>
 					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
 						<img src="user.svg?f" class="w-4" alt="" />

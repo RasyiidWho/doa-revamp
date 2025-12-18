@@ -649,7 +649,7 @@
 <!-- @b tambah doa -->
 <Drawer.Root bind:open={mbukakTambahDoa} direction="right">
 	<Drawer.Content class="bg-[#FAF8F4]! min-h-0!">
-		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll">
+		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll" data-vaul-no-drag>
 			<div class="w-full flex justify-between pt-4">
 				<div>
 					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
@@ -929,7 +929,7 @@
 <!-- @b edit user -->
 <Drawer.Root bind:open={mbukakEditUser} direction="right">
 	<Drawer.Content class="bg-[#FAF8F4]! min-h-0!">
-		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll">
+		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll" data-vaul-no-drag>
 			<div class="w-full flex justify-between pt-4">
 				<div>
 					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
