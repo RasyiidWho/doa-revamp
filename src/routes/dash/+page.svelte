@@ -343,7 +343,7 @@
 	</div>
 -->
 	<Select.Root type="single" name="favoriteFruit" bind:value>
-		<Select.Trigger class="flex! flex-row! bg-[#fef8f0]! py-5! px-3! w-48! gap-3! group! shadow-none! overflow-hidden! border-0! rounded-none!">
+		<Select.Trigger class="flex! flex-row! bg-[#fef8f0]! py-5! px-3! w-48! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none!">
 			<!-- {triggerContent} -->
 			<!-- <img
 			src="helic.svg?v=3"
@@ -402,7 +402,7 @@
 		<img src="users2.svg?c" class="w-5 group-hover:rotate-[24deg] transition-all duration-500" alt="" />
 	</div>
 	<Popover.Root>
-		<Popover.Trigger class="flex! flex-row! bg-[#fef8f0]! p-2! px-3! gap-2! group!">
+		<Popover.Trigger class="flex! flex-row! bg-[#fef8f0]! p-2! px-3! gap-2! group">
 			<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 		</Popover.Trigger>
 		<Popover.Content preventScroll={true} class="mb-3! rounded-none! shadow-none! bg-[#fef8f0]! w-80!  border-1! border-[#e1d5c5]! p-2!">
@@ -796,7 +796,7 @@
 					</div> -->
 
 					<Select.Root type="single" name="favoriteFruit" bind:value={selectedSubtype}>
-						<Select.Trigger placeholder="Pilih Tipe" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group! shadow-none! overflow-hidden! border-0! rounded-none!">
+						<Select.Trigger placeholder="Pilih Tipe" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none!">
 							<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
 							<p title={subtypes.find((t) => t.value === selectedSubtype)?.label || 'Pilih Tipe'} class="text-base max-w-[19dvw] truncate {selectedSubtype === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{subtypes.find((t) => t.value === selectedSubtype)?.label || 'Pilih Tipe'}</p>
 							<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
@@ -1005,7 +1005,7 @@
 				<div class="flex flex-col gap-1">
 					<p class="font-medium">User Level</p>
 					<Select.Root type="single" name="favoriteFruit" bind:value={selectedUserLevel}>
-						<Select.Trigger placeholder="Pilih User Level" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group! shadow-none! overflow-hidden! border-0! rounded-none!">
+						<Select.Trigger placeholder="Pilih User Level" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none!">
 							<img src="working arrangement.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
 							<p class="text-base {selectedUserLevel === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{userlevels.find((t) => t.value === selectedUserLevel)?.label || 'Pilih User Level'}</p>
 							<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
