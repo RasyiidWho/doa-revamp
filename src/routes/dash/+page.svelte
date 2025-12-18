@@ -38,6 +38,7 @@
 	let navbar = $state();
 	let value = $state('aircraft');
 	let search = $state('');
+	let searchTotal = $state('');
 	let searchDoa = $state('');
 	let selectedUser = $state<any>({});
 	let selectedUserLevel = $state('0');
@@ -263,6 +264,31 @@
 		if (lower.includes('working') || lower.includes('quality') || lower.includes('library')) return 'case.svg?f';
 		return 'cert.svg?f';
 	};
+
+	let filteredDoa = $derived(
+		(data.doa_selected || []).filter(
+			(doa: any) =>
+				!search ||
+				(doa.number && doa.number.toLowerCase().includes(search.toLowerCase())) ||
+				(doa.nik && doa.nik.toLowerCase().includes(search.toLowerCase())) ||
+				(doa.nama && doa.nama.toLowerCase().includes(search.toLowerCase())) ||
+				(doa.revision && doa.revision.toLowerCase().includes(search.toLowerCase())) ||
+				(doa.date && doa.date.toLowerCase().includes(search.toLowerCase())) ||
+				(doa.date2 && doa.date2.toLowerCase().includes(search.toLowerCase())) ||
+				(doa.title && doa.title.toLowerCase().includes(search.toLowerCase()))
+		)
+	);
+
+	let filteredUsers = $derived(
+		(data.users || []).filter(
+			(user: any) =>
+				!search ||
+				user.username.toLowerCase().includes(search.toLowerCase()) ||
+				user.activated.toLowerCase().includes(search.toLowerCase()) ||
+				user.userlevel_name.toLowerCase().includes(search.toLowerCase()) ||
+				user.configPenghasil.toLowerCase().includes(search.toLowerCase())
+		)
+	);
 </script>
 
 <img class="fixed bottom-0 left-0 -z-50 h-1/2 opacity-75" src="grad.svg" alt="" />
@@ -519,7 +545,7 @@
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] items-center group">
 							<div class="bg-secondary p-2 px-3">
-								<p class="text-white! min-w-5 text-center">{data.doa_selected ? data.doa_selected.length : 0}</p>
+								<p class="text-white! min-w-5 text-center">{filteredDoa.length}</p>
 							</div>
 							<p class="font-medium px-3">Total Dokumen</p>
 						</div>
@@ -570,8 +596,8 @@
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{#if data.doa_selected}
-							{#each data.doa_selected.filter((doa) => !search || (doa.number && doa.number.toLowerCase().includes(search.toLowerCase())) || (doa.nik && doa.nik.toLowerCase().includes(search.toLowerCase())) || (doa.nama && doa.nama.toLowerCase().includes(search.toLowerCase())) || (doa.revision && doa.revision.toLowerCase().includes(search.toLowerCase())) || (doa.date && doa.date.toLowerCase().includes(search.toLowerCase())) || (doa.date2 && doa.date2.toLowerCase().includes(search.toLowerCase())) || (doa.title && doa.title.toLowerCase().includes(search.toLowerCase()))) as doa (doa.no)}
+						{#if filteredDoa}
+							{#each filteredDoa as doa (doa.no)}
 								<Table.Row class="group relative! border-0! hover:bg-secondary/10! hover:scale-[100.5%]! transition-all!">
 									<Table.Cell class="font-medium! py-3! pl-4! w-1!">{doa.number || '-'}</Table.Cell>
 									<Table.Cell class="w-1!">{doa.nik || '-'}</Table.Cell>
@@ -800,7 +826,7 @@
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] items-center group">
 							<div class="bg-secondary p-2 px-3">
-								<p class="text-white! min-w-5 text-center">{data.users ? data.users.length : 0}</p>
+								<p class="text-white! min-w-5 text-center">{filteredUsers.length}</p>
 							</div>
 							<p class="font-medium px-3">Total User</p>
 						</div>
@@ -841,8 +867,8 @@
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{#if data.users}
-							{#each data.users.filter((user) => !search || user.username.toLowerCase().includes(search.toLowerCase()) || user.activated.toLowerCase().includes(search.toLowerCase()) || user.userlevel_name.toLowerCase().includes(search.toLowerCase()) || user.configPenghasil.toLowerCase().includes(search.toLowerCase())) as user (user.kuid)}
+						{#if filteredUsers}
+							{#each filteredUsers as user (user.kuid)}
 								<!-- {"username":"160238","kuid":"c054e296693e2c4eb00c371ad632fdc4","password":"6d2f4baaaee3f763980805bad0363546","userlevel":1,"provinsi":"","configPenghasil":"Dimas Septa","activated":"Y"}, -->
 								<Table.Row class="group relative! border-0! hover:bg-secondary/10! hover:scale-[100.5%]! transition-all!">
 									<Table.Cell class="font-medium pl-4! w-1! justify-center! items-center!">
