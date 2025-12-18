@@ -16,6 +16,19 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 
+	import Calendar from '$lib/components/ui/calendar/calendar.svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import { today, type CalendarDate, parseDate } from '@internationalized/date';
+
+	const id = $props.id();
+
+	let open = $state(false);
+	let openTanggal = $state(false);
+	let openValid = $state(false);
+	let tanggal = $state<CalendarDate | undefined>();
+	let valid = $state<CalendarDate | undefined>();
+	let anyar = $state(false);
+
 	let showSearch = $state(false);
 	let { data }: PageProps = $props();
 	let mbukakDoa = $state(false);
@@ -32,6 +45,10 @@
 	let selectedDoaGroup = $state('');
 	let selectedDoaIcon = $state('');
 	let selectedDoaTitle = $state('');
+	let selectedDoa = $state<any>({});
+	let judul = $state('');
+	let nomor = $state('');
+	let revisi = $state('');
 
 	const group = [
 		{ icon: 'plane.svg', value: 'aircraft', label: 'Aircraft' },
@@ -142,6 +159,44 @@
 			}
 			// scroller: scroller
 		}).init();
+	});
+
+	$effect(() => {
+		if (anyar) {
+			judul = '';
+			nomor = '';
+			revisi = '';
+			tanggal = undefined;
+			valid = undefined;
+			selectedSubtype = '';
+		} else if (selectedDoa && Object.keys(selectedDoa).length > 0) {
+			judul = selectedDoa.title || '';
+			nomor = selectedDoa.number || '';
+			revisi = selectedDoa.revision || '';
+			selectedSubtype = selectedDoa.type || '';
+
+			if (selectedDoa.date && !selectedDoa.date.includes('0000')) {
+				try {
+					tanggal = parseDate(selectedDoa.date);
+				} catch (e) {
+					console.error('Error parsing tanggal:', e);
+					tanggal = undefined;
+				}
+			} else {
+				tanggal = undefined;
+			}
+
+			if (selectedDoa.date2 && !selectedDoa.date2.includes('0000')) {
+				try {
+					valid = parseDate(selectedDoa.date2);
+				} catch (e) {
+					console.error('Error parsing valid date:', e);
+					valid = undefined;
+				}
+			} else {
+				valid = undefined;
+			}
+		}
 	});
 
 	const fUsers = async () => {
@@ -271,6 +326,7 @@
 	<div
 		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group"
 		onclick={() => {
+			anyar = true;
 			mbukakTambahDoa = true;
 		}}
 	>
@@ -476,6 +532,7 @@
 					</div>
 					<div
 						onclick={() => {
+							anyar = true;
 							mbukakTambahDoa = true;
 						}}
 					>
@@ -524,7 +581,16 @@
 									<Table.Cell class="w-1!">{doa.date2 && !doa.date2.includes('0000') ? doa.date2 : '-'}</Table.Cell>
 									<Table.Cell class="max-w-[15vw] truncate" title={doa.title}>{doa.title || '-'}</Table.Cell>
 									<div class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1 justify-end opacity-0 group-hover:opacity-100 transition-all">
-										<div class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"><img src="edit.svg" class="w-3.5" alt="" /></div>
+										<div
+											class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"
+											onclick={() => {
+												anyar = false;
+												selectedDoa = doa;
+												mbukakTambahDoa = true;
+											}}
+										>
+											<img src="edit.svg" class="w-3.5" alt="" />
+										</div>
 										{#if doa.nmpath}
 											<a
 												href={(() => {
@@ -585,16 +651,82 @@
 					<p class="font-medium">Judul</p>
 					<div class="relative w-full items-center">
 						<img src="document.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-						<Input type="text" placeholder="Masukkan Judul" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+						<Input type="text" placeholder="Masukkan Judul" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={judul} />
+					</div>
+				</div>
+
+				<div class="flex flex-col gap-1">
+					<p class="font-medium">Nomor</p>
+					<div class="relative w-full items-center">
+						<img src="number.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+						<Input type="text" placeholder="Nomor" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={nomor} />
+					</div>
+				</div>
+
+				<div class="flex flex-col gap-1">
+					<p class="font-medium">Revisi</p>
+					<div class="relative w-full items-center">
+						<img src="beat.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+						<Input type="text" placeholder="Revisi" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={revisi} />
 					</div>
 				</div>
 
 				<div class="flex flex-col gap-1">
 					<p class="font-medium">Dokumen</p>
-					<div class="relative w-full items-center">
+					<div class="relative w-full items-center w-full! rounded-none! bg-primary/50! flex! items-center! border-transparent! placeholder:text-secondary/35 py-2.5! pl-8! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0">
 						<img src="clip.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-						<Input type="text" placeholder="Upload Dokumen" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+						<Input type="file" placeholder="Upload Dokumen" class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent pt-2 focus:!ring-offset-0" autofocus={false} />
 					</div>
+				</div>
+
+				<div class="flex flex-col gap-3">
+					<p class="font-medium">Tanggal</p>
+					<Popover.Root bind:open={openTanggal}>
+						<Popover.Trigger id="{id}-date" class="relative w-full items-center w-full! rounded-none! bg-primary/50! flex! items-center! border-transparent! placeholder:text-secondary/35 py-4! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0">
+							{#snippet child({ props })}
+								<div {...props}>
+									<img src="date.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+									<div class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0 {tanggal ? '' : 'text-secondary/25!'}">{tanggal ? tanggal.toString() : 'Pilih Tanggal'}</div>
+								</div>
+							{/snippet}
+						</Popover.Trigger>
+						<Popover.Content class="mb-3! rounded-none! shadow-none! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-2!">
+							<Calendar
+								type="single"
+								bind:value={tanggal}
+								captionLayout="dropdown"
+								locale="id"
+								onValueChange={() => {
+									openTanggal = false;
+								}}
+							/>
+						</Popover.Content>
+					</Popover.Root>
+				</div>
+
+				<div class="flex flex-col gap-3">
+					<p class="font-medium">Valid</p>
+					<Popover.Root bind:open={openValid}>
+						<Popover.Trigger id="{id}-date" class="relative w-full items-center w-full! rounded-none! bg-primary/50! flex! items-center! border-transparent! placeholder:text-secondary/35 py-4! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0">
+							{#snippet child({ props })}
+								<div {...props}>
+									<img src="date valid.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+									<div class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0 {valid ? '' : 'text-secondary/25!'}">{valid ? valid.toString() : 'Pilih Tanggal'}</div>
+								</div>
+							{/snippet}
+						</Popover.Trigger>
+						<Popover.Content class="mb-3! rounded-none! shadow-none! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-2!">
+							<Calendar
+								type="single"
+								bind:value={valid}
+								captionLayout="dropdown"
+								locale="id"
+								onValueChange={() => {
+									openValid = false;
+								}}
+							/>
+						</Popover.Content>
+					</Popover.Root>
 				</div>
 
 				<div class="flex flex-col gap-1">
@@ -607,7 +739,7 @@
 					<Select.Root type="single" name="favoriteFruit" bind:value={selectedSubtype}>
 						<Select.Trigger placeholder="Pilih Tipe" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group! shadow-none! overflow-hidden! border-0! rounded-none!">
 							<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-							<p title={subtypes.find((t) => t.value === selectedSubtype)?.label || 'Pilih Tipe'} class="text-base max-w-[18dvw] truncate {selectedSubtype === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{subtypes.find((t) => t.value === selectedSubtype)?.label || 'Pilih Tipe'}</p>
+							<p title={subtypes.find((t) => t.value === selectedSubtype)?.label || 'Pilih Tipe'} class="text-base max-w-[19dvw] truncate {selectedSubtype === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{subtypes.find((t) => t.value === selectedSubtype)?.label || 'Pilih Tipe'}</p>
 							<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
 						</Select.Trigger>
 						<Select.Content class="mb-2! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
@@ -616,28 +748,12 @@
 								{#each subtypes as subtypes (subtypes.value)}
 									<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={subtypes.value} label={subtypes.label}>
 										<img src="type.svg" class="w-3 ml-2 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
-										<p class="text-base max-w-[18dvw] truncate" title={subtypes.label}>{subtypes.label}</p>
+										<p class="text-base max-w-[19dvw] truncate" title={subtypes.label}>{subtypes.label}</p>
 									</Select.Item>
 								{/each}
 							</Select.Group>
 						</Select.Content>
 					</Select.Root>
-				</div>
-
-				<div class="flex flex-col gap-1">
-					<p class="font-medium">Revisi</p>
-					<div class="relative w-full items-center">
-						<img src="beat.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-						<Input type="text" placeholder="Revisi" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
-					</div>
-				</div>
-
-				<div class="flex flex-col gap-1">
-					<p class="font-medium">Nomor</p>
-					<div class="relative w-full items-center">
-						<img src="number.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-						<Input type="text" placeholder="Nomor" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
-					</div>
 				</div>
 
 				<!-- <div class="flex w-full flex-col justify-center gap-1 text-left">
@@ -649,11 +765,22 @@
 				</div> -->
 			</div>
 		</ScrollArea>
-		<div>
-			<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
-				<p class="font-medium !text-white">Tambah</p>
+		{#if anyar}
+			<div>
+				<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
+					<p class="font-medium !text-white">Tambah</p>
+				</div>
 			</div>
-		</div>
+		{:else}
+			<div class="flex">
+				<div class="flex w-1/3 justify-center items-center py-4 text-center bg-red-900 p-2 px-3 gap-2 group">
+					<p class="font-medium !text-white">Hapus</p>
+				</div>
+				<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
+					<p class="font-medium !text-white">Ubah</p>
+				</div>
+			</div>
+		{/if}
 	</Drawer.Content>
 </Drawer.Root>
 

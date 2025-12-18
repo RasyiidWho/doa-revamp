@@ -2,18 +2,8 @@
 	scrollbar-width: none;
 	font-kerning: none;
 	cursor: default;
-	/* overscroll-behavior: none; */
-	/* cursor: default !important; */
-	/* overflow-x: hidden;
-	font-kerning: none;
-	overscroll-behavior: none;
-	/* font-family: 'Outfit', sans-serif; */
-	/* overflow: hidden; */
-	/* user-select: none; */
 	color: #5c4d3c;
 	outline: none !important;
-	/* --eek: var(--primary); */
-	/* filter: saturate(1.25) */
 }
 
 * {

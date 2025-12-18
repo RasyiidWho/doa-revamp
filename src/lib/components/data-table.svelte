@@ -213,7 +213,7 @@
 							<LayoutColumnsIcon />
 							<span class="hidden lg:inline">Customize Columns</span>
 							<span class="lg:hidden">Columns</span>
-							<ChevronDownIcon />
+							<ChevronDownIcon color="#694b29"/>
 						</Button>
 					{/snippet}
 				</DropdownMenu.Trigger>

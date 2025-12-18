@@ -144,10 +144,10 @@
 						<img src="logo.png" class="" />
 					</div>
 					<div class="flex flex-col gap-1 w-full">
-						<p class="font-medium">NIK/Username</p>
+						<p class="font-medium">NIK</p>
 						<div class="relative w-full items-center">
 							<img src="nik.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-							<Input type="text" placeholder="Masukkan Judul" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+							<Input type="text" placeholder="Masukkan NIK" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 						</div>
 					</div>
 
@@ -155,7 +155,7 @@
 						<p class="font-medium">Password</p>
 						<div class="relative w-full items-center">
 							<img src="pass.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-							<Input type="password" placeholder="Upload Dokumen" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+							<Input type="password" placeholder="Masukkan Password" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 						</div>
 					</div>
 
