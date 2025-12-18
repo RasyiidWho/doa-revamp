@@ -205,7 +205,7 @@
 
 <!-- @b tambah user -->
 <Drawer.Root bind:open={mbukakTambahUser} direction="right">
-	<Drawer.Content class="bg-[#FAF8F4] !min-h-0">
+	<Drawer.Content class="bg-[#FAF8F4]! !min-h-0">
 		<ScrollArea scrollbarYClasses="hidden" class="el relative flex items-center px-4 gap-2 h-full !min-h-0 flex-col " orientation="vertical" type="scroll">
 			<div class="w-full flex justify-between pt-4">
 				<div>
@@ -223,7 +223,7 @@
 				>
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
-							<img src="plus.svg" class="w-3 rotate-[45deg]" alt="" />
+							<img src="minimize.svg?a" class="w-3 group-hover:rotate-[180deg] transition-all duration-500" alt="" />
 						</div>
 					</div>
 				</div>

@@ -230,7 +230,7 @@
 	</div>
 -->
 	<Select.Root type="single" name="favoriteFruit" bind:value>
-		<Select.Trigger class="flex flex-row bg-[#fef8f0] py-5 px-3 w-48 gap-3 group shadow-none overflow-hidden border-0 rounded-none">
+		<Select.Trigger class="flex! flex-row! bg-[#fef8f0]! py-5! px-3! w-48! gap-3! group! shadow-none! overflow-hidden! border-0! rounded-none!">
 			<!-- {triggerContent} -->
 			<!-- <img
 			src="helic.svg?v=3"
@@ -248,7 +248,7 @@
 					<img src="plane.svg?v=2" class="w-6 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
 				</div>
 				<div class="heli-img {group.find((t) => t.value === value)?.value === 'aircraft' ? 'hidden' : 'block'}">
-					<img src="helic.svg?v=3" class="w-7 group-hover:rotate-[45deg] transition-all duration-500 scale-x-[-1]" alt="" />
+					<img src="helic.svg?v=3" class="w-7 group-hover:rotate-[25deg] transition-all duration-500 scale-x-[-1]" alt="" />
 				</div>
 			</div>
 			<p class="text-base">{group.find((t) => t.value === value)?.label}</p>
@@ -288,10 +288,10 @@
 		<img src="users2.svg?c" class="w-5 group-hover:rotate-[24deg] transition-all duration-500" alt="" />
 	</div>
 	<Popover.Root>
-		<Popover.Trigger class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group">
+		<Popover.Trigger class="flex! flex-row! bg-[#fef8f0]! p-2! px-3! gap-2! group!">
 			<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 		</Popover.Trigger>
-		<Popover.Content class="mb-3 rounded-none shadow-none border-0 bg-[#fef8f0] border-1 border-[#e1d5c5] p-2">
+		<Popover.Content class="mb-3! rounded-none! shadow-none! bg-[#fef8f0]! w-80!  border-1! border-[#e1d5c5]! p-2!">
 			<div class="relative w-full items-center group h-full">
 				<img src="search.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 				<Input
@@ -441,7 +441,7 @@
 
 <!-- @b doa -->
 <Drawer.Root bind:open={mbukakDoa}>
-	<Drawer.Content class="bg-[#FAF8F4] min-h-[95dvh] flex items-center">
+	<Drawer.Content class="bg-[#FAF8F4]! min-h-[95dvh]! flex! items-center!">
 		<div class="w-11/12 pt-12 gap-2 flex flex-col">
 			<div class="w-full flex justify-between">
 				<div class="flex gap-2">
@@ -464,7 +464,7 @@
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] items-center group">
 							<div class="bg-secondary p-2 px-3">
-								<p class="text-white!">{data.doa_selected ? data.doa_selected.length : 0}</p>
+								<p class="text-white! min-w-5 text-center">{data.doa_selected ? data.doa_selected.length : 0}</p>
 							</div>
 							<p class="font-medium px-3">Total Dokumen</p>
 						</div>
@@ -493,17 +493,17 @@
 					>
 						<div>
 							<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
-								<img src="plus.svg" class="w-3 rotate-[45deg]" alt="" />
+								<img src="minimize.svg?a" class="w-3 group-hover:rotate-[180deg] transition-all duration-500" alt="" />
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="[&_[data-slot=table-container]]:max-h-[80vh] [&_[data-slot=table-container]]:overflow-y-auto">
+			<div class="[&_[data-slot=table-container]]:max-h-[calc(100vh-10rem)]! [&_[data-slot=table-container]]:overflow-y-auto!">
 				<Table.Root>
-					<Table.Header class="shadow-none">
-						<Table.Row class="bg-[#F3EBE0] sticky top-0 z-20">
-							<Table.Head class="py-4 pl-4">Nomor</Table.Head>
+					<Table.Header class="shadow-none!">
+						<Table.Row class="bg-[#F3EBE0]! sticky! top-0! z-20!">
+							<Table.Head class="py-4! pl-4!">Nomor</Table.Head>
 							<Table.Head>NIK</Table.Head>
 							<Table.Head>Nama</Table.Head>
 							<Table.Head>Rev</Table.Head>
@@ -516,17 +516,17 @@
 					<Table.Body>
 						{#if data.doa_selected}
 							{#each data.doa_selected.filter((doa) => !search || (doa.number && doa.number.toLowerCase().includes(search.toLowerCase())) || (doa.nik && doa.nik.toLowerCase().includes(search.toLowerCase())) || (doa.nama && doa.nama.toLowerCase().includes(search.toLowerCase())) || (doa.revision && doa.revision.toLowerCase().includes(search.toLowerCase())) || (doa.date && doa.date.toLowerCase().includes(search.toLowerCase())) || (doa.date2 && doa.date2.toLowerCase().includes(search.toLowerCase())) || (doa.title && doa.title.toLowerCase().includes(search.toLowerCase()))) as doa (doa.no)}
-								<Table.Row class="group relative border-0 hover:bg-secondary/10 hover:scale-[100.5%] transition-all">
-									<Table.Cell class="font-medium py-3 pl-4 w-1">{doa.number || '-'}</Table.Cell>
-									<Table.Cell class="w-1">{doa.nik || '-'}</Table.Cell>
-									<Table.Cell>{doa.nama || '-'}</Table.Cell>
-									<Table.Cell class="w-1">{doa.revision || '-'}</Table.Cell>
-									<Table.Cell class="w-1">{doa.date && !doa.date.includes('0000') ? doa.date : '-'}</Table.Cell>
-									<Table.Cell class="w-1">{doa.date2 && !doa.date2.includes('0000') ? doa.date2 : '-'}</Table.Cell>
-									<Table.Cell>{doa.title ? (doa.title.length > 70 ? doa.title.substring(0, 70) + '...' : doa.title) : '-'}</Table.Cell>
-									<div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all">
-										<img src="edit.svg" class="w-3" alt="" />
-										<img src="download.svg" class="w-4" alt="" />
+								<Table.Row class="group relative! border-0! hover:bg-secondary/10! hover:scale-[100.5%]! transition-all!">
+									<Table.Cell class="font-medium! py-3! pl-4! w-1!">{doa.number || '-'}</Table.Cell>
+									<Table.Cell class="w-1!">{doa.nik || '-'}</Table.Cell>
+									<Table.Cell class="w-1!">{doa.nama || '-'}</Table.Cell>
+									<Table.Cell class="w-1!">{doa.revision || '-'}</Table.Cell>
+									<Table.Cell class="w-1!">{doa.date && !doa.date.includes('0000') ? doa.date : '-'}</Table.Cell>
+									<Table.Cell class="w-1!">{doa.date2 && !doa.date2.includes('0000') ? doa.date2 : '-'}</Table.Cell>
+									<Table.Cell class="max-w-[15vw] truncate" title={doa.title}>{doa.title || '-'}</Table.Cell>
+									<div class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1 justify-end opacity-0 group-hover:opacity-100 transition-all">
+										<div class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"><img src="edit.svg" class="w-3.5" alt="" /></div>
+										<div class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"><img src="download.svg" class="w-3.5" alt="" /></div>
 									</div>
 								</Table.Row>
 							{/each}
@@ -540,8 +540,8 @@
 
 <!-- @b tambah doa -->
 <Drawer.Root bind:open={mbukakTambahDoa} direction="right">
-	<Drawer.Content class="bg-[#FAF8F4] !min-h-0">
-		<ScrollArea scrollbarYClasses="hidden" class="el relative flex items-center px-4 gap-2 h-full !min-h-0 flex-col" orientation="vertical" type="scroll">
+	<Drawer.Content class="bg-[#FAF8F4]! min-h-0!">
+		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll">
 			<div class="w-full flex justify-between pt-4">
 				<div>
 					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
@@ -558,7 +558,7 @@
 				>
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
-							<img src="plus.svg" class="w-3 rotate-[45deg]" alt="" />
+							<img src="minimize.svg?a" class="w-3 group-hover:rotate-[180deg] transition-all duration-500" alt="" />
 						</div>
 					</div>
 				</div>
@@ -624,7 +624,7 @@
 
 <!-- @b users -->
 <Drawer.Root bind:open={mbukakUsers}>
-	<Drawer.Content class="bg-[#FAF8F4] min-h-[95dvh] flex items-center">
+	<Drawer.Content class="bg-[#FAF8F4]! min-h-[95dvh]! flex! items-center!">
 		<div class="w-11/12 pt-12 gap-2 flex flex-col">
 			<div class="w-full flex justify-between">
 				<div>
@@ -638,7 +638,7 @@
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] items-center group">
 							<div class="bg-secondary p-2 px-3">
-								<p class="text-white!">{data.users ? data.users.length : 0}</p>
+								<p class="text-white! min-w-5 text-center">{data.users ? data.users.length : 0}</p>
 							</div>
 							<p class="font-medium px-3">Total User</p>
 						</div>
@@ -661,18 +661,18 @@
 					>
 						<div>
 							<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
-								<img src="plus.svg" class="w-3 rotate-[45deg]" alt="" />
+								<img src="minimize.svg?a" class="w-3 group-hover:rotate-[180deg] transition-all duration-500" alt="" />
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="[&_[data-slot=table-container]]:max-h-[80vh] [&_[data-slot=table-container]]:overflow-y-auto">
+			<div class="[&_[data-slot=table-container]]:max-h-[80vh]! [&_[data-slot=table-container]]:overflow-y-auto!">
 				<Table.Root>
-					<Table.Header class="shadow-none">
-						<Table.Row class="bg-[#F3EBE0] sticky top-0 z-20">
-							<Table.Head class="py-4 pl-4">Status</Table.Head>
-							<Table.Head class="text-center">NIK</Table.Head>
+					<Table.Header class="shadow-none!">
+						<Table.Row class="bg-[#F3EBE0]! sticky! top-0! z-20!">
+							<Table.Head class="py-4! pl-4!">Status</Table.Head>
+							<Table.Head class="text-center!">NIK</Table.Head>
 							<Table.Head>Nama</Table.Head>
 							<!-- <Table.Head>Organisasi</Table.Head> -->
 							<Table.Head>User Level</Table.Head>
@@ -682,8 +682,8 @@
 						{#if data.users}
 							{#each data.users.filter((user) => !search || user.username.toLowerCase().includes(search.toLowerCase()) || user.activated.toLowerCase().includes(search.toLowerCase()) || user.userlevel_name.toLowerCase().includes(search.toLowerCase()) || user.configPenghasil.toLowerCase().includes(search.toLowerCase())) as user (user.kuid)}
 								<!-- {"username":"160238","kuid":"c054e296693e2c4eb00c371ad632fdc4","password":"6d2f4baaaee3f763980805bad0363546","userlevel":1,"provinsi":"","configPenghasil":"Dimas Septa","activated":"Y"}, -->
-								<Table.Row class="group relative border-0 hover:bg-secondary/10 hover:scale-[100.5%] transition-all">
-									<Table.Cell class="font-medium pl-4 w-1! justify-center items-center">
+								<Table.Row class="group relative! border-0! hover:bg-secondary/10! hover:scale-[100.5%]! transition-all!">
+									<Table.Cell class="font-medium pl-4! w-1! justify-center! items-center!">
 										{#if user.userlevel == '0'}
 											<div class="bg-orange-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
 												<div class="bg-orange-600! rounded-full w-1 h-1"></div>
@@ -701,7 +701,7 @@
 											</div>
 										{/if}
 									</Table.Cell>
-									<Table.Cell class="text-center w-1/8">{user.username.length > 20 ? user.username.substring(0, 20) + '...' : user.username}</Table.Cell>
+									<Table.Cell class="text-center! w-1/8!">{user.username.length > 20 ? user.username.substring(0, 20) + '...' : user.username}</Table.Cell>
 									<Table.Cell class="">{user.configPenghasil.length > 20 ? user.configPenghasil.substring(0, 20) + '...' : user.configPenghasil}</Table.Cell>
 									<!-- <Table.Cell class="w-1/6"
 									>{#if user.d}
@@ -710,9 +710,9 @@
 										-
 									{/if}</Table.Cell
 								> -->
-									<Table.Cell class="w-1/6">{user.userlevel_name}</Table.Cell>
+									<Table.Cell class="w-1/6!">{user.userlevel_name}</Table.Cell>
 									<div
-										class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-all"
+										class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-all"
 										onclick={() => {
 											selectedUser = user;
 											selectedUserLevel = user.userlevel.toString();
@@ -723,9 +723,9 @@
 									>
 										{#if user.userlevel}
 											<!-- <img src="copy.svg" class="w-3" alt="" /> -->
-											<img src="edit.svg" class="w-3" alt="" />
+											<div class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"><img src="edit.svg" class="w-3.5" alt="" /></div>
 										{:else}
-											<p class="text-xs font-medium bg-primary px-2 py-1 rounded-none">Aktivasi</p>
+											<p class="text-xs font-medium bg-primary px-2 py-1 rounded-none border-1 border-secondary">Aktivasi</p>
 										{/if}
 									</div>
 								</Table.Row>
@@ -738,10 +738,10 @@
 	</Drawer.Content>
 </Drawer.Root>
 
-<!-- @b tambah doa -->
+<!-- @b edit user -->
 <Drawer.Root bind:open={mbukakEditUser} direction="right">
-	<Drawer.Content class="bg-[#FAF8F4] !min-h-0 z-[100]!">
-		<ScrollArea scrollbarYClasses="hidden" class="el relative flex items-center px-4 gap-2 h-full !min-h-0 flex-col" orientation="vertical" type="scroll">
+	<Drawer.Content class="bg-[#FAF8F4]! !min-h-0 z-[100]!">
+		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! !min-h-0! flex-col!" orientation="vertical" type="scroll">
 			<div class="w-full flex justify-between pt-4">
 				<div>
 					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
@@ -758,7 +758,7 @@
 				>
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
-							<img src="plus.svg" class="w-3 rotate-[45deg]" alt="" />
+							<img src="minimize.svg?a" class="w-3 group-hover:rotate-[180deg] transition-all duration-500" alt="" />
 						</div>
 					</div>
 				</div>
