@@ -13,7 +13,7 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import Headroom from 'headroom.js';
 	import { gsap } from 'gsap';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { goto } from '$app/navigation';
 
 	import Calendar from '$lib/components/ui/calendar/calendar.svelte';
@@ -50,6 +50,8 @@
 	let judul = $state('');
 	let nomor = $state('');
 	let revisi = $state('');
+	let animationFrame: number;
+	// let dateNow = $state();
 
 	const group = [
 		{ icon: 'plane.svg', value: 'aircraft', label: 'Aircraft' },
@@ -111,7 +113,59 @@
 
 	// gsap.registerPlugin(ScrollTrigger);
 
+	let dateNow = $state(Date.now());
+
+	const updateTime = async () => {
+		dateNow = Date.now();
+
+		if (animationFrame) {
+			cancelAnimationFrame(animationFrame);
+			animationFrame = 0;
+		}
+
+		animationFrame = requestAnimationFrame(async () => {
+			await tick();
+			updateTime();
+		});
+	};
+
+	let formattedDate = $derived.by(() => {
+		return new Intl.DateTimeFormat('id-ID', {
+			weekday: 'long',
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric'
+		}).format(new Date(dateNow));
+	});
+
+	let formattedTime = $derived.by(() => {
+		return new Intl.DateTimeFormat('id-ID', {
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+			hour12: false
+		})
+			.format(new Date(dateNow))
+			.replace(/\./g, ':');
+	});
+
+	let greeting = $derived.by(() => {
+		const hour = new Date(dateNow).getHours();
+		if (hour >= 0 && hour <= 11) {
+			return 'Pagi';
+		} else if (hour >= 12 && hour <= 16) {
+			return 'Siang';
+		} else if (hour >= 17 && hour <= 19) {
+			return 'Sore';
+		} else if (hour >= 20 && hour <= 23) {
+			return 'Malam';
+		} else {
+			return '-';
+		}
+	});
+
 	onMount(() => {
+		updateTime();
 		gsap.fromTo(
 			'.plane',
 			{
@@ -265,30 +319,9 @@
 		return 'cert.svg?f';
 	};
 
-	let filteredDoa = $derived(
-		(data.doa_selected || []).filter(
-			(doa: any) =>
-				!search ||
-				(doa.number && doa.number.toLowerCase().includes(search.toLowerCase())) ||
-				(doa.nik && doa.nik.toLowerCase().includes(search.toLowerCase())) ||
-				(doa.nama && doa.nama.toLowerCase().includes(search.toLowerCase())) ||
-				(doa.revision && doa.revision.toLowerCase().includes(search.toLowerCase())) ||
-				(doa.date && doa.date.toLowerCase().includes(search.toLowerCase())) ||
-				(doa.date2 && doa.date2.toLowerCase().includes(search.toLowerCase())) ||
-				(doa.title && doa.title.toLowerCase().includes(search.toLowerCase()))
-		)
-	);
+	let filteredDoa = $derived((data.doa_selected || []).filter((doa: any) => !search || (doa.number && doa.number.toLowerCase().includes(search.toLowerCase())) || (doa.nik && doa.nik.toLowerCase().includes(search.toLowerCase())) || (doa.nama && doa.nama.toLowerCase().includes(search.toLowerCase())) || (doa.revision && doa.revision.toLowerCase().includes(search.toLowerCase())) || (doa.date && doa.date.toLowerCase().includes(search.toLowerCase())) || (doa.date2 && doa.date2.toLowerCase().includes(search.toLowerCase())) || (doa.title && doa.title.toLowerCase().includes(search.toLowerCase()))));
 
-	let filteredUsers = $derived(
-		(data.users || []).filter(
-			(user: any) =>
-				!search ||
-				user.username.toLowerCase().includes(search.toLowerCase()) ||
-				user.activated.toLowerCase().includes(search.toLowerCase()) ||
-				user.userlevel_name.toLowerCase().includes(search.toLowerCase()) ||
-				user.configPenghasil.toLowerCase().includes(search.toLowerCase())
-		)
-	);
+	let filteredUsers = $derived((data.users || []).filter((user: any) => !search || user.username.toLowerCase().includes(search.toLowerCase()) || user.activated.toLowerCase().includes(search.toLowerCase()) || user.userlevel_name.toLowerCase().includes(search.toLowerCase()) || user.configPenghasil.toLowerCase().includes(search.toLowerCase())));
 </script>
 
 <img class="fixed bottom-0 left-0 -z-50 h-1/2 opacity-75" src="grad.svg" alt="" />
@@ -441,14 +474,14 @@
 					<img src="date.svg?f" class="w-3.5" alt="" />
 					<p class="text-secondary opacity-75">Tanggal</p>
 				</div>
-				<p class="font-medium text-lg whitespace-nowrap overflow-hidden text-ellipsis">Selasa, 14 Januari 2000</p>
+				<p class="font-medium text-lg whitespace-nowrap overflow-hidden text-ellipsis">{formattedDate}</p>
 			</div>
-			<div class="w-fit bg-white/25 p-4 px-6">
+			<div class="w-fit min-w-44 bg-white/25 p-4 px-6">
 				<div class="flex gap-1.5">
 					<img src="clock.svg?f" class="w-4" alt="" />
 					<p class="text-secondary opacity-75">Jam</p>
 				</div>
-				<p class="font-medium text-lg whitespace-nowrap overflow-hidden text-ellipsis">Siang, 14:32:10</p>
+				<p class="font-medium text-lg whitespace-nowrap overflow-hidden text-ellipsis">{greeting}, {formattedTime}</p>
 			</div>
 		</div>
 	</div>
