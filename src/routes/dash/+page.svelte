@@ -319,9 +319,72 @@
 		return 'cert.svg?f';
 	};
 
-	let filteredDoa = $derived((data.doa_selected || []).filter((doa: any) => !search || (doa.number && doa.number.toLowerCase().includes(search.toLowerCase())) || (doa.nik && doa.nik.toLowerCase().includes(search.toLowerCase())) || (doa.nama && doa.nama.toLowerCase().includes(search.toLowerCase())) || (doa.revision && doa.revision.toLowerCase().includes(search.toLowerCase())) || (doa.date && doa.date.toLowerCase().includes(search.toLowerCase())) || (doa.date2 && doa.date2.toLowerCase().includes(search.toLowerCase())) || (doa.title && doa.title.toLowerCase().includes(search.toLowerCase()))));
+	let sortColumn = $state('date');
+	let sortDirection = $state('desc');
 
-	let filteredUsers = $derived((data.users || []).filter((user: any) => !search || user.username.toLowerCase().includes(search.toLowerCase()) || user.activated.toLowerCase().includes(search.toLowerCase()) || user.userlevel_name.toLowerCase().includes(search.toLowerCase()) || user.configPenghasil.toLowerCase().includes(search.toLowerCase())));
+	const handleSort = (column: string) => {
+		if (sortColumn === column) {
+			sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+		} else {
+			sortColumn = column;
+			sortDirection = 'asc';
+		}
+	};
+
+	let filteredDoa = $derived(
+		(data.doa_selected || [])
+			.filter(
+				(doa: any) =>
+					!search ||
+					(doa.number && doa.number.toLowerCase().includes(search.toLowerCase())) ||
+					(doa.nik && doa.nik.toLowerCase().includes(search.toLowerCase())) ||
+					(doa.nama && doa.nama.toLowerCase().includes(search.toLowerCase())) ||
+					(doa.revision && doa.revision.toLowerCase().includes(search.toLowerCase())) ||
+					(doa.date && doa.date.toLowerCase().includes(search.toLowerCase())) ||
+					(doa.date2 && doa.date2.toLowerCase().includes(search.toLowerCase())) ||
+					(doa.title && doa.title.toLowerCase().includes(search.toLowerCase()))
+			)
+			.sort((a: any, b: any) => {
+				if (!sortColumn) return 0;
+				const aValue = a[sortColumn] ? a[sortColumn].toString().toLowerCase() : '';
+				const bValue = b[sortColumn] ? b[sortColumn].toString().toLowerCase() : '';
+				if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+				if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+				return 0;
+			})
+	);
+
+	let sortColumnUser = $state('configPenghasil');
+	let sortDirectionUser = $state('asc');
+
+	const handleSortUser = (column: string) => {
+		if (sortColumnUser === column) {
+			sortDirectionUser = sortDirectionUser === 'asc' ? 'desc' : 'asc';
+		} else {
+			sortColumnUser = column;
+			sortDirectionUser = 'asc';
+		}
+	};
+
+	let filteredUsers = $derived(
+		(data.users || [])
+			.filter(
+				(user: any) =>
+					!search ||
+					user.username.toLowerCase().includes(search.toLowerCase()) ||
+					user.activated.toLowerCase().includes(search.toLowerCase()) ||
+					user.userlevel_name.toLowerCase().includes(search.toLowerCase()) ||
+					user.configPenghasil.toLowerCase().includes(search.toLowerCase())
+			)
+			.sort((a: any, b: any) => {
+				if (!sortColumnUser) return 0;
+				const aValue = a[sortColumnUser] ? a[sortColumnUser].toString().toLowerCase() : '';
+				const bValue = b[sortColumnUser] ? b[sortColumnUser].toString().toLowerCase() : '';
+				if (aValue < bValue) return sortDirectionUser === 'asc' ? -1 : 1;
+				if (aValue > bValue) return sortDirectionUser === 'asc' ? 1 : -1;
+				return 0;
+			})
+	);
 </script>
 
 <img class="fixed bottom-0 left-0 -z-50 h-1/2 opacity-75" src="grad.svg" alt="" />
@@ -618,13 +681,65 @@
 				<Table.Root>
 					<Table.Header class="shadow-none!">
 						<Table.Row class="bg-[#F3EBE0]! sticky! top-0! z-20!">
-							<Table.Head class="py-4! pl-4!">Nomor</Table.Head>
-							<Table.Head>NIK</Table.Head>
-							<Table.Head>Nama</Table.Head>
-							<Table.Head>Rev</Table.Head>
-							<Table.Head>Tanggal</Table.Head>
-							<Table.Head>Valid</Table.Head>
-							<Table.Head>Judul</Table.Head>
+							<Table.Head
+								class="py-4! pl-4! cursor-pointer "
+								onclick={() => handleSort('number')}
+							>
+								<div class="flex items-center gap-2 relative">
+									Nomor
+									{#if sortColumn === 'number'}
+										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirection === 'asc' ? '' : 'rotate-180'}" alt="" />
+									{/if}
+								</div>
+							</Table.Head>
+							<Table.Head class="cursor-pointer " onclick={() => handleSort('nik')}>
+								<div class="flex items-center gap-2 relative">
+									NIK
+									{#if sortColumn === 'nik'}
+										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirection === 'asc' ? '' : 'rotate-180'}" alt="" />
+									{/if}
+								</div>
+							</Table.Head>
+							<Table.Head class="cursor-pointer " onclick={() => handleSort('nama')}>
+								<div class="flex items-center gap-2 relative">
+									Nama
+									{#if sortColumn === 'nama'}
+										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirection === 'asc' ? '' : 'rotate-180'}" alt="" />
+									{/if}
+								</div>
+							</Table.Head>
+							<Table.Head class="cursor-pointer " onclick={() => handleSort('revision')}>
+								<div class="flex items-center gap-2 relative">
+									Rev
+									{#if sortColumn === 'revision'}
+										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirection === 'asc' ? '' : 'rotate-180'}" alt="" />
+									{/if}
+								</div>
+							</Table.Head>
+							<Table.Head class="cursor-pointer " onclick={() => handleSort('date')}>
+								<div class="flex items-center gap-2 relative">
+									Tanggal
+									{#if sortColumn === 'date'}
+										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirection === 'asc' ? '' : 'rotate-180'}" alt="" />
+									{/if}
+								</div>
+							</Table.Head>
+							<Table.Head class="cursor-pointer " onclick={() => handleSort('date2')}>
+								<div class="flex items-center gap-2 relative">
+									Valid
+									{#if sortColumn === 'date2'}
+										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirection === 'asc' ? '' : 'rotate-180'}" alt="" />
+									{/if}
+								</div>
+							</Table.Head>
+							<Table.Head class="cursor-pointer " onclick={() => handleSort('title')}>
+								<div class="flex items-center gap-2 relative">
+									Judul
+									{#if sortColumn === 'title'}
+										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirection === 'asc' ? '' : 'rotate-180'}" alt="" />
+									{/if}
+								</div>
+							</Table.Head>
 							<!-- <Table.Head class="text-end pr-4">-</Table.Head> -->
 						</Table.Row>
 					</Table.Header>
@@ -892,11 +1007,61 @@
 				<Table.Root>
 					<Table.Header class="shadow-none!">
 						<Table.Row class="bg-[#F3EBE0]! sticky! top-0! z-20!">
-							<Table.Head class="py-4! pl-4!">Status</Table.Head>
-							<Table.Head class="text-center!">NIK</Table.Head>
-							<Table.Head>Nama</Table.Head>
+							<Table.Head
+								class="py-4! pl-4! cursor-pointer "
+								onclick={() => handleSortUser('activated')}
+							>
+								<div class="flex items-center gap-2 relative">
+									Status
+									{#if sortColumnUser === 'activated'}
+										<img
+											src="down.svg"
+											class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}"
+											alt=""
+										/>
+									{/if}
+								</div>
+							</Table.Head>
+							<Table.Head
+								class="text-center! cursor-pointer "
+								onclick={() => handleSortUser('username')}
+							>
+								<div class="flex items-center justify-center gap-2 relative">
+									NIK
+									{#if sortColumnUser === 'username'}
+										<img
+											src="down.svg"
+											class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}"
+											alt=""
+										/>
+									{/if}
+								</div>
+							</Table.Head>
+							<Table.Head class="cursor-pointer " onclick={() => handleSortUser('configPenghasil')}>
+								<div class="flex items-center gap-2 relative">
+									Nama
+									{#if sortColumnUser === 'configPenghasil'}
+										<img
+											src="down.svg"
+											class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}"
+											alt=""
+										/>
+									{/if}
+								</div>
+							</Table.Head>
 							<!-- <Table.Head>Organisasi</Table.Head> -->
-							<Table.Head>User Level</Table.Head>
+							<Table.Head class="cursor-pointer " onclick={() => handleSortUser('userlevel_name')}>
+								<div class="flex items-center gap-2 relative">
+									User Level
+									{#if sortColumnUser === 'userlevel_name'}
+										<img
+											src="down.svg"
+											class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}"
+											alt=""
+										/>
+									{/if}
+								</div>
+							</Table.Head>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
