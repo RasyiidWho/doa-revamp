@@ -511,7 +511,7 @@
 			mebur();
 		}}
 	>
-		<img src="power.svg" class="w-4 pt-1 group-hover:rotate-[24deg] transition-all duration-500" alt="" />
+		<img src="power.svg?d" class="w-4 pt-0 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 	</div>
 </div>
 
@@ -584,9 +584,9 @@
 											<div class="pl-2 pr-2 flex justify-center">
 												<div class="w-0.5 h-7 border-l border-dashed border-secondary" />
 											</div>
-											<p class="group-hover:scale-[101.5%] transition-all">{sub.name}</p>
+											<p class="group-hover:scale-[101%] transition-all">{sub.name}</p>
 										</div>
-										<p class="group-hover:scale-[101.5%] transition-all">{sub.total}</p>
+										<p class="group-hover:scale-[105%] transition-all">{sub.total}</p>
 									</div>
 								{/each}
 							</div>
