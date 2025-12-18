@@ -253,7 +253,7 @@
 			</div>
 			<p class="text-base">{group.find((t) => t.value === value)?.label}</p>
 		</Select.Trigger>
-		<Select.Content class="mb-2 rounded-none shadow-none border-0 bg-[#fef8f0] border-1 border-[#e1d5c5] p-1">
+		<Select.Content class="mb-2! rounded-none! shadow-none! bg-[#fef8f0]! border-1! border-[#e1d5c5]! p-1!">
 			<Select.Group>
 				<!-- <Select.Label>Fruits</Select.Label> -->
 				{#each group as group (group.value)}
@@ -291,7 +291,7 @@
 		<Popover.Trigger class="flex! flex-row! bg-[#fef8f0]! p-2! px-3! gap-2! group!">
 			<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 		</Popover.Trigger>
-		<Popover.Content class="mb-3! rounded-none! shadow-none! bg-[#fef8f0]! w-80!  border-1! border-[#e1d5c5]! p-2!">
+		<Popover.Content preventScroll={true} class="mb-3! rounded-none! shadow-none! bg-[#fef8f0]! w-80!  border-1! border-[#e1d5c5]! p-2!">
 			<div class="relative w-full items-center group h-full">
 				<img src="search.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 				<Input
@@ -740,8 +740,8 @@
 
 <!-- @b edit user -->
 <Drawer.Root bind:open={mbukakEditUser} direction="right">
-	<Drawer.Content class="bg-[#FAF8F4]! !min-h-0 z-[100]!">
-		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! !min-h-0! flex-col!" orientation="vertical" type="scroll">
+	<Drawer.Content class="bg-[#FAF8F4]! min-h-0!">
+		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll">
 			<div class="w-full flex justify-between pt-4">
 				<div>
 					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
@@ -788,12 +788,12 @@
 						<Input type="text" placeholder="Pilih Tipe" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 					</div> -->
 					<Select.Root type="single" name="favoriteFruit" bind:value={selectedUserLevel}>
-						<Select.Trigger placeholder="Pilih Tipe" class="flex relative pl-11! flex-row bg-primary/50 py-7 px-3 w-full gap-3 group shadow-none overflow-hidden border-0 rounded-none">
+						<Select.Trigger placeholder="Pilih Tipe" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group! shadow-none! overflow-hidden! border-0! rounded-none!">
 							<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
 							<p class="text-base {selectedUserLevel === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{userlevels.find((t) => t.value === selectedUserLevel)?.label || 'Pilih Tipe'}</p>
 							<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
 						</Select.Trigger>
-						<Select.Content class="mb-2 rounded-none shadow-none border-0 bg-[#f4efe7] border-1 border-[#e1d5c5] p-0 z-[100]">
+						<Select.Content class="mb-2! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
 							<Select.Group>
 								<!-- <Select.Label>Fruits</Select.Label> -->
 								{#each userlevels as userlevels (userlevels.value)}
