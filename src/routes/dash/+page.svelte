@@ -12,6 +12,9 @@
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import Headroom from 'headroom.js';
+	import { gsap } from 'gsap';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	let showSearch = $state(false);
 	let { data }: PageProps = $props();
@@ -20,6 +23,15 @@
 	let mbukakUsers = $state(false);
 	let mbukakEditUser = $state(false);
 	let navbar = $state();
+	let value = $state('aircraft');
+	let search = $state('');
+	let searchDoa = $state('');
+	let selectedUser = $state<any>({});
+	let selectedUserLevel = $state('0');
+	let selectedSubtype = $state('');
+	let selectedDoaGroup = $state('');
+	let selectedDoaIcon = $state('');
+	let selectedDoaTitle = $state('');
 
 	const group = [
 		{ icon: 'plane.svg', value: 'aircraft', label: 'Aircraft' },
@@ -27,7 +39,6 @@
 	];
 
 	const subtypes = [
-		{ value: '', label: 'Pilih Type' },
 		{ value: '41A', label: 'PART 41A Design Standard Manual (NDM)' },
 		{ value: '41B', label: 'PART 41B Drafting Standard Manual (NDS)' },
 		{ value: '41C-1', label: 'PART 41C NPS-Mark & Label' },
@@ -77,19 +88,6 @@
 		{ value: '4', label: 'Eksekutif' },
 		{ value: '5', label: 'Controller' }
 	];
-
-	let value = $state('aircraft');
-	let search = $state('');
-	let searchDoa = $state('');
-	let selectedUser = $state<any>({});
-	let selectedUserLevel = $state('0');
-	let selectedDoaGroup = $state('');
-	let selectedDoaIcon = $state('');
-	let selectedDoaTitle = $state('');
-
-	import { gsap } from 'gsap';
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
 
 	// import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -183,6 +181,7 @@
 			response.json().then((res) => {
 				if (s || t) {
 					data = { ...data, doa_selected: res };
+					console.log(data.doa_selected);
 				} else {
 					data = { ...data, doa: res };
 				}
@@ -485,7 +484,7 @@
 						</div>
 					</div>
 
-										<div
+					<div
 						class="flex gap-2"
 						onclick={() => {
 							mbukakDoa = false;
@@ -526,7 +525,24 @@
 									<Table.Cell class="max-w-[15vw] truncate" title={doa.title}>{doa.title || '-'}</Table.Cell>
 									<div class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1 justify-end opacity-0 group-hover:opacity-100 transition-all">
 										<div class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"><img src="edit.svg" class="w-3.5" alt="" /></div>
-										<div class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"><img src="download.svg" class="w-3.5" alt="" /></div>
+										{#if doa.nmpath}
+											<a
+												href={(() => {
+													if (selectedDoaTitle && selectedDoaTitle.toUpperCase().includes('FORM')) {
+														return `http://portalditek.indonesian-aerospace.com/webdoa/${doa.pdf || doa.nmpath}`;
+													}
+													const ndm = doa.nmpath.split('/').pop();
+													const nmpath = doa.nmpath;
+													const jdl = encodeURIComponent(doa.title);
+													const kuid = '40a2d4ec3577eb61c342bc09dd5cb73b';
+													return `http://portalditek.indonesian-aerospace.com/webdoa/tcpdf/edm/watermark.php?ndm=${ndm}&nmpath=${nmpath}&jdl=${jdl}&kuid=${kuid}`;
+												})()}
+												target="_blank"
+												class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"
+											>
+												<img src="download.svg" class="w-3.5" alt="" />
+											</a>
+										{/if}
 									</div>
 								</Table.Row>
 							{/each}
@@ -583,10 +599,29 @@
 
 				<div class="flex flex-col gap-1">
 					<p class="font-medium">Tipe</p>
-					<div class="relative w-full items-center">
+					<!-- <div class="relative w-full items-center">
 						<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
 						<Input type="text" placeholder="Pilih Tipe" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
-					</div>
+					</div> -->
+
+					<Select.Root type="single" name="favoriteFruit" bind:value={selectedSubtype}>
+						<Select.Trigger placeholder="Pilih Tipe" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group! shadow-none! overflow-hidden! border-0! rounded-none!">
+							<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+							<p title={subtypes.find((t) => t.value === selectedSubtype)?.label || 'Pilih Tipe'} class="text-base max-w-[18dvw] truncate {selectedSubtype === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{subtypes.find((t) => t.value === selectedSubtype)?.label || 'Pilih Tipe'}</p>
+							<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
+						</Select.Trigger>
+						<Select.Content class="mb-2! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
+							<Select.Group>
+								<!-- <Select.Label>Fruits</Select.Label> -->
+								{#each subtypes as subtypes (subtypes.value)}
+									<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={subtypes.value} label={subtypes.label}>
+										<img src="type.svg" class="w-3 ml-2 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
+										<p class="text-base max-w-[18dvw] truncate" title={subtypes.label}>{subtypes.label}</p>
+									</Select.Item>
+								{/each}
+							</Select.Group>
+						</Select.Content>
+					</Select.Root>
 				</div>
 
 				<div class="flex flex-col gap-1">
@@ -783,14 +818,10 @@
 
 				<div class="flex flex-col gap-1">
 					<p class="font-medium">User Level</p>
-					<!-- <div class="relative w-full items-center">
-						<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-						<Input type="text" placeholder="Pilih Tipe" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
-					</div> -->
 					<Select.Root type="single" name="favoriteFruit" bind:value={selectedUserLevel}>
-						<Select.Trigger placeholder="Pilih Tipe" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group! shadow-none! overflow-hidden! border-0! rounded-none!">
-							<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-							<p class="text-base {selectedUserLevel === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{userlevels.find((t) => t.value === selectedUserLevel)?.label || 'Pilih Tipe'}</p>
+						<Select.Trigger placeholder="Pilih User Level" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group! shadow-none! overflow-hidden! border-0! rounded-none!">
+							<img src="working arrangement.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+							<p class="text-base {selectedUserLevel === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{userlevels.find((t) => t.value === selectedUserLevel)?.label || 'Pilih User Level'}</p>
 							<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
 						</Select.Trigger>
 						<Select.Content class="mb-2! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
@@ -798,7 +829,7 @@
 								<!-- <Select.Label>Fruits</Select.Label> -->
 								{#each userlevels as userlevels (userlevels.value)}
 									<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={userlevels.value} label={userlevels.label}>
-										<img src="type.svg" class="w-3 ml-2 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
+										<img src="working arrangement.svg" class="w-3 ml-2 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
 										<p class="text-base">{userlevels.label}</p>
 									</Select.Item>
 								{/each}
