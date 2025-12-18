@@ -111,10 +111,13 @@
 		} else {
 			// errorMessage = res.message || 'Login failed';
 			tos('beat.svg', 'Login Gagal', res.message || 'Login failed');
+			setTimeout(async () => {
+				disabled = false;
+			}, 500);
 		}
-		disabled = false;
 	};
 </script>
+
 
 <Toaster
 	position="top-left"
@@ -169,7 +172,11 @@
 								<p class="font-medium">Daftar</p>
 							</div>
 							<div class="group flex w-2/3 items-center justify-center gap-2 bg-secondary p-2 px-3 py-4 text-center cursor-pointer {disabled ? 'pointer-events-none' : ''}" onclick={fLogin}>
-								<p class="font-medium !text-white">Login</p>
+								{#if disabled}
+									<img src="spinner.svg?a" class=" h-5! w-5!" alt="" />
+								{:else}
+									<p class="font-medium !text-white">Login</p>
+								{/if}
 							</div>
 						</div>
 					</div>
