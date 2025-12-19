@@ -8,7 +8,7 @@ export default defineConfig({
 	},
 	transformer: {
 		generator: {
-			classPrefix: 'ioneric-'
+			classPrefix: 'hi@rasyiid.com-'
 		}
 	}
 });
