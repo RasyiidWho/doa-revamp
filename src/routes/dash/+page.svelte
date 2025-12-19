@@ -583,7 +583,7 @@
 	<div class="bg-white/25 flex items-center justify-center w-11/12 h-3/4">
 		<div class="bg-white/50 h-full w-full mx-4 my-4 flex flex-col min-h-[50dvh] relative">
 			<div class="p-4">
-				<img src="spinner_color.svg?a" class=" h-5! w-5! absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 {loading ? 'block' : 'hidden'}" alt="" />
+				<img src="spinner_color.svg?a" class=" h-5! w-5! absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 {loading && !mbukakDoa && !mbukakTambahDoa && !mbukakUsers && !mbukakEditUser ? 'block' : 'hidden'}" alt="" />
 				<div class="flex justify-between w-full bg-[#F3EBE0] p-4 px-6 mb-2">
 					<p class="font-medium">Daftar DOA</p>
 					<p class="font-medium">Jumlah</p>
