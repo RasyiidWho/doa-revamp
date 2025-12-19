@@ -48,6 +48,7 @@
 	let selectedDoaIcon = $state('');
 	let selectedDoaTitle = $state('');
 	let selectedDoa = $state<any>({});
+	let mbukakSearch = $state(false);
 	let judul = $state('');
 	let nomor = $state('');
 	let revisi = $state('');
@@ -166,9 +167,23 @@
 	});
 
 	onMount(() => {
-		if (data.user) {
-			console.log(data.user);
-		}
+		document.addEventListener('keydown', async (e) => {
+			if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+				e.preventDefault();
+				if (mbukakSearch) {
+					mbukakSearch = false;
+				} else {
+					mbukakSearch = true;
+					await tick();
+					const el = document.querySelector('.search') as HTMLInputElement;
+					if (el) el.focus();
+				}
+			}
+		});
+
+		// if (data.user) {
+		// 	console.log(data.user);
+		// }
 		updateTime();
 		gsap.fromTo(
 			'.plane',
@@ -301,7 +316,7 @@
 					loading = false;
 					if (s || t) {
 						data = { ...data, doa_selected: res };
-						console.log(data.doa_selected);
+						// console.log(data.doa_selected);
 					} else {
 						data = { ...data, doa: res };
 					}
@@ -457,7 +472,7 @@
 	>
 		<img src="users2.svg?c" class="w-5 group-hover:rotate-[24deg] transition-all duration-500" alt="" />
 	</div>
-	<Popover.Root>
+	<Popover.Root bind:open={mbukakSearch}>
 		<Popover.Trigger class="flex! flex-row! bg-[#fef8f0]! p-2! px-3! gap-2! group">
 			<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 		</Popover.Trigger>
@@ -467,8 +482,8 @@
 				<Input
 					type="text"
 					placeholder="Cari..."
-					class="w-full rounded-none bg-transparent border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0"
-					autofocus={false}
+					class="search w-full rounded-none bg-transparent border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0"
+					autofocus={true}
 					bind:value={searchDoa}
 					onkeydown={async (event) => {
 						if (event.key === 'Enter') {
@@ -620,9 +635,9 @@
 <Drawer.Root
 	bind:open={mbukakDoa}
 	onClose={() => {
-		console.log('tutup');
+		// console.log('tutup');
 		data = { ...data, doa_selected: [], users: [] };
-		console.log(data);
+		// console.log(data);
 	}}
 >
 	<Drawer.Content class="bg-[#FAF8F4]! min-h-[95dvh]! flex! items-center!">
@@ -649,7 +664,7 @@
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] items-center group">
 							<div class="bg-secondary p-2 px-3">
-								<p class="text-white! min-w-5 text-center">{filteredDoa.length || "-"}</p>
+								<p class="text-white! min-w-5 text-center">{filteredDoa.length || '-'}</p>
 							</div>
 							<p class="font-medium px-3">Total Dokumen</p>
 						</div>
@@ -657,7 +672,7 @@
 					<div>
 						<div class="relative w-full items-center group h-full">
 							<img src="search.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
-							<Input type="text" placeholder="Cari..." class="w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={search} />
+							<Input type="text" placeholder="Cari..." class="search w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={true} bind:value={search} />
 						</div>
 					</div>
 					<div
@@ -996,8 +1011,8 @@
 							<div class="bg-secondary w-2 h-2 absolute -right-0.5 -top-0.5"></div>
 						</div> -->
 						<div class="relative w-full items-center group h-full">
-							<img src="search.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
-							<Input type="text" placeholder="Cari..." class="w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={search} />
+							<img src="search.svg" class="absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
+							<Input type="text" placeholder="Cari..." class="search w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={true} bind:value={search} />
 						</div>
 					</div>
 					<div
@@ -1086,7 +1101,7 @@
 											selectedUserLevel = userx.userlevel.toString();
 											// selectedUserLevel = '0';
 											search = '';
-											console.log(userx);
+											// console.log(userx);
 											mbukakEditUser = true;
 										}}
 									>
