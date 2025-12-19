@@ -20,7 +20,7 @@ const adapter = new DrizzleMySQLAdapter(db, session, userTable);
 export const lucia = new Lucia(adapter, {
 	sessionCookie: {
 		attributes: {
-			secure: !dev
+			secure: false
 		}
 	},
 	getUserAttributes: (attributes) => {

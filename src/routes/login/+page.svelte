@@ -83,8 +83,8 @@
 		});
 	});
 
-	let username = $state('');
-	let password = $state('');
+	let username = $state('155160');
+	let password = $state('sim4st3k123');
 	let errorMessage = $state('');
 
 	let fLogin = async () => {
