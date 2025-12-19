@@ -18,6 +18,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { tos } from '$lib/utils';
+	import { mainTitle } from '$lib/store';
 
 	let disabled = $state(false);
 
@@ -33,6 +34,8 @@
 			'full-page-listening': true
 			// gyroscope: false
 		});
+
+		$mainTitle = 'Login';
 
 		gsap.fromTo(
 			'.plane',
@@ -118,7 +121,6 @@
 	};
 </script>
 
-
 <Toaster
 	position="top-left"
 	richColors={false}
@@ -166,6 +168,7 @@
 							<div
 								class="group flex w-1/3 items-center justify-center bg-primary p-2 px-3 py-4 text-center cursor-pointer"
 								onclick={() => {
+									$mainTitle = 'Proposal Pendaftaran DOA';
 									mbukakTambahUser = true;
 								}}
 							>
@@ -207,7 +210,9 @@
 </div>
 
 <!-- @b tambah user -->
-<Drawer.Root bind:open={mbukakTambahUser} direction="right">
+<Drawer.Root bind:open={mbukakTambahUser} direction="right" onClose={() => {
+	$mainTitle = 'Login';
+}}>
 	<Drawer.Content class="bg-[#FAF8F4]! !min-h-0">
 		<ScrollArea scrollbarYClasses="hidden" class="el relative flex items-center px-4 gap-2 h-full !min-h-0 flex-col " orientation="vertical" type="scroll">
 			<div class="w-full flex justify-between pt-4" data-vaul-no-drag>
@@ -221,6 +226,7 @@
 				<div
 					class="flex gap-2"
 					onclick={() => {
+						$mainTitle = 'Login';	
 						mbukakTambahUser = false;
 					}}
 				>

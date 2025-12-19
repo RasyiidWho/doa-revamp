@@ -15,6 +15,7 @@
 	import { gsap } from 'gsap';
 	import { onMount, tick } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { mainTitle } from '$lib/store';
 
 	import Calendar from '$lib/components/ui/calendar/calendar.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
@@ -53,6 +54,7 @@
 	let nomor = $state('');
 	let revisi = $state('');
 	let animationFrame: number;
+	let searchRef = $state<HTMLInputElement | null>(null);
 	// let dateNow = $state();
 
 	const group = [
@@ -169,17 +171,21 @@
 	onMount(() => {
 		document.addEventListener('keydown', async (e) => {
 			if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+				searchRef?.focus();
 				e.preventDefault();
 				if (mbukakSearch) {
 					mbukakSearch = false;
 				} else {
 					mbukakSearch = true;
-					await tick();
-					const el = document.querySelector('.search') as HTMLInputElement;
-					if (el) el.focus();
 				}
+
+				// await tick();
+				// console.log('eek');
+				// const el = document.querySelector('.search') as HTMLInputElement;
 			}
 		});
+
+		$mainTitle = group.find((t) => t.value === value)?.label || '';
 
 		// if (data.user) {
 		// 	console.log(data.user);
@@ -441,7 +447,14 @@
 			<Select.Group>
 				<!-- <Select.Label>Fruits</Select.Label> -->
 				{#each group as group (group.value)}
-					<Select.Item class="rounded-none shadow-none px-3 py-2 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={group.value} label={group.label}>
+					<Select.Item
+						class="rounded-none shadow-none px-3 py-2 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!"
+						value={group.value}
+						label={group.label}
+						onclick={() => {
+							$mainTitle = group.label;
+						}}
+					>
 						{#if group.value === 'aircraft'}
 							<img src="plane.svg?v=2" class="w-6 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
 						{:else}
@@ -467,6 +480,7 @@
 		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group aspect-squre"
 		onclick={() => {
 			fUsers();
+			$mainTitle = 'Daftar User';
 			mbukakUsers = true;
 		}}
 	>
@@ -482,7 +496,7 @@
 				<Input
 					type="text"
 					placeholder="Cari..."
-					class="search w-full rounded-none bg-transparent border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0"
+					class="w-full rounded-none bg-transparent border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0"
 					autofocus={true}
 					bind:value={searchDoa}
 					onkeydown={async (event) => {
@@ -492,6 +506,7 @@
 							selectedDoaGroup = '';
 							selectedDoaIcon = 'search';
 							selectedDoaTitle = 'Hasil Pencarian: ' + searchDoa;
+							$mainTitle = 'Pencarian: ' + searchDoa;
 							mbukakDoa = true;
 						}
 					}}
@@ -506,6 +521,7 @@
 						selectedDoaGroup = '';
 						selectedDoaIcon = 'search';
 						selectedDoaTitle = 'Hasil Pencarian: ' + searchDoa;
+						$mainTitle = 'Pencarian: ' + searchDoa;
 						mbukakDoa = true;
 					}}
 				/>
@@ -592,6 +608,7 @@
 											selectedDoaGroup = value.toUpperCase();
 											selectedDoaIcon = item.name.toLowerCase();
 											selectedDoaTitle = sub.name;
+											$mainTitle = sub.name;
 											mbukakDoa = true;
 										}}
 									>
@@ -614,6 +631,7 @@
 									selectedDoaGroup = value.toUpperCase();
 									selectedDoaIcon = item.name.toLowerCase();
 									selectedDoaTitle = item.name;
+									$mainTitle = item.name;
 									mbukakDoa = true;
 								}}
 							>
@@ -638,6 +656,7 @@
 		// console.log('tutup');
 		data = { ...data, doa_selected: [], users: [] };
 		// console.log(data);
+		$mainTitle = group.find((t) => t.value === value)?.label || '';
 	}}
 >
 	<Drawer.Content class="bg-[#FAF8F4]! min-h-[95dvh]! flex! items-center!">
@@ -672,12 +691,13 @@
 					<div>
 						<div class="relative w-full items-center group h-full">
 							<img src="search.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
-							<Input type="text" placeholder="Cari..." class="search w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={true} bind:value={search} />
+							<Input type="text" ref={searchRef} placeholder="Cari..." class="search w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={true} bind:value={search} />
 						</div>
 					</div>
 					<div
 						onclick={() => {
 							anyar = true;
+							$mainTitle = 'Tambah DOA';
 							mbukakTambahDoa = true;
 						}}
 					>
@@ -689,11 +709,12 @@
 					<div
 						class="flex gap-2"
 						onclick={() => {
-							mbukakDoa = false;
-						}}
-					>
-						<div>
-							<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
+									$mainTitle = group.find((t) => t.value === value)?.label || '';
+									mbukakDoa = false;
+								}}
+							>
+							<div>
+								<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
 								<img src="minimize.svg?a" class="w-3 group-hover:rotate-[180deg] transition-all duration-500" alt="" />
 							</div>
 						</div>
@@ -780,6 +801,7 @@
 											onclick={() => {
 												anyar = false;
 												selectedDoa = doa;
+												$mainTitle = 'Edit DOA';
 												mbukakTambahDoa = true;
 											}}
 										>
@@ -815,7 +837,17 @@
 </Drawer.Root>
 
 <!-- @b tambah doa -->
-<Drawer.Root bind:open={mbukakTambahDoa} direction="right">
+<Drawer.Root
+	bind:open={mbukakTambahDoa}
+	direction="right"
+	onClose={() => {
+		if (mbukakDoa) {
+			$mainTitle = selectedDoaTitle;
+		} else {
+			$mainTitle = group.find((t) => t.value === value)?.label || '';
+		}
+	}}
+>
 	<Drawer.Content class="bg-[#FAF8F4]! min-h-0!">
 		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll" data-vaul-no-drag>
 			<div class="w-full flex justify-between pt-4">
@@ -829,6 +861,11 @@
 				<div
 					class="flex gap-2"
 					onclick={() => {
+						if (mbukakDoa) {
+							$mainTitle = selectedDoaTitle;
+						} else {
+							$mainTitle = group.find((t) => t.value === value)?.label || '';
+						}
 						mbukakTambahDoa = false;
 					}}
 				>
@@ -983,6 +1020,7 @@
 	bind:open={mbukakUsers}
 	onClose={() => {
 		data = { ...data, doa_selected: [], users: [] };
+		$mainTitle = group.find((t) => t.value === value)?.label || '';
 	}}
 >
 	<Drawer.Content class="bg-[#FAF8F4]! min-h-[95dvh]! flex! items-center!">
@@ -1012,12 +1050,13 @@
 						</div> -->
 						<div class="relative w-full items-center group h-full">
 							<img src="search.svg" class="absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
-							<Input type="text" placeholder="Cari..." class="search w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={true} bind:value={search} />
+							<Input type="text" placeholder="Cari..." ref={searchRef} class="search w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={true} bind:value={search} />
 						</div>
 					</div>
 					<div
 						class="flex gap-2"
 						onclick={() => {
+							$mainTitle = group.find((t) => t.value === value)?.label || '';
 							mbukakUsers = false;
 						}}
 					>
@@ -1102,6 +1141,7 @@
 											// selectedUserLevel = '0';
 											search = '';
 											// console.log(userx);
+											$mainTitle = 'Edit User';
 											mbukakEditUser = true;
 										}}
 									>
@@ -1123,7 +1163,13 @@
 </Drawer.Root>
 
 <!-- @b edit user -->
-<Drawer.Root bind:open={mbukakEditUser} direction="right">
+<Drawer.Root
+	bind:open={mbukakEditUser}
+	direction="right"
+	onClose={() => {
+		$mainTitle = 'Daftar User';
+	}}
+>
 	<Drawer.Content class="bg-[#FAF8F4]! min-h-0!">
 		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll" data-vaul-no-drag>
 			<div class="w-full flex justify-between pt-4">
@@ -1137,6 +1183,7 @@
 				<div
 					class="flex gap-2"
 					onclick={() => {
+						$mainTitle = 'Daftar User';
 						mbukakTambahDoa = false;
 					}}
 				>
