@@ -153,11 +153,11 @@
 
 	let greeting = $derived.by(() => {
 		const hour = new Date(dateNow).getHours();
-		if (hour >= 0 && hour <= 11) {
+		if (hour >= 0 && hour <= 10) {
 			return 'Pagi';
-		} else if (hour >= 12 && hour <= 16) {
+		} else if (hour >= 11 && hour <= 15) {
 			return 'Siang';
-		} else if (hour >= 17 && hour <= 19) {
+		} else if (hour >= 16 && hour <= 19) {
 			return 'Sore';
 		} else if (hour >= 20 && hour <= 23) {
 			return 'Malam';
