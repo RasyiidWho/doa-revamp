@@ -721,7 +721,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="[&_[data-slot=table-container]]:max-h-[calc(100dvh-10rem)]! [&_[data-slot=table-container]]:overflow-y-auto!">
+			<div class="table-scroll-container">
 				<Table.Root>
 					<Table.Header class="shadow-none!">
 						<Table.Row class="bg-[#F3EBE0]! sticky! top-0! z-20!">
@@ -1058,7 +1058,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="[&_[data-slot=table-container]]:max-h-[calc(100dvh-10rem)]! [&_[data-slot=table-container]]:overflow-y-auto!">
+			<div class="table-scroll-container">
 				<Table.Root>
 					<Table.Header class="shadow-none!">
 						<Table.Row class="bg-[#F3EBE0]! sticky! top-0! z-20!">

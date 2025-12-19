@@ -230,3 +230,9 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
 	-webkit-box-shadow: 0 0 0 30px white inset !important;
 }
+
+/* Table scroll container - targets the shadcn-svelte Table component */
+.table-scroll-container [data-slot='table-container'] {
+	max-height: calc(100dvh - 10rem);
+	overflow-y: auto;
+}
