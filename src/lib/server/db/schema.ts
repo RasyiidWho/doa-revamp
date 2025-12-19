@@ -170,10 +170,10 @@ export const standardbu = mysqlTable("standardbu", {
 ]);
 
 export const useraccounts = mysqlTable("useraccounts", {
-	username: varchar({ length: 50 }).notNull(),
-	kuid: varchar({ length: 32 }).notNull(),
-	password: varchar({ length: 35 }).notNull(),
-	userlevel: int().notNull(),
+	username: varchar("username", { length: 50 }).notNull(),
+	kuid: varchar("kuid", { length: 32 }).notNull(),
+	password: varchar("password", { length: 35 }).notNull(),
+	userlevel: int("userlevel").notNull(),
 	provinsi: varchar("Provinsi", { length: 20 }).notNull(),
 	configPenghasil: varchar("Config_penghasil", { length: 50 }).notNull(),
 	activated: mysqlEnum("Activated", ['Y','N']).default('N').notNull(),
@@ -183,10 +183,10 @@ export const useraccounts = mysqlTable("useraccounts", {
 ]);
 
 export const useraccounts170325 = mysqlTable("useraccounts170325", {
-	username: varchar({ length: 50 }).notNull(),
-	kuid: varchar({ length: 32 }).notNull(),
-	password: varchar({ length: 35 }).notNull(),
-	userlevel: int().notNull(),
+	username: varchar("username", { length: 50 }).notNull(),
+	kuid: varchar("kuid", { length: 32 }).notNull(),
+	password: varchar("password", { length: 35 }).notNull(),
+	userlevel: int("userlevel").notNull(),
 	provinsi: varchar("Provinsi", { length: 20 }).notNull(),
 	configPenghasil: varchar("Config_penghasil", { length: 50 }).notNull(),
 	activated: mysqlEnum("Activated", ['Y','N']).default('N').notNull(),

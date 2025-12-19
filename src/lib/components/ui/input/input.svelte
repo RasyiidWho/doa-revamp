@@ -20,16 +20,16 @@
 	}: Props = $props();
 </script>
 <style>
-input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active {
-	transition: background-color 5000s !important;
-	-webkit-text-fill-color: #5c4d3c !important;
-	caret-color: #5c4d3c !important;
-}
-
+	input:-webkit-autofill,
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus,
+	input:-webkit-autofill:active {
+		transition: background-color 5000s !important;
+		-webkit-text-fill-color: #5c4d3c !important;
+		caret-color: #5c4d3c !important;
+	}
 </style>
+
 {#if type === "file"}
 	<input
 		bind:this={ref}

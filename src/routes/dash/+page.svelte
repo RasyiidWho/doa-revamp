@@ -28,6 +28,7 @@
 	let tanggal = $state<CalendarDate | undefined>();
 	let valid = $state<CalendarDate | undefined>();
 	let anyar = $state(false);
+	let loading = $state(false);
 
 	let showSearch = $state(false);
 	let { data }: PageProps = $props();
@@ -205,7 +206,7 @@
 			ease: 'power1.inOut'
 		});
 
-		fUsers();
+		// fUsers();
 		fDoa();
 	});
 
@@ -258,48 +259,55 @@
 	});
 
 	const fUsers = async () => {
-		const response = await fetch('/-users/v', {
-			method: 'GET'
-		});
-
-		if (response) {
-			response.json().then((res) => {
-				const transformedUsers = res.map((user) => ({
-					...user,
-					userlevel_name: (() => {
-						if (user.userlevel == '-1') return 'Administrator';
-						if (user.userlevel == '1') return 'PMO/PPC';
-						if (user.userlevel == '2') return 'Managemen';
-						if (user.userlevel == '3') return 'PM dan PE';
-						if (user.userlevel == '4') return 'Eksekutif';
-						if (user.userlevel == '5') return 'Controller';
-						return '-';
-					})(),
-					activated: user.userlevel == '0' ? 'Aktivasi' : user.activated === 'Y' ? 'Aktif' : user.activated === 'N' ? 'Nonaktif' : user.activated
-				}));
-				data = { ...data, users: transformedUsers };
-				// console.log(data.users[0]);
+		loading = true;
+		setTimeout(async () => {
+			const response = await fetch('/-users/v', {
+				method: 'GET'
 			});
-		}
+
+			if (response) {
+				response.json().then((res) => {
+					loading = false;
+					const transformedUsers = res.map((user) => ({
+						...user,
+						userlevel_name: (() => {
+							if (user.userlevel == '-1') return 'Administrator';
+							if (user.userlevel == '1') return 'PMO/PPC';
+							if (user.userlevel == '2') return 'Managemen';
+							if (user.userlevel == '3') return 'PM dan PE';
+							if (user.userlevel == '4') return 'Eksekutif';
+							if (user.userlevel == '5') return 'Controller';
+							return '-';
+						})(),
+						activated: user.userlevel == '0' ? 'Aktivasi' : user.activated === 'Y' ? 'Aktif' : user.activated === 'N' ? 'Nonaktif' : user.activated
+					}));
+					data = { ...data, users: transformedUsers };
+					// console.log(data.users[0]);
+				});
+			}
+		}, 1000);
 	};
 
 	const fDoa = async (s: string, t: string) => {
-		data = { ...data, doa_selected: [] };
-		const response = await fetch('/-doa/v', {
-			method: 'POST',
-			body: JSON.stringify({ s: s, t: t })
-		});
-
-		if (response) {
-			response.json().then((res) => {
-				if (s || t) {
-					data = { ...data, doa_selected: res };
-					console.log(data.doa_selected);
-				} else {
-					data = { ...data, doa: res };
-				}
+		loading = true;
+		setTimeout(async () => {
+			const response = await fetch('/-doa/v', {
+				method: 'POST',
+				body: JSON.stringify({ s: s, t: t })
 			});
-		}
+
+			if (response) {
+				response.json().then((res) => {
+					loading = false;
+					if (s || t) {
+						data = { ...data, doa_selected: res };
+						console.log(data.doa_selected);
+					} else {
+						data = { ...data, doa: res };
+					}
+				});
+			}
+		}, 1000);
 	};
 
 	let fLogout = async () => {
@@ -542,8 +550,9 @@
 
 	<!-- @b list doa -->
 	<div class="bg-white/25 flex items-center justify-center w-11/12 h-3/4">
-		<div class="bg-white/50 h-full w-full mx-4 my-4 flex flex-col">
+		<div class="bg-white/50 h-full w-full mx-4 my-4 flex flex-col min-h-[50dvh] relative">
 			<div class="p-4">
+				<img src="spinner_color.svg?a" class=" h-5! w-5! absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 {loading ? 'block' : 'hidden'}" alt="" />
 				<div class="flex justify-between w-full bg-[#F3EBE0] p-4 px-6 mb-2">
 					<p class="font-medium">Daftar DOA</p>
 					<p class="font-medium">Jumlah</p>
@@ -608,9 +617,17 @@
 </div>
 
 <!-- @b doa -->
-<Drawer.Root bind:open={mbukakDoa}>
+<Drawer.Root
+	bind:open={mbukakDoa}
+	onClose={() => {
+		console.log('tutup');
+		data = { ...data, doa_selected: [], users: [] };
+		console.log(data);
+	}}
+>
 	<Drawer.Content class="bg-[#FAF8F4]! min-h-[95dvh]! flex! items-center!">
-		<div class="w-11/12 pt-12 gap-2 flex flex-col">
+		<div class="h-screen w-screen z-50 absolute {loading ? 'block' : 'hidden'}"><img src="spinner_color.svg?a" class=" h-5! w-5! absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" alt="" /></div>
+		<div class="w-11/12 pt-12 gap-2 flex-col flex">
 			<div class="w-full flex justify-between">
 				<div class="flex gap-2">
 					<div class={selectedDoaGroup ? 'flex' : 'hidden'}>
@@ -632,7 +649,7 @@
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] items-center group">
 							<div class="bg-secondary p-2 px-3">
-								<p class="text-white! min-w-5 text-center">{filteredDoa.length}</p>
+								<p class="text-white! min-w-5 text-center">{filteredDoa.length || "-"}</p>
 							</div>
 							<p class="font-medium px-3">Total Dokumen</p>
 						</div>
@@ -731,7 +748,7 @@
 							<!-- <Table.Head class="text-end pr-4">-</Table.Head> -->
 						</Table.Row>
 					</Table.Header>
-					<Table.Body>
+					<Table.Body class={loading ? 'hidden' : 'visible'}>
 						{#if filteredDoa}
 							{#each filteredDoa as doa (doa.no)}
 								<Table.Row class="group relative! border-0! hover:bg-secondary/10! hover:scale-[100.5%]! transition-all!">
@@ -947,8 +964,14 @@
 </Drawer.Root>
 
 <!-- @b users -->
-<Drawer.Root bind:open={mbukakUsers}>
+<Drawer.Root
+	bind:open={mbukakUsers}
+	onClose={() => {
+		data = { ...data, doa_selected: [], users: [] };
+	}}
+>
 	<Drawer.Content class="bg-[#FAF8F4]! min-h-[95dvh]! flex! items-center!">
+		<div class="h-screen w-screen z-50 absolute {loading ? 'block' : 'hidden'}"><img src="spinner_color.svg?a" class=" h-5! w-5! absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" alt="" /></div>
 		<div class="w-11/12 pt-12 gap-2 flex flex-col">
 			<div class="w-full flex justify-between">
 				<div>
@@ -1030,18 +1053,18 @@
 							</Table.Head>
 						</Table.Row>
 					</Table.Header>
-					<Table.Body>
+					<Table.Body class={loading ? 'hidden' : 'visible'}>
 						{#if filteredUsers}
-							{#each filteredUsers as user (user.kuid)}
+							{#each filteredUsers as userx (userx.kuid)}
 								<!-- {"username":"160238","kuid":"c054e296693e2c4eb00c371ad632fdc4","password":"6d2f4baaaee3f763980805bad0363546","userlevel":1,"provinsi":"","configPenghasil":"Dimas Septa","activated":"Y"}, -->
 								<Table.Row class="group relative! border-0! hover:bg-secondary/10! hover:scale-[100.5%]! transition-all!">
 									<Table.Cell class="font-medium pl-4! w-1! justify-center! items-center!">
-										{#if user.userlevel == '0'}
+										{#if userx.userlevel == '0'}
 											<div class="bg-orange-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
 												<div class="bg-orange-600! rounded-full w-1 h-1"></div>
 												<span class="text-xs text-orange-600!">Aktivasi</span>
 											</div>
-										{:else if user.activated === 'Aktif'}
+										{:else if userx.activated === 'Aktif'}
 											<div class="bg-green-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
 												<div class="bg-green-600! rounded-full w-1 h-1"></div>
 												<span class="text-xs text-green-600!">Aktif</span>
@@ -1053,27 +1076,21 @@
 											</div>
 										{/if}
 									</Table.Cell>
-									<Table.Cell class="text-center! w-1/8!">{user.username.length > 20 ? user.username.substring(0, 20) + '...' : user.username}</Table.Cell>
-									<Table.Cell class="">{user.configPenghasil.length > 20 ? user.configPenghasil.substring(0, 20) + '...' : user.configPenghasil}</Table.Cell>
-									<!-- <Table.Cell class="w-1/6"
-									>{#if user.d}
-										{user.d.length > 20 ? user.d.substring(0, 20) + '...' : user.d}
-									{:else}
-										-
-									{/if}</Table.Cell
-								> -->
-									<Table.Cell class="w-1/6!">{user.userlevel_name}</Table.Cell>
+									<Table.Cell class="text-center! w-1/8!">{userx.username.length > 20 ? userx.username.substring(0, 20) + '...' : userx.username}</Table.Cell>
+									<Table.Cell class="">{userx.configPenghasil.length > 20 ? userx.configPenghasil.substring(0, 20) + '...' : userx.configPenghasil}</Table.Cell>
+									<Table.Cell class="w-1/6!">{userx.userlevel_name}</Table.Cell>
 									<div
 										class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-all"
 										onclick={() => {
-											selectedUser = user;
-											selectedUserLevel = user.userlevel.toString();
+											selectedUser = userx;
+											selectedUserLevel = userx.userlevel.toString();
 											// selectedUserLevel = '0';
 											search = '';
+											console.log(userx);
 											mbukakEditUser = true;
 										}}
 									>
-										{#if user.userlevel}
+										{#if userx.userlevel}
 											<!-- <img src="copy.svg" class="w-3" alt="" /> -->
 											<div class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"><img src="edit.svg" class="w-3.5" alt="" /></div>
 										{:else}

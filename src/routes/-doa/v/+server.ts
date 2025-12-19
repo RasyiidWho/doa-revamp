@@ -14,7 +14,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			.select()
 			.from(standard)
 			.where(
-				sql`${standard.remark} != 'D' AND (${standard.no} LIKE ${searchPattern} OR 
+				sql`(${standard.no} LIKE ${searchPattern} OR 
 					${standard.number} LIKE ${searchPattern} OR 
 					${standard.date} LIKE ${searchPattern} OR 
 					${standard.date2} LIKE ${searchPattern} OR 
@@ -96,20 +96,20 @@ export const POST: RequestHandler = async ({ request }) => {
 				total: fmt(getCount('CVE') + getCount('AWO') + getCount('ass')),
 				sub: [
 					{
-						name: 'PERSONNEL ASSIGNMENT - CVE',
+						name: 'CVE',
 						type: 'CVE',
 						total: fmt(getCount('CVE'))
 					},
 					{
-						name: 'PERSONNEL ASSIGNMENT - AWO',
+						name: 'AWO',
 						type: 'AWO',
 						total: fmt(getCount('AWO'))
 					},
-					{
-						name: 'Assignment Project CVE and AWO',
-						type: 'ass',
-						total: fmt(getCount('ass'))
-					}
+					// {
+					// 	name: 'Assignment Project CVE and AWO',
+					// 	type: 'ass',
+					// 	total: fmt(getCount('ass'))
+					// }
 				]
 			},
 			{
