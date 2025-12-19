@@ -1091,8 +1091,8 @@
 											</div>
 										{/if}
 									</Table.Cell>
-									<Table.Cell class="text-center! w-1/8!">{userx.username.length > 20 ? userx.username.substring(0, 20) + '...' : userx.username}</Table.Cell>
-									<Table.Cell class="">{userx.configPenghasil.length > 20 ? userx.configPenghasil.substring(0, 20) + '...' : userx.configPenghasil}</Table.Cell>
+									<Table.Cell class="text-center! w-1/8!">{userx.username}</Table.Cell>
+									<Table.Cell class="">{userx.configPenghasil}</Table.Cell>
 									<Table.Cell class="w-1/6!">{userx.userlevel_name}</Table.Cell>
 									<div
 										class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-all"
