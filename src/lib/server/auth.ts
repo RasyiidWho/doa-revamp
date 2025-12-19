@@ -7,6 +7,7 @@ import { mysqlTable, varchar, int, mysqlEnum } from "drizzle-orm/mysql-core";
 
 const userTable = mysqlTable("useraccounts", {
 	id: varchar("username", { length: 50 }).notNull(),
+	kuid: varchar("kuid", { length: 50 }).notNull(),
 	password: varchar({ length: 35 }).notNull(),
 	userlevel: int().notNull(),
 	provinsi: varchar("Provinsi", { length: 20 }).notNull(),
@@ -24,7 +25,8 @@ export const lucia = new Lucia(adapter, {
 	},
 	getUserAttributes: (attributes) => {
 		return {
-			username: attributes.id,
+			id: attributes.id,
+			kuid: attributes.kuid,
 			userlevel: attributes.userlevel,
 			provinsi: attributes.provinsi,
 			configPenghasil: attributes.configPenghasil,
@@ -42,6 +44,7 @@ declare module "lucia" {
 
 interface DatabaseUserAttributes {
 	id: string;
+	kuid: string;
 	userlevel: number;
 	provinsi: string;
 	configPenghasil: string;

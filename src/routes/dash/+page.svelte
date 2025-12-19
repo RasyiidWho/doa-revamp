@@ -187,9 +187,9 @@
 
 		$mainTitle = group.find((t) => t.value === value)?.label || '';
 
-		// if (data.user) {
-		// 	console.log(data.user);
-		// }
+		if (data.user) {
+			console.log(data.user);
+		}
 		updateTime();
 		gsap.fromTo(
 			'.plane',
@@ -808,22 +808,12 @@
 											<img src="edit.svg" class="w-3.5" alt="" />
 										</div>
 										{#if doa.nmpath}
-											<a
-												href={(() => {
-													if (selectedDoaTitle && selectedDoaTitle.toUpperCase().includes('FORM')) {
-														return `http://portalditek.indonesian-aerospace.com/webdoa/${doa.pdf || doa.nmpath}`;
-													}
-													const ndm = doa.nmpath.split('/').pop();
-													const nmpath = doa.nmpath;
-													const jdl = encodeURIComponent(doa.title);
-													const kuid = '40a2d4ec3577eb61c342bc09dd5cb73b';
-													return `http://portalditek.indonesian-aerospace.com/webdoa/tcpdf/edm/watermark.php?ndm=${ndm}&nmpath=${nmpath}&jdl=${jdl}&kuid=${kuid}`;
-												})()}
-												target="_blank"
-												class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"
+											<div
+												onclick={() => window.open(selectedDoaTitle && selectedDoaTitle.toUpperCase().includes('FORM') ? `http://portalditek.indonesian-aerospace.com/webdoa/${doa.pdf || doa.nmpath}` : `http://portalditek.indonesian-aerospace.com/webdoa/tcpdf/edm/watermark.php?ndm=${doa.nmpath.split('/').pop()}&nmpath=${doa.nmpath}&jdl=${encodeURIComponent(doa.title)}&kuid=${data.user.kuid}`, '_blank')}
+												class="bg-primary flex p-1.5 aspect-square border-1 border-secondary cursor-pointer"
 											>
 												<img src="download.svg" class="w-3.5" alt="" />
-											</a>
+											</div>
 										{/if}
 									</div>
 								</Table.Row>
