@@ -289,7 +289,7 @@
 	});
 
 	const fUsers = async () => {
-		// loadingDrawer = true;
+		loadingDrawer = true;
 		setTimeout(async () => {
 			const response = await fetch('/-users/r', {
 				method: 'GET'
@@ -297,7 +297,7 @@
 
 			if (response) {
 				response.json().then((res) => {
-					// loadingDrawer = false;
+					loadingDrawer = false;
 					const transformedUsers = res.map((user) => ({
 						...user,
 						userlevel_name: (() => {

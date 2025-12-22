@@ -3,9 +3,22 @@ import { json } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { useraccounts } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
+import * as yup from 'yup';
 
 export const POST: RequestHandler = async ({ request }) => {
 	const data = await request.json();
+	const schema = yup.object({
+		username: yup.string().required(),
+		userlevel: yup.number().required(),
+		password: yup.string(),
+		activated: yup.string().required()
+	});
+
+	try {
+		await schema.validate(data.e);
+	} catch (error: any) {
+		return json({ success: false, error: error.message }, { status: 400 });
+	}
 
 	if (data.e) {
 		const updateData = data.e.password
