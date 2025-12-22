@@ -573,7 +573,7 @@
 			</div>
 			<div class="w-fit bg-white/25 p-4 px-6">
 				<div class="flex gap-1.5">
-					<img src="date.svg?f" class="w-3.5" alt="" />
+					<img src="date.svg?f" class="w-5 opacity-75" alt="" />
 					<p class="text-secondary opacity-75">Tanggal</p>
 				</div>
 				<p class="font-medium text-lg whitespace-nowrap overflow-hidden text-ellipsis">{formattedDate}</p>
