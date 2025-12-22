@@ -702,7 +702,7 @@
 											await fDoas('', sub.type);
 											search = '';
 											selectedDoaType = sub.type;
-											selectedDoaGroup = value.toUpperCase();
+											selectedDoaGroup = value.toUpperCase().replace('_', ' ');
 											selectedDoaIcon = item.name.toLowerCase();
 											selectedDoaTitle = sub.name;
 											$mainTitle = sub.name;
@@ -726,7 +726,7 @@
 									await fDoas('', item.type);
 									search = '';	
 									selectedDoaType = item.type;
-									selectedDoaGroup = value.toUpperCase();
+									selectedDoaGroup = value.toUpperCase().replace('_', ' ');
 									selectedDoaIcon = item.name.toLowerCase();
 									selectedDoaTitle = item.name;
 									$mainTitle = item.name;
