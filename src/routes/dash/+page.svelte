@@ -237,7 +237,7 @@
 		});
 
 		// fUsers();
-		fDoa();
+		fDoas();
 	});
 
 	$effect(() => {
@@ -319,7 +319,7 @@
 	};
 
 	const fUser = async () => {
-		// loadingDrawer = true;
+		loadingInput = true;
 		setTimeout(async () => {
 			const response = await fetch('/-users/w', {
 				method: 'POST',
@@ -330,13 +330,14 @@
 				// response.json().then((res) => {
 				// 	console.log(res);
 				// });
+				loadingInput = false;
 				mbukakEditUser = false;
 				fUsers();
 			}
 		}, 1000);
 	};
 
-	const fDoa = async (s: string, t: string) => {
+	const fDoas = async (s: string, t: string) => {
 		if (s || t) {
 			loadingDrawer = true;
 		} else {
@@ -509,17 +510,17 @@
 		<img src="plus.svg" class="w-4 group-hover:rotate-[180deg] transition-all duration-1000" alt="" />
 		<p class="">Tambah</p>
 	</div>
-	{#if data.user.userlevel == -1} 
-	<div
-		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group aspect-squre"
-		onclick={() => {
-			fUsers();
-			$mainTitle = 'Daftar User';
-			mbukakUsers = true;
-		}}
-	>
-		<img src="users2.svg?c" class="w-5 group-hover:rotate-[24deg] transition-all duration-500" alt="" />
-	</div>
+	{#if data.user.userlevel == -1}
+		<div
+			class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group aspect-squre"
+			onclick={() => {
+				fUsers();
+				$mainTitle = 'Daftar User';
+				mbukakUsers = true;
+			}}
+		>
+			<img src="users2.svg?c" class="w-5 group-hover:rotate-[24deg] transition-all duration-500" alt="" />
+		</div>
 	{/if}
 	<Popover.Root bind:open={mbukakSearch}>
 		<Popover.Trigger class="flex! flex-row! bg-[#fef8f0]! p-2! px-3! gap-2! group">
@@ -536,7 +537,7 @@
 					bind:value={searchDoa}
 					onkeydown={async (event) => {
 						if (event.key === 'Enter') {
-							await fDoa(searchDoa, '');
+							await fDoas(searchDoa, '');
 							search = '';
 							selectedDoaGroup = '';
 							selectedDoaIcon = 'search';
@@ -551,7 +552,7 @@
 					class=" absolute top-1/2 right-3 h-4! w-4! -translate-y-1/2 cursor-pointer"
 					alt=""
 					onclick={async () => {
-						await fDoa(searchDoa, '');
+						await fDoas(searchDoa, '');
 						search = '';
 						selectedDoaGroup = '';
 						selectedDoaIcon = 'search';
@@ -570,8 +571,11 @@
 			fLogout();
 		}}
 	>
-		<img src="power.svg?d" class="w-4 pt-0 group-hover:rotate-[90deg] transition-all duration-500 {loadingLogout ? 'hidden' : 'block'}" alt="" />
-		<img src="spinner_color.svg?a" class="h-4! w-4! mt-1 {loadingLogout ? 'block' : 'hidden'}" alt="" />
+		{#if loadingLogout}
+			<img src="spinner_color.svg?a" class="h-4! w-4! mt-1" alt="" />
+		{:else}
+			<img src="power.svg?d" class="w-4 pt-0 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
+		{/if}
 	</div>
 </div>
 
@@ -639,7 +643,7 @@
 									<div
 										class="flex hover:underline cursor-pointer justify-between w-full p-0 px-6 text-secondary opacity-75 group"
 										onclick={async () => {
-											await fDoa('', sub.type);
+											await fDoas('', sub.type);
 											search = '';
 											selectedDoaGroup = value.toUpperCase();
 											selectedDoaIcon = item.name.toLowerCase();
@@ -662,7 +666,7 @@
 							<div
 								class="nonsub flex justify-between w-full p-2 px-6 hover:underline cursor-pointer hover:scale-[100.5%] transition-all"
 								onclick={async () => {
-									await fDoa('', item.type);
+									await fDoas('', item.type);
 									search = '';
 									selectedDoaGroup = value.toUpperCase();
 									selectedDoaIcon = item.name.toLowerCase();
@@ -1040,48 +1044,176 @@
 
 <!-- @b users -->
 {#if data.user.userlevel == -1}
-<Drawer.Root
-	bind:open={mbukakUsers}
-	onClose={() => {
-		data = { ...data, doa_selected: [], users: [] };
-		$mainTitle = group.find((t) => t.value === value)?.label || '';
-	}}
->
-	<Drawer.Content class="bg-[#FAF8F4]! min-h-[95dvh]! flex! items-center!">
-		<div class="h-screen w-screen z-50 absolute {loadingDrawer ? 'block' : 'hidden'}"><img src="spinner_color.svg?a" class=" h-5! w-5! absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" alt="" /></div>
-		<div class="w-11/12 pt-12 gap-2 flex flex-col">
-			<div class="w-full flex justify-between">
-				<div>
-					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
-						<img src="users3.svg?f" class="w-4" alt="" />
-						<p class="font-medium">Daftar User</p>
-					</div>
-				</div>
-
-				<div class="flex gap-2">
+	<Drawer.Root
+		bind:open={mbukakUsers}
+		onClose={() => {
+			data = { ...data, doa_selected: [], users: [] };
+			$mainTitle = group.find((t) => t.value === value)?.label || '';
+		}}
+	>
+		<Drawer.Content class="bg-[#FAF8F4]! min-h-[95dvh]! flex! items-center!">
+			<div class="h-screen w-screen z-50 absolute {loadingDrawer ? 'block' : 'hidden'}"><img src="spinner_color.svg?a" class=" h-5! w-5! absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" alt="" /></div>
+			<div class="w-11/12 pt-12 gap-2 flex flex-col">
+				<div class="w-full flex justify-between">
 					<div>
-						<div class="flex flex-row bg-[#F3EBE0] items-center group">
-							<div class="bg-secondary p-2 px-3">
-								<p class="text-white! min-w-5 text-center">{filteredUsers.length}</p>
-							</div>
-							<p class="font-medium px-3">Total User</p>
+						<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
+							<img src="users3.svg?f" class="w-4" alt="" />
+							<p class="font-medium">Daftar User</p>
 						</div>
 					</div>
-					<div>
-						<!-- <div class="relative flex flex-row bg-[#F3EBE0] p-3 group">
+
+					<div class="flex gap-2">
+						<div>
+							<div class="flex flex-row bg-[#F3EBE0] items-center group">
+								<div class="bg-secondary p-2 px-3">
+									<p class="text-white! min-w-5 text-center">{filteredUsers.length}</p>
+								</div>
+								<p class="font-medium px-3">Total User</p>
+							</div>
+						</div>
+						<div>
+							<!-- <div class="relative flex flex-row bg-[#F3EBE0] p-3 group">
 							<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
 							<div class="bg-secondary w-2 h-2 absolute -right-0.5 -top-0.5"></div>
 						</div> -->
-						<div class="relative w-full items-center group h-full">
-							<img src="search.svg" class="absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
-							<Input type="text" placeholder="Cari..." ref={searchRef} class="search w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={true} bind:value={search} />
+							<div class="relative w-full items-center group h-full">
+								<img src="search.svg" class="absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
+								<Input type="text" placeholder="Cari..." ref={searchRef} class="search w-full rounded-none bg-primary border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={true} bind:value={search} />
+							</div>
+						</div>
+						<div
+							class="flex gap-2"
+							onclick={() => {
+								$mainTitle = group.find((t) => t.value === value)?.label || '';
+								mbukakUsers = false;
+							}}
+						>
+							<div>
+								<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
+									<img src="minimize.svg?a" class="w-3 group-hover:rotate-[180deg] transition-all duration-500" alt="" />
+								</div>
+							</div>
 						</div>
 					</div>
+				</div>
+				<div class="table-scroll-container">
+					<Table.Root>
+						<Table.Header class="shadow-none!">
+							<Table.Row class="bg-[#F3EBE0]! sticky! top-0! z-20!">
+								<Table.Head class="py-4! pl-4! cursor-pointer " onclick={() => handleSortUser('activated')}>
+									<div class="flex items-center gap-2 relative">
+										Status
+										{#if sortColumnUser === 'activated'}
+											<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
+										{/if}
+									</div>
+								</Table.Head>
+								<Table.Head class="text-center! cursor-pointer " onclick={() => handleSortUser('username')}>
+									<div class="flex items-center justify-center gap-2 relative">
+										NIK
+										{#if sortColumnUser === 'username'}
+											<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
+										{/if}
+									</div>
+								</Table.Head>
+								<Table.Head class="cursor-pointer " onclick={() => handleSortUser('configPenghasil')}>
+									<div class="flex items-center gap-2 relative">
+										Nama
+										{#if sortColumnUser === 'configPenghasil'}
+											<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
+										{/if}
+									</div>
+								</Table.Head>
+								<!-- <Table.Head>Organisasi</Table.Head> -->
+								<Table.Head class="cursor-pointer " onclick={() => handleSortUser('userlevel_name')}>
+									<div class="flex items-center gap-2 relative">
+										User Level
+										{#if sortColumnUser === 'userlevel_name'}
+											<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
+										{/if}
+									</div>
+								</Table.Head>
+							</Table.Row>
+						</Table.Header>
+						<Table.Body class={loadingDrawer ? 'hidden' : 'visible'}>
+							{#if filteredUsers}
+								{#each filteredUsers as userx (userx.kuid)}
+									<!-- {"username":"160238","kuid":"c054e296693e2c4eb00c371ad632fdc4","password":"6d2f4baaaee3f763980805bad0363546","userlevel":1,"provinsi":"","configPenghasil":"Dimas Septa","activated":"Y"}, -->
+									<Table.Row class="group relative! border-0! hover:bg-secondary/10! hover:scale-[100.5%]! transition-all!">
+										<Table.Cell class="font-medium pl-4! w-1! justify-center! items-center!">
+											{#if userx.userlevel == '0'}
+												<div class="bg-orange-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
+													<div class="bg-orange-600! rounded-full w-1 h-1"></div>
+													<span class="text-xs text-orange-600!">Aktivasi</span>
+												</div>
+											{:else if userx.activated === 'Aktif'}
+												<div class="bg-green-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
+													<div class="bg-green-600! rounded-full w-1 h-1"></div>
+													<span class="text-xs text-green-600!">Aktif</span>
+												</div>
+											{:else}
+												<div class="bg-gray-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
+													<div class="bg-gray-600! rounded-full w-1 h-1"></div>
+													<span class="text-xs text-gray-600!">Nonaktif</span>
+												</div>
+											{/if}
+										</Table.Cell>
+										<Table.Cell class="text-center! w-1/8! select-text!">{userx.username}</Table.Cell>
+										<Table.Cell class="select-text!">{userx.configPenghasil}</Table.Cell>
+										<Table.Cell class="w-1/6! select-text!">{userx.userlevel_name}</Table.Cell>
+										<div
+											class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-all"
+											onclick={() => {
+												selectedUser = userx;
+												selectedUserLevel = userx.userlevel.toString();
+												selectedUser.password = '';
+												// selectedUserLevel = '0';
+												search = '';
+												// console.log(userx);
+												$mainTitle = 'Edit User';
+												mbukakEditUser = true;
+											}}
+										>
+											{#if userx.userlevel}
+												<!-- <img src="copy.svg" class="w-3" alt="" /> -->
+												<div class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"><img src="edit.svg" class="w-3.5" alt="" /></div>
+											{:else}
+												<p class="text-xs font-medium bg-primary px-2 py-1 rounded-none border-1 border-secondary">Aktivasi</p>
+											{/if}
+										</div>
+									</Table.Row>
+								{/each}
+							{/if}
+						</Table.Body>
+					</Table.Root>
+				</div>
+			</div>
+		</Drawer.Content>
+	</Drawer.Root>
+
+	<!-- @b edit user -->
+	<Drawer.Root
+		bind:open={mbukakEditUser}
+		direction="right"
+		onClose={() => {
+			$mainTitle = 'Daftar User';
+		}}
+	>
+		<Drawer.Content class="bg-[#FAF8F4]! min-h-0!">
+			<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll" data-vaul-no-drag>
+				<div class="w-full flex justify-between pt-4">
+					<div>
+						<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
+							<img src="user.svg?f" class="w-4" alt="" />
+							<p class="font-medium">Edit User</p>
+						</div>
+					</div>
+
 					<div
 						class="flex gap-2"
 						onclick={() => {
-							$mainTitle = group.find((t) => t.value === value)?.label || '';
-							mbukakUsers = false;
+							$mainTitle = 'Daftar User';
+							mbukakTambahDoa = false;
 						}}
 					>
 						<div>
@@ -1091,214 +1223,88 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="table-scroll-container">
-				<Table.Root>
-					<Table.Header class="shadow-none!">
-						<Table.Row class="bg-[#F3EBE0]! sticky! top-0! z-20!">
-							<Table.Head class="py-4! pl-4! cursor-pointer " onclick={() => handleSortUser('activated')}>
-								<div class="flex items-center gap-2 relative">
-									Status
-									{#if sortColumnUser === 'activated'}
-										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
-									{/if}
-								</div>
-							</Table.Head>
-							<Table.Head class="text-center! cursor-pointer " onclick={() => handleSortUser('username')}>
-								<div class="flex items-center justify-center gap-2 relative">
-									NIK
-									{#if sortColumnUser === 'username'}
-										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
-									{/if}
-								</div>
-							</Table.Head>
-							<Table.Head class="cursor-pointer " onclick={() => handleSortUser('configPenghasil')}>
-								<div class="flex items-center gap-2 relative">
-									Nama
-									{#if sortColumnUser === 'configPenghasil'}
-										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
-									{/if}
-								</div>
-							</Table.Head>
-							<!-- <Table.Head>Organisasi</Table.Head> -->
-							<Table.Head class="cursor-pointer " onclick={() => handleSortUser('userlevel_name')}>
-								<div class="flex items-center gap-2 relative">
-									User Level
-									{#if sortColumnUser === 'userlevel_name'}
-										<img src="down.svg" class="w-2 absolute right-2 transition-all {sortDirectionUser === 'asc' ? '' : 'rotate-180'}" alt="" />
-									{/if}
-								</div>
-							</Table.Head>
-						</Table.Row>
-					</Table.Header>
-					<Table.Body class={loadingDrawer ? 'hidden' : 'visible'}>
-						{#if filteredUsers}
-							{#each filteredUsers as userx (userx.kuid)}
-								<!-- {"username":"160238","kuid":"c054e296693e2c4eb00c371ad632fdc4","password":"6d2f4baaaee3f763980805bad0363546","userlevel":1,"provinsi":"","configPenghasil":"Dimas Septa","activated":"Y"}, -->
-								<Table.Row class="group relative! border-0! hover:bg-secondary/10! hover:scale-[100.5%]! transition-all!">
-									<Table.Cell class="font-medium pl-4! w-1! justify-center! items-center!">
-										{#if userx.userlevel == '0'}
-											<div class="bg-orange-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
-												<div class="bg-orange-600! rounded-full w-1 h-1"></div>
-												<span class="text-xs text-orange-600!">Aktivasi</span>
-											</div>
-										{:else if userx.activated === 'Aktif'}
-											<div class="bg-green-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
-												<div class="bg-green-600! rounded-full w-1 h-1"></div>
-												<span class="text-xs text-green-600!">Aktif</span>
-											</div>
-										{:else}
-											<div class="bg-gray-500/10 py-0.5 flex items-center gap-1 px-1.5 text-center flex w-min">
-												<div class="bg-gray-600! rounded-full w-1 h-1"></div>
-												<span class="text-xs text-gray-600!">Nonaktif</span>
-											</div>
-										{/if}
-									</Table.Cell>
-									<Table.Cell class="text-center! w-1/8! select-text!">{userx.username}</Table.Cell>
-									<Table.Cell class="select-text!">{userx.configPenghasil}</Table.Cell>
-									<Table.Cell class="w-1/6! select-text!">{userx.userlevel_name}</Table.Cell>
-									<div
-										class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-all"
-										onclick={() => {
-											selectedUser = userx;
-											selectedUserLevel = userx.userlevel.toString();
-											selectedUser.password = '';
-											// selectedUserLevel = '0';
-											search = '';
-											// console.log(userx);
-											$mainTitle = 'Edit User';
-											mbukakEditUser = true;
-										}}
-									>
-										{#if userx.userlevel}
-											<!-- <img src="copy.svg" class="w-3" alt="" /> -->
-											<div class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"><img src="edit.svg" class="w-3.5" alt="" /></div>
-										{:else}
-											<p class="text-xs font-medium bg-primary px-2 py-1 rounded-none border-1 border-secondary">Aktivasi</p>
-										{/if}
-									</div>
-								</Table.Row>
-							{/each}
-						{/if}
-					</Table.Body>
-				</Table.Root>
-			</div>
-		</div>
-	</Drawer.Content>
-</Drawer.Root>
 
-<!-- @b edit user -->
-<Drawer.Root
-	bind:open={mbukakEditUser}
-	direction="right"
-	onClose={() => {
-		$mainTitle = 'Daftar User';
-	}}
->
-	<Drawer.Content class="bg-[#FAF8F4]! min-h-0!">
-		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll" data-vaul-no-drag>
-			<div class="w-full flex justify-between pt-4">
-				<div>
-					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
-						<img src="user.svg?f" class="w-4" alt="" />
-						<p class="font-medium">Edit User</p>
-					</div>
-				</div>
-
-				<div
-					class="flex gap-2"
-					onclick={() => {
-						$mainTitle = 'Daftar User';
-						mbukakTambahDoa = false;
-					}}
-				>
-					<div>
-						<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
-							<img src="minimize.svg?a" class="w-3 group-hover:rotate-[180deg] transition-all duration-500" alt="" />
+				<div class="w-full pt-4 flex flex-col gap-2 pb-4">
+					<div class="flex flex-col gap-1">
+						<p class="font-medium">NIK</p>
+						<div class="relative w-full items-center">
+							<img src="nik.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+							<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedUser.username} disabled />
 						</div>
 					</div>
-				</div>
-			</div>
 
-			<div class="w-full pt-4 flex flex-col gap-2 pb-4">
-				<div class="flex flex-col gap-1">
-					<p class="font-medium">NIK</p>
-					<div class="relative w-full items-center">
-						<img src="nik.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-						<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedUser.username} disabled />
+					<div class="flex flex-col gap-1">
+						<p class="font-medium">Nama</p>
+						<div class="relative w-full items-center">
+							<img src="name.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+							<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" bind:value={selectedUser.configPenghasil} autofocus={false} disabled />
+						</div>
+					</div>
+
+					<div class="flex flex-col gap-1">
+						<p class="font-medium">User Level</p>
+						<Select.Root type="single" name="favoriteFruit" bind:value={selectedUser.userlevel}>
+							<Select.Trigger placeholder="Pilih User Level" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none!">
+								<img src="working arrangement.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+								<p class="text-base {selectedUser.userlevel === 0 ? 'text-secondary/35!' : 'text-secondary!'}">{userlevels.find((t) => t.value === selectedUser.userlevel)?.label || 'Pilih User Level'}</p>
+								<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
+							</Select.Trigger>
+							<Select.Content class="mb-2! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
+								<Select.Group>
+									<!-- <Select.Label>Fruits</Select.Label> -->
+									{#each userlevels as userlevels (userlevels.value)}
+										<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={userlevels.value} label={userlevels.label}>
+											<img src="working arrangement.svg" class="w-3 ml-2 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
+											<p class="text-base">{userlevels.label}</p>
+										</Select.Item>
+									{/each}
+								</Select.Group>
+							</Select.Content>
+						</Select.Root>
+					</div>
+
+					<div class="flex flex-col gap-1">
+						<p class="font-medium">Password</p>
+						<div class="relative w-full items-center">
+							<img src="pass.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+							<Input bind:value={selectedUser.password} type="password" placeholder="Tidak Diubah" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+						</div>
+					</div>
+
+					<div class="flex w-full flex-col justify-center gap-1 text-left">
+						<p class="font-medium">Status Akun</p>
+						<RadioGroup.Root bind:value={selectedUser.activated}>
+							<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
+								<RadioGroup.Item value="Aktif" id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-full" />
+								<div class="grid gap-1.5 font-normal">
+									<p class="text-sm leading-none font-medium">Aktif</p>
+									<p class="text-secondary/75! text-sm">Status akun menjadi aktif memungkinkan pengguna untuk login dan menggunakan semua fitur aplikasi DOA.</p>
+								</div>
+							</Label>
+
+							<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-aria-checked:border-secondary has-aria-checked:bg-primary/50">
+								<RadioGroup.Item value="Nonaktif" id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-full" />
+								<div class="grid gap-1.5 font-normal">
+									<p class="text-sm leading-none font-medium">Nonaktif</p>
+									<p class="text-secondary/75! text-sm">Status akun menjadi nonaktif pengguna tidak dapat login dan tidak dapat menggunakan fitur aplikasi DOA.</p>
+								</div>
+							</Label>
+						</RadioGroup.Root>
 					</div>
 				</div>
-
-				<div class="flex flex-col gap-1">
-					<p class="font-medium">Nama</p>
-					<div class="relative w-full items-center">
-						<img src="name.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-						<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" bind:value={selectedUser.configPenghasil} autofocus={false} disabled />
-					</div>
+			</ScrollArea>
+			<div class="flex">
+				<div class="flex w-1/3 justify-center items-center py-4 text-center bg-red-900 p-2 px-3 gap-2 group">
+					<p class="font-medium !text-white">Hapus</p>
 				</div>
-
-				<div class="flex flex-col gap-1">
-					<p class="font-medium">User Level</p>
-					<Select.Root type="single" name="favoriteFruit" bind:value={selectedUser.userlevel}>
-						<Select.Trigger placeholder="Pilih User Level" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none!">
-							<img src="working arrangement.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-							<p class="text-base {selectedUser.userlevel === 0 ? 'text-secondary/35!' : 'text-secondary!'}">{userlevels.find((t) => t.value === selectedUser.userlevel)?.label || 'Pilih User Level'}</p>
-							<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
-						</Select.Trigger>
-						<Select.Content class="mb-2! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
-							<Select.Group>
-								<!-- <Select.Label>Fruits</Select.Label> -->
-								{#each userlevels as userlevels (userlevels.value)}
-									<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={userlevels.value} label={userlevels.label}>
-										<img src="working arrangement.svg" class="w-3 ml-2 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
-										<p class="text-base">{userlevels.label}</p>
-									</Select.Item>
-								{/each}
-							</Select.Group>
-						</Select.Content>
-					</Select.Root>
-				</div>
-
-				<div class="flex flex-col gap-1">
-					<p class="font-medium">Password</p>
-					<div class="relative w-full items-center">
-						<img src="pass.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-						<Input bind:value={selectedUser.password} type="password" placeholder="Tidak Diubah" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
-					</div>
-				</div>
-
-				<div class="flex w-full flex-col justify-center gap-1 text-left">
-					<p class="font-medium">Status Akun</p>
-					<RadioGroup.Root bind:value={selectedUser.activated}>
-						<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
-							<RadioGroup.Item value="Aktif" id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-full" />
-							<div class="grid gap-1.5 font-normal">
-								<p class="text-sm leading-none font-medium">Aktif</p>
-								<p class="text-secondary/75! text-sm">Status akun menjadi aktif memungkinkan pengguna untuk login dan menggunakan semua fitur aplikasi DOA.</p>
-							</div>
-						</Label>
-
-						<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-aria-checked:border-secondary has-aria-checked:bg-primary/50">
-							<RadioGroup.Item value="Nonaktif" id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-full" />
-							<div class="grid gap-1.5 font-normal">
-								<p class="text-sm leading-none font-medium">Nonaktif</p>
-								<p class="text-secondary/75! text-sm">Status akun menjadi nonaktif pengguna tidak dapat login dan tidak dapat menggunakan fitur aplikasi DOA.</p>
-							</div>
-						</Label>
-					</RadioGroup.Root>
+				<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group" onclick={fUser}>
+					{#if loadingInput}
+						<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
+					{:else}
+						<p class="font-medium !text-white">Ubah</p>
+					{/if}
 				</div>
 			</div>
-		</ScrollArea>
-		<div class="flex">
-			<div class="flex w-1/3 justify-center items-center py-4 text-center bg-red-900 p-2 px-3 gap-2 group">
-				<p class="font-medium !text-white">Hapus</p>
-			</div>
-			<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group" onclick={fUser}>
-				<p class="font-medium !text-white">Ubah</p>
-			</div>
-		</div>
-	</Drawer.Content>
-</Drawer.Root>
-
-
+		</Drawer.Content>
+	</Drawer.Root>
 {/if}

@@ -4,6 +4,7 @@ import { db } from '$lib/server/db';
 import { useraccounts } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import * as yup from 'yup';
+import md5 from 'blueimp-md5'
 
 export const POST: RequestHandler = async ({ request }) => {
 	const data = await request.json();
@@ -24,7 +25,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		const updateData = data.e.password
 			? {
 					userlevel: data.e.userlevel,
-					password: data.e.password,
+					password: md5(data.e.password),
 					activated: (data.e.activated == 'Aktif' ? 'Y' : 'N') as 'Y' | 'N'
 				}
 			: {
