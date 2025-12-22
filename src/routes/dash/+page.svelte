@@ -64,6 +64,13 @@
 		{ icon: 'helic.svg', value: 'non-aircraft', label: 'Non Aircraft' }
 	];
 
+	// const user = {
+	// 	nik: '',
+	// 	userlevel: '',
+	// 	activated: '',
+	// 	password: '',
+	// }
+
 	const subtypes = [
 		{ value: '41A', label: 'PART 41A Design Standard Manual (NDM)' },
 		{ value: '41B', label: 'PART 41B Drafting Standard Manual (NDS)' },
@@ -306,6 +313,23 @@
 					}));
 					data = { ...data, users: transformedUsers };
 					// console.log(data.users[0]);
+				});
+			}
+		}, 1000);
+	};
+
+	const fUser = async () => {
+		// loadingDrawer = true;
+		setTimeout(async () => {
+			const response = await fetch('/-users/a', {
+				method: 'POST',
+				body: JSON.stringify({ e: selectedUser })
+			});
+
+			if (response) {
+				response.json().then((res) => {
+					loadingDrawer = false;
+					console.log(res);
 				});
 			}
 		}, 1000);
@@ -1137,6 +1161,7 @@
 										onclick={() => {
 											selectedUser = userx;
 											selectedUserLevel = userx.userlevel.toString();
+											selectedUser.password = '';
 											// selectedUserLevel = '0';
 											search = '';
 											// console.log(userx);
@@ -1199,7 +1224,7 @@
 					<p class="font-medium">NIK</p>
 					<div class="relative w-full items-center">
 						<img src="nik.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-						<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} value={selectedUser.username} disabled />
+						<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedUser.username} disabled />
 					</div>
 				</div>
 
@@ -1207,7 +1232,7 @@
 					<p class="font-medium">Nama</p>
 					<div class="relative w-full items-center">
 						<img src="name.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-						<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" value={selectedUser.configPenghasil} autofocus={false} disabled />
+						<Input type="text" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" bind:value={selectedUser.configPenghasil} autofocus={false} disabled />
 					</div>
 				</div>
 
@@ -1237,7 +1262,7 @@
 					<p class="font-medium">Password</p>
 					<div class="relative w-full items-center">
 						<img src="pass.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-						<Input type="password" placeholder="Tidak Diubah" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+						<Input bind:value={selectedUser.password} type="password" placeholder="Tidak Diubah" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 					</div>
 				</div>
 
@@ -1267,7 +1292,7 @@
 			<div class="flex w-1/3 justify-center items-center py-4 text-center bg-red-900 p-2 px-3 gap-2 group">
 				<p class="font-medium !text-white">Hapus</p>
 			</div>
-			<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
+			<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group" onclick={fUser}>
 				<p class="font-medium !text-white">Ubah</p>
 			</div>
 		</div>
