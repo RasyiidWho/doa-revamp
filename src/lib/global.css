@@ -4,6 +4,7 @@
 	cursor: default;
 	color: #5c4d3c;
 	outline: none !important;
+	/* user-select: none; */
 }
 
 * {

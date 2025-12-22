@@ -797,13 +797,13 @@
 						{#if filteredDoa}
 							{#each filteredDoa as doa (doa.no)}
 								<Table.Row class="group relative! border-0! hover:bg-secondary/10! hover:scale-[100.5%]! transition-all!">
-									<Table.Cell class="font-medium! py-3! pl-4! w-1!">{doa.number || '-'}</Table.Cell>
-									<Table.Cell class="w-1!">{doa.nik || '-'}</Table.Cell>
-									<Table.Cell class="w-1!">{doa.nama || '-'}</Table.Cell>
-									<Table.Cell class="w-1!">{doa.revision || '-'}</Table.Cell>
-									<Table.Cell class="w-1!">{doa.date && !doa.date.includes('0000') ? doa.date : '-'}</Table.Cell>
-									<Table.Cell class="w-1!">{doa.date2 && !doa.date2.includes('0000') ? doa.date2 : '-'}</Table.Cell>
-									<Table.Cell class="max-w-[15vw] truncate" title={doa.title}>{doa.title || '-'}</Table.Cell>
+									<Table.Cell class="font-medium! py-3! pl-4! w-1! select-text!">{doa.number || '-'}</Table.Cell>
+									<Table.Cell class="w-1! select-text!">{doa.nik || '-'}</Table.Cell>
+									<Table.Cell class="w-1! select-text!">{doa.nama || '-'}</Table.Cell>
+									<Table.Cell class="w-1! select-text!">{doa.revision || '-'}</Table.Cell>
+									<Table.Cell class="w-1! select-text!">{doa.date && !doa.date.includes('0000') ? doa.date : '-'}</Table.Cell>
+									<Table.Cell class="w-1! select-text!">{doa.date2 && !doa.date2.includes('0000') ? doa.date2 : '-'}</Table.Cell>
+									<Table.Cell class="max-w-[15vw] truncate select-text!" title={doa.title}>{doa.title || '-'}</Table.Cell>
 									<div class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1 justify-end opacity-0 group-hover:opacity-100 transition-all">
 										<div
 											class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"
@@ -1126,9 +1126,9 @@
 											</div>
 										{/if}
 									</Table.Cell>
-									<Table.Cell class="text-center! w-1/8!">{userx.username}</Table.Cell>
-									<Table.Cell class="">{userx.configPenghasil}</Table.Cell>
-									<Table.Cell class="w-1/6!">{userx.userlevel_name}</Table.Cell>
+									<Table.Cell class="text-center! w-1/8! select-text!">{userx.username}</Table.Cell>
+									<Table.Cell class="select-text!">{userx.configPenghasil}</Table.Cell>
+									<Table.Cell class="w-1/6! select-text!">{userx.userlevel_name}</Table.Cell>
 									<div
 										class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-all"
 										onclick={() => {
