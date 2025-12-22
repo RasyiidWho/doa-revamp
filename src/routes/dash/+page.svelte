@@ -64,7 +64,7 @@
 
 	const group = [
 		{ icon: 'plane.svg', value: 'aircraft', label: 'Aircraft' },
-		{ icon: 'helic.svg', value: 'non-aircraft', label: 'Non Aircraft' }
+		{ icon: 'helic.svg', value: 'non_aircraft', label: 'Non Aircraft' }
 	];
 
 	if(data.user.userlevel == -1){
@@ -399,6 +399,8 @@
 					} else {
 						loadingDoa = false;
 						data = { ...data, doa: res };
+						value = res.def;
+						console.log(data)
 					}
 				});
 			}
@@ -494,8 +496,8 @@
 		<img src="down.svg" class="w-2 pt-1" alt="" />
 	</div>
 -->
-	<Select.Root type="single" name="favoriteFruit" bind:value>
-		<Select.Trigger class="flex! flex-row! bg-[#fef8f0]! py-5! px-3! w-48! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none!">
+	<Select.Root type="single" bind:value>
+		<Select.Trigger class="flex! flex-row! bg-[#fef8f0]! py-5! px-3! w-48! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none! {data.doa?.single ? 'pointer-events-none' : ''}">
 			<!-- {triggerContent} -->
 			<!-- <img
 			src="helic.svg?v=3"
@@ -682,7 +684,7 @@
 					<p class="font-medium">Jumlah</p>
 				</div>
 				{#if data.doa}
-					{#each data.doa[value === 'non-aircraft' ? 'non_aircraft' : 'aircraft'] || [] as item (item.name)}
+					{#each data.doa[value === 'non_aircraft' ? 'non_aircraft' : 'aircraft'] || [] as item (item.name)}
 						{#if item.sub}
 							<div class="withsub">
 								<div class="flex justify-between w-full p-2 px-6">
