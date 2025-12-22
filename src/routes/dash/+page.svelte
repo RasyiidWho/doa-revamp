@@ -541,6 +541,7 @@
 			</Select.Group>
 		</Select.Content>
 	</Select.Root>
+	{#if roleEditDoa}
 	<div
 		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group"
 		onclick={() => {
@@ -560,7 +561,8 @@
 		<img src="plus.svg" class="w-4 group-hover:rotate-[180deg] transition-all duration-1000" alt="" />
 		<p class="">Tambah</p>
 	</div>
-	{#if data.user.userlevel == -1}
+	{/if}
+	{#if roleUser}
 		<div
 			class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group aspect-squre"
 			onclick={() => {
@@ -575,6 +577,7 @@
 	<Popover.Root bind:open={mbukakSearch}>
 		<Popover.Trigger class="flex! flex-row! bg-[#fef8f0]! p-2! px-3! gap-2! group">
 			<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
+			<p class="{roleUser || roleEditDoa ? 'hidden' : ''}">Pencarian</p>
 		</Popover.Trigger>
 		<Popover.Content preventScroll={true} class="mb-3! rounded-none! shadow-none! bg-[#fef8f0]! w-80!  border-1! border-[#e1d5c5]! p-2!">
 			<div class="relative w-full items-center group h-full">
