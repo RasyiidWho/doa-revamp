@@ -216,3 +216,17 @@ export const session = mysqlTable("session", {
 (table) => [
 	primaryKey({ columns: [table.id], name: "session_id"}),
 ]);
+
+export const registers = mysqlTable("registers", {
+	email: varchar({ length: 100 }).notNull(),
+	nama: varchar({ length: 100 }).notNull(),
+	nik: varchar({ length: 100 }).notNull(),
+	org: varchar({ length: 50 }).notNull(),
+	orgLokasi: varchar("org_lokasi", { length: 50 }).notNull(),
+	mgrEmail: varchar("mgr_email", { length: 100 }).notNull(),
+	mgrNama: varchar("mgr_nama", { length: 100 }).notNull(),
+	mgrNik: varchar("mgr_nik", { length: 100 }).notNull(),
+},
+(table) => [
+	primaryKey({ columns: [table.nik], name: "registers_nik" }),
+]);

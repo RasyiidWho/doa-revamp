@@ -26,6 +26,17 @@
 
 	// gsap.registerPlugin(ScrollTrigger);
 
+	let register = $state({
+		email: '',
+		nama: '',
+		nik: '',
+		org: '',
+		org_lokasi: '',
+		mgr_email: '',
+		mgr_nama: '',
+		mgr_nik: ''
+	});
+
 	onMount(() => {
 		VanillaTilt.init(document.querySelectorAll('.planex'), {
 			// reverse: true,
@@ -87,15 +98,32 @@
 	let password = $state('sim4st3k123');
 	let errorMessage = $state('');
 
+	let fRegister = async () => {
+		disabled = true;
+		errorMessage = '';
+		const response = await fetch('/-register', {
+			method: 'POST',
+			body: JSON.stringify({ register })
+		});
+
+		const res = await response.json();
+
+		if (response.ok) {
+			// mbukakTambahUser = false;
+		} else {
+			tos('beat.svg', 'Register Gagal', res.message || 'Register failed');
+			setTimeout(async () => {
+				disabled = false;
+			}, 500);
+		}
+	};
+
 	let fLogin = async () => {
 		disabled = true;
 		errorMessage = '';
 		const response = await fetch('/-login', {
 			method: 'POST',
-			body: JSON.stringify({ username, password }),
-			headers: {
-				'Content-Type': 'application/json'
-			}
+			body: JSON.stringify({ username, password })
 		});
 
 		const res = await response.json();
@@ -126,11 +154,11 @@
 	richColors={false}
 	duration={3000}
 	visibleToasts={1}
-	class="!z-[10] [--width:340px]! xl:[--width:400px]!"
+	class="!z-[99999] [--width:340px]! xl:[--width:400px]!"
 	toastOptions={{
 		unstyled: true,
 		classes: {
-			toast: 'xl:absolute xl:left-0 mb-14 xl:mb-4 !z-[10]'
+			toast: 'xl:absolute xl:left-0 mb-14 xl:mb-4 !z-[99999]'
 		}
 	}}
 />
@@ -210,9 +238,13 @@
 </div>
 
 <!-- @b tambah user -->
-<Drawer.Root bind:open={mbukakTambahUser} direction="right" onClose={() => {
-	$mainTitle = 'Login';
-}}>
+<Drawer.Root
+	bind:open={mbukakTambahUser}
+	direction="right"
+	onClose={() => {
+		$mainTitle = 'Login';
+	}}
+>
 	<Drawer.Content class="bg-[#FAF8F4]! !min-h-0">
 		<ScrollArea scrollbarYClasses="hidden" class="el relative flex items-center px-4 gap-2 h-full !min-h-0 flex-col " orientation="vertical" type="scroll">
 			<div class="w-full flex justify-between pt-4" data-vaul-no-drag>
@@ -226,7 +258,7 @@
 				<div
 					class="flex gap-2"
 					onclick={() => {
-						$mainTitle = 'Login';	
+						$mainTitle = 'Login';
 						mbukakTambahUser = false;
 					}}
 				>
@@ -248,7 +280,7 @@
 							<p class="font-medium">Email</p>
 							<div class="relative w-full items-center">
 								<img src="mail.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input type="text" placeholder="Masukkan Email" class="w-full rounded-none border-transparent! bg-primary/75 placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.email} type="text" placeholder="Masukkan Email" class="w-full rounded-none border-transparent! bg-primary/75 placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
 
@@ -256,7 +288,7 @@
 							<p class="font-medium">Nama</p>
 							<div class="relative w-full items-center">
 								<img src="name.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input type="text" placeholder="Masukkan Nama" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.nama} type="text" placeholder="Masukkan Nama" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
 
@@ -264,7 +296,7 @@
 							<p class="font-medium">Password</p>
 							<div class="relative w-full items-center">
 								<img src="pass.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input type="password" placeholder="Masukkan Password" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.password} type="password" placeholder="Masukkan Password" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
 					</div>
@@ -277,7 +309,7 @@
 							<p class="font-medium">NIK</p>
 							<div class="relative w-full items-center">
 								<img src="nik.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input type="text" placeholder="Masukkan NIK" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.nik} type="text" placeholder="Masukkan NIK" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
 
@@ -285,7 +317,7 @@
 							<p class="font-medium">Kode Organisasi</p>
 							<div class="relative w-full items-center">
 								<img src="engineering standard.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input type="text" placeholder="Masukkan Kode Organisasi" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.org} type="text" placeholder="Masukkan Kode Organisasi" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
 
@@ -293,7 +325,7 @@
 							<p class="font-medium">Lokasi Kerja</p>
 							<div class="relative w-full items-center">
 								<img src="case.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-								<Input type="text" placeholder="Masukkan Lokasi Kerja" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.org_lokasi} type="text" placeholder="Masukkan Lokasi Kerja" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
 					</div>
@@ -306,7 +338,7 @@
 							<p class="font-medium">Nama Manager</p>
 							<div class="relative w-full items-center">
 								<img src="name.svg?a" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input type="text" placeholder="Masukkan Nama Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.mgr_nama} type="text" placeholder="Masukkan Nama Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
 
@@ -314,7 +346,7 @@
 							<p class="font-medium">NIK Manager</p>
 							<div class="relative w-full items-center">
 								<img src="nik.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input type="text" placeholder="Masukkan NIK Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.mgr_nik} type="text" placeholder="Masukkan NIK Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
 
@@ -322,7 +354,7 @@
 							<p class="font-medium">Email Manager</p>
 							<div class="relative w-full items-center">
 								<img src="mail.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input type="text" placeholder="Masukkan Email Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.mgr_email} type="text" placeholder="Masukkan Email Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 							</div>
 						</div>
 					</div>
@@ -356,7 +388,11 @@
 				</div>
 			</div></ScrollArea
 		>
-		<div>
+		<div
+			onclick={() => {
+				fRegister();
+			}}
+		>
 			<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
 				<p class="font-medium !text-white">Daftar</p>
 			</div>
