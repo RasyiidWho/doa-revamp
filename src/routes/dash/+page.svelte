@@ -291,7 +291,7 @@
 	const fUsers = async () => {
 		loadingDrawer = true;
 		setTimeout(async () => {
-			const response = await fetch('/-users/v', {
+			const response = await fetch('/-users/r', {
 				method: 'GET'
 			});
 
@@ -321,7 +321,7 @@
 	const fUser = async () => {
 		// loadingDrawer = true;
 		setTimeout(async () => {
-			const response = await fetch('/-users/a', {
+			const response = await fetch('/-users/w', {
 				method: 'POST',
 				body: JSON.stringify({ e: selectedUser })
 			});
@@ -342,7 +342,7 @@
 			loadingDoa = true;
 		}
 		setTimeout(async () => {
-			const response = await fetch('/-doa/v', {
+			const response = await fetch('/-doa/r', {
 				method: 'POST',
 				body: JSON.stringify({ s: s, t: t })
 			});
