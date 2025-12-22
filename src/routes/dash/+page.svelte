@@ -114,12 +114,12 @@
 	];
 
 	const userlevels = [
-		{ value: '-1', label: 'Administrator' },
-		{ value: '1', label: 'PMO/PPC' },
-		{ value: '2', label: 'Managemen' },
-		{ value: '3', label: 'PM dan PE' },
-		{ value: '4', label: 'Eksekutif' },
-		{ value: '5', label: 'Controller' }
+		{ value: -1, label: 'Administrator' },
+		{ value: 1, label: 'PMO/PPC' },
+		{ value: 2, label: 'Managemen' },
+		{ value: 3, label: 'PM dan PE' },
+		{ value: 4, label: 'Eksekutif' },
+		{ value: 5, label: 'Controller' }
 	];
 
 	// import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -289,7 +289,7 @@
 	});
 
 	const fUsers = async () => {
-		loadingDrawer = true;
+		// loadingDrawer = true;
 		setTimeout(async () => {
 			const response = await fetch('/-users/r', {
 				method: 'GET'
@@ -297,7 +297,7 @@
 
 			if (response) {
 				response.json().then((res) => {
-					loadingDrawer = false;
+					// loadingDrawer = false;
 					const transformedUsers = res.map((user) => ({
 						...user,
 						userlevel_name: (() => {
@@ -326,11 +326,12 @@
 				body: JSON.stringify({ e: selectedUser })
 			});
 
-			if (response) {
-				response.json().then((res) => {
-					loadingDrawer = false;
-					console.log(res);
-				});
+			if (response.ok) {
+				// response.json().then((res) => {
+				// 	console.log(res);
+				// });
+				mbukakEditUser = false;
+				fUsers();
 			}
 		}, 1000);
 	};
@@ -1238,10 +1239,10 @@
 
 				<div class="flex flex-col gap-1">
 					<p class="font-medium">User Level</p>
-					<Select.Root type="single" name="favoriteFruit" bind:value={selectedUserLevel}>
+					<Select.Root type="single" name="favoriteFruit" bind:value={selectedUser.userlevel}>
 						<Select.Trigger placeholder="Pilih User Level" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none!">
 							<img src="working arrangement.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-							<p class="text-base {selectedUserLevel === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{userlevels.find((t) => t.value === selectedUserLevel)?.label || 'Pilih User Level'}</p>
+							<p class="text-base {selectedUser.userlevel === 0 ? 'text-secondary/35!' : 'text-secondary!'}">{userlevels.find((t) => t.value === selectedUser.userlevel)?.label || 'Pilih User Level'}</p>
 							<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
 						</Select.Trigger>
 						<Select.Content class="mb-2! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
@@ -1268,7 +1269,7 @@
 
 				<div class="flex w-full flex-col justify-center gap-1 text-left">
 					<p class="font-medium">Status Akun</p>
-					<RadioGroup.Root value={selectedUser.activated}>
+					<RadioGroup.Root bind:value={selectedUser.activated}>
 						<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
 							<RadioGroup.Item value="Aktif" id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-full" />
 							<div class="grid gap-1.5 font-normal">
