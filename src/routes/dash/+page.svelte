@@ -47,6 +47,7 @@
 	let selectedDoaIcon = $state('');
 	let selectedDoaTitle = $state('');
 	let selectedDoa = $state<any>({});
+	let selectedDoaType = $state('');
 	let mbukakSearch = $state(false);
 	let judul = $state('');
 	let nomor = $state('');
@@ -115,11 +116,10 @@
 
 	const userlevels = [
 		{ value: -1, label: 'Administrator' },
-		{ value: 1, label: 'PMO/PPC' },
-		{ value: 2, label: 'Managemen' },
-		{ value: 3, label: 'PM dan PE' },
-		{ value: 4, label: 'Eksekutif' },
-		{ value: 5, label: 'Controller' }
+		{ value: 1, label: 'DOA Personel' },
+		{ value: 2, label: 'PMO/PPC' },
+		{ value: 3, label: 'Non Aircraft' },
+		{ value: 4, label: 'Controller' }
 	];
 
 	// import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -259,31 +259,31 @@
 			valid = undefined;
 			selectedSubtype = '';
 		} else if (selectedDoa && Object.keys(selectedDoa).length > 0) {
-			judul = selectedDoa.title || '';
-			nomor = selectedDoa.number || '';
-			revisi = selectedDoa.revision || '';
-			selectedSubtype = selectedDoa.type || '';
+			// judul = selectedDoa.title || '';
+			// nomor = selectedDoa.number || '';
+			// revisi = selectedDoa.revision || '';
+			// selectedSubtype = selectedDoa.type || '';
 
 			if (selectedDoa.date && !selectedDoa.date.includes('0000')) {
 				try {
-					tanggal = parseDate(selectedDoa.date);
+					selectedDoa.date = parseDate(selectedDoa.date);
 				} catch (e) {
 					console.error('Error parsing tanggal:', e);
-					tanggal = undefined;
+					selectedDoa.date = undefined;
 				}
 			} else {
-				tanggal = undefined;
+				selectedDoa.date = undefined;
 			}
 
 			if (selectedDoa.date2 && !selectedDoa.date2.includes('0000')) {
 				try {
-					valid = parseDate(selectedDoa.date2);
+					selectedDoa.date2 = parseDate(selectedDoa.date2);
 				} catch (e) {
 					console.error('Error parsing valid date:', e);
-					valid = undefined;
+					selectedDoa.date2 = undefined;
 				}
 			} else {
-				valid = undefined;
+				selectedDoa.date2 = undefined;
 			}
 		}
 	});
@@ -302,11 +302,10 @@
 						...user,
 						userlevel_name: (() => {
 							if (user.userlevel == '-1') return 'Administrator';
-							if (user.userlevel == '1') return 'PMO/PPC';
-							if (user.userlevel == '2') return 'Managemen';
-							if (user.userlevel == '3') return 'PM dan PE';
-							if (user.userlevel == '4') return 'Eksekutif';
-							if (user.userlevel == '5') return 'Controller';
+							if (user.userlevel == '1') return 'DOA Personel';
+							if (user.userlevel == '2') return 'PMO/PPC';
+							if (user.userlevel == '3') return 'Non Aircraft';
+							if (user.userlevel == '4') return 'Controller';
 							return '-';
 						})(),
 						activated: user.userlevel == '0' ? 'Aktivasi' : user.activated === 'Y' ? 'Aktif' : user.activated === 'N' ? 'Nonaktif' : user.activated
@@ -330,6 +329,27 @@
 				loadingInput = false;
 				mbukakEditUser = false;
 				fUsers();
+			}
+		}, 1000);
+	};
+
+	const fDoa = async (d: boolean = false) => {
+		loadingInput = true;
+		setTimeout(async () => {
+			const response = await fetch('/-doa/w', {
+				method: 'POST',
+				body: JSON.stringify({ e: selectedDoa, d })
+			});
+
+			if (response.ok) {
+				loadingInput = false;
+				mbukakTambahDoa = false;
+				fDoas();
+				if (mbukakDoa) {
+					fDoas('', selectedDoaType);
+				} else if (mbukakSearch) {
+					fDoas(searchDoa, '');
+				}
 			}
 		}, 1000);
 	};
@@ -642,6 +662,7 @@
 										onclick={async () => {
 											await fDoas('', sub.type);
 											search = '';
+											selectedDoaType = sub.type;
 											selectedDoaGroup = value.toUpperCase();
 											selectedDoaIcon = item.name.toLowerCase();
 											selectedDoaTitle = sub.name;
@@ -665,6 +686,7 @@
 								onclick={async () => {
 									await fDoas('', item.type);
 									search = '';
+									selectedDoaType = item.type;
 									selectedDoaGroup = value.toUpperCase();
 									selectedDoaIcon = item.name.toLowerCase();
 									selectedDoaTitle = item.name;
@@ -906,7 +928,7 @@
 					<p class="font-medium">Judul</p>
 					<div class="relative w-full items-center">
 						<img src="document.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-						<Input type="text" placeholder="Masukkan Judul" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={judul} />
+						<Input type="text" placeholder="Masukkan Judul" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedDoa.title} />
 					</div>
 				</div>
 
@@ -914,7 +936,7 @@
 					<p class="font-medium">Nomor</p>
 					<div class="relative w-full items-center">
 						<img src="number.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-						<Input type="text" placeholder="Nomor" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={nomor} />
+						<Input type="text" placeholder="Nomor" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedDoa.number} />
 					</div>
 				</div>
 
@@ -922,7 +944,7 @@
 					<p class="font-medium">Revisi</p>
 					<div class="relative w-full items-center">
 						<img src="beat.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-						<Input type="text" placeholder="Revisi" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={revisi} />
+						<Input type="text" placeholder="Revisi" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedDoa.revision} />
 					</div>
 				</div>
 
@@ -941,14 +963,14 @@
 							{#snippet child({ props })}
 								<div {...props}>
 									<img src="date.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-									<div class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0 {tanggal ? '' : 'text-secondary/25!'}">{tanggal ? tanggal.toString() : 'Pilih Tanggal'}</div>
+									<div class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0 {selectedDoa.date ? '' : 'text-secondary/25!'}">{selectedDoa.date ? selectedDoa.date.toString() : 'Pilih Tanggal'}</div>
 								</div>
 							{/snippet}
 						</Popover.Trigger>
 						<Popover.Content class="mb-3! rounded-none! shadow-none! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-2!">
 							<Calendar
 								type="single"
-								bind:value={tanggal}
+								bind:value={selectedDoa.date}
 								captionLayout="dropdown"
 								locale="id"
 								onValueChange={() => {
@@ -966,14 +988,14 @@
 							{#snippet child({ props })}
 								<div {...props}>
 									<img src="date valid.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-									<div class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0 {valid ? '' : 'text-secondary/25!'}">{valid ? valid.toString() : 'Pilih Tanggal'}</div>
+									<div class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0 {selectedDoa.date2 ? '' : 'text-secondary/25!'}">{selectedDoa.date2 ? selectedDoa.date2.toString() : 'Pilih Tanggal'}</div>
 								</div>
 							{/snippet}
 						</Popover.Trigger>
 						<Popover.Content class="mb-3! rounded-none! shadow-none! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-2!">
 							<Calendar
 								type="single"
-								bind:value={valid}
+								bind:value={selectedDoa.date2}
 								captionLayout="dropdown"
 								locale="id"
 								onValueChange={() => {
@@ -991,10 +1013,10 @@
 						<Input type="text" placeholder="Pilih Tipe" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 					</div> -->
 
-					<Select.Root type="single" name="favoriteFruit" bind:value={selectedSubtype}>
+					<Select.Root type="single" name="favoriteFruit" bind:value={selectedDoa.type}>
 						<Select.Trigger placeholder="Pilih Tipe" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none!">
 							<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-							<p title={subtypes.find((t) => t.value === selectedSubtype)?.label || 'Pilih Tipe'} class="text-base max-w-[19dvw] truncate {selectedSubtype === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{subtypes.find((t) => t.value === selectedSubtype)?.label || 'Pilih Tipe'}</p>
+							<p title={subtypes.find((t) => t.value === selectedDoa.type)?.label || 'Pilih Tipe'} class="text-base max-w-[19dvw] truncate {selectedDoa.type === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{subtypes.find((t) => t.value === selectedDoa.type)?.label || 'Pilih Tipe'}</p>
 							<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
 						</Select.Trigger>
 						<Select.Content class="mb-2! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
@@ -1023,16 +1045,28 @@
 		{#if anyar}
 			<div>
 				<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
-					<p class="font-medium !text-white">Tambah</p>
+					{#if loadingInput}
+						<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
+					{:else}
+						<p class="font-medium !text-white">Tambah</p>
+					{/if}
 				</div>
 			</div>
 		{:else}
 			<div class="flex">
-				<div class="flex w-1/3 justify-center items-center py-4 text-center bg-red-900 p-2 px-3 gap-2 group">
-					<p class="font-medium !text-white">Hapus</p>
+				<div class="flex w-1/3 justify-center items-center py-4 text-center bg-red-900 p-2 px-3 gap-2 group" onclick={() => fDoa(true)}>
+					{#if loadingInput}
+						<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
+					{:else}
+						<p class="font-medium !text-white">Hapus</p>
+					{/if}
 				</div>
-				<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
-					<p class="font-medium !text-white">Ubah</p>
+				<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group" onclick={() => fDoa(false)}>
+					{#if loadingInput}
+						<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
+					{:else}
+						<p class="font-medium !text-white">Ubah</p>
+					{/if}
 				</div>
 			</div>
 		{/if}
