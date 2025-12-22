@@ -497,7 +497,7 @@
 	</div>
 -->
 	<Select.Root type="single" bind:value>
-		<Select.Trigger class="flex! flex-row! bg-[#fef8f0]! py-5! px-3! w-48! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none! {data.doa?.single ? 'pointer-events-none' : ''}">
+		<Select.Trigger class="flex! flex-row! bg-[#fef8f0]! py-5! px-3! w-48! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none!">
 			<!-- {triggerContent} -->
 			<!-- <img
 			src="helic.svg?v=3"
@@ -525,7 +525,7 @@
 				<!-- <Select.Label>Fruits</Select.Label> -->
 				{#each group as group (group.value)}
 					<Select.Item
-						class="rounded-none shadow-none px-3 py-2 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!"
+						class="rounded-none shadow-none px-3 py-2 border-0 hover:bg-transparent! bg-transparent active:bg-transparent! {group.value !== value && data.doa?.single ? 'hidden' : ''}"
 						value={group.value}
 						label={group.label}
 						onclick={() => {
