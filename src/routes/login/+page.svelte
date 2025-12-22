@@ -40,7 +40,7 @@
 	onMount(() => {
 		VanillaTilt.init(document.querySelectorAll('.planex'), {
 			// reverse: true,
-			max: 30,
+			max: 20,
 			// glare: true,
 			'full-page-listening': true
 			// gyroscope: false
@@ -163,7 +163,7 @@
 	}}
 />
 
-<img class="fixed bottom-0 left-0 -z-50 h-1/2 opacity-75" src="grad.svg" alt="" />
+<img class="fixed bottom-0 left-0 -z-50 h-1/2" src="grad.svg" alt="" />
 <img class="fixed top-0 right-0 -z-50 h-1/2 -rotate-180" src="grad.svg" alt="" />
 
 <div class="relative flex min-h-dvh! w-dvw flex-col items-center justify-center py-10">

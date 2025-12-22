@@ -484,6 +484,7 @@
 		<img src="plus.svg" class="w-4 group-hover:rotate-[180deg] transition-all duration-1000" alt="" />
 		<p class="">Tambah</p>
 	</div>
+	{#if data.user.userlevel == -1} 
 	<div
 		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group aspect-squre"
 		onclick={() => {
@@ -494,6 +495,7 @@
 	>
 		<img src="users2.svg?c" class="w-5 group-hover:rotate-[24deg] transition-all duration-500" alt="" />
 	</div>
+	{/if}
 	<Popover.Root bind:open={mbukakSearch}>
 		<Popover.Trigger class="flex! flex-row! bg-[#fef8f0]! p-2! px-3! gap-2! group">
 			<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
@@ -1012,6 +1014,7 @@
 </Drawer.Root>
 
 <!-- @b users -->
+{#if data.user.userlevel == -1}
 <Drawer.Root
 	bind:open={mbukakUsers}
 	onClose={() => {
@@ -1270,3 +1273,6 @@
 		</div>
 	</Drawer.Content>
 </Drawer.Root>
+
+
+{/if}
