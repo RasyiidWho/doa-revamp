@@ -58,12 +58,25 @@
 	let loadingDoa = $state(false);
 	let loadingDrawer = $state(false);
 	let loadingInput = $state(false);
+	let roleEditDoa = $state(false);
+	let roleUser = $state(false);
 	// let dateNow = $state();
 
 	const group = [
 		{ icon: 'plane.svg', value: 'aircraft', label: 'Aircraft' },
 		{ icon: 'helic.svg', value: 'non-aircraft', label: 'Non Aircraft' }
 	];
+
+	if(data.user.userlevel == -1){
+		roleEditDoa = true;
+		roleUser = true;
+	} else if(data.user.userlevel == 5){
+		roleEditDoa = true;
+		roleUser = false;
+	} else {
+		roleEditDoa = false;
+		roleUser = false;
+	}
 
 	selectedDoa = {
 		no: '',
@@ -129,8 +142,9 @@
 		{ value: 1, label: 'DOA Personel' },
 		{ value: 2, label: 'PMO/PPC' },
 		{ value: 3, label: 'Non Aircraft' },
-		{ value: 4, label: 'Controller' }
+		{ value: 5, label: 'Controller' }
 	];
+	// Meta = Manajemen njuk dadi opo?
 
 	// import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -315,7 +329,7 @@
 							if (user.userlevel == '1') return 'DOA Personel';
 							if (user.userlevel == '2') return 'PMO/PPC';
 							if (user.userlevel == '3') return 'Non Aircraft';
-							if (user.userlevel == '4') return 'Controller';
+							if (user.userlevel == '5') return 'Controller';
 							return '-';
 						})(),
 						activated: user.userlevel == '0' ? 'Aktivasi' : user.activated === 'Y' ? 'Aktif' : user.activated === 'N' ? 'Nonaktif' : user.activated
@@ -704,7 +718,7 @@
 								class="nonsub flex justify-between w-full p-2 px-6 hover:underline cursor-pointer hover:scale-[100.5%] transition-all"
 								onclick={async () => {
 									await fDoas('', item.type);
-									search = '';
+									search = '';	
 									selectedDoaType = item.type;
 									selectedDoaGroup = value.toUpperCase();
 									selectedDoaIcon = item.name.toLowerCase();
@@ -884,7 +898,7 @@
 									<Table.Cell class="max-w-[15vw] truncate select-text!" title={doa.title}>{doa.title || '-'}</Table.Cell>
 									<div class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1 justify-end opacity-0 group-hover:opacity-100 transition-all">
 										<div
-											class="bg-primary flex p-1.5 aspect-square border-1 border-secondary"
+											class="bg-primary flex p-1.5 aspect-square border-1 border-secondary {roleEditDoa ? '' : 'hidden'}"
 											onclick={() => {
 												anyar = false;
 												selectedDoa = doa;
@@ -911,6 +925,7 @@
 </Drawer.Root>
 
 <!-- @b tambah doa -->
+ {#if roleEditDoa}
 <Drawer.Root
 	bind:open={mbukakTambahDoa}
 	direction="right"
@@ -1100,9 +1115,9 @@
 		{/if}
 	</Drawer.Content>
 </Drawer.Root>
-
+{/if}
 <!-- @b users -->
-{#if data.user.userlevel == -1}
+{#if roleUser}
 	<Drawer.Root
 		bind:open={mbukakUsers}
 		onClose={() => {
@@ -1227,7 +1242,7 @@
 												selectedUserLevel = userx.userlevel.toString();
 												selectedUser.password = '';
 												// selectedUserLevel = '0';
-												search = '';
+												// search = '';
 												// console.log(userx);
 												$mainTitle = 'Edit User';
 												mbukakEditUser = true;
