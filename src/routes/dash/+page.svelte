@@ -29,8 +29,6 @@
 	let tanggal = $state<CalendarDate | undefined>();
 	let valid = $state<CalendarDate | undefined>();
 	let anyar = $state(false);
-	let loading = $state(false);
-
 	let showSearch = $state(false);
 	let { data }: PageProps = $props();
 	let mbukakDoa = $state(false);
@@ -55,6 +53,10 @@
 	let revisi = $state('');
 	let animationFrame: number;
 	let searchRef = $state<HTMLInputElement | null>(null);
+	let loadingLogout = $state(false);
+	let loadingDoa = $state(false);
+	let loadingDrawer = $state(false);
+	let loadingInput = $state(false);
 	// let dateNow = $state();
 
 	const group = [
@@ -280,7 +282,7 @@
 	});
 
 	const fUsers = async () => {
-		loading = true;
+		loadingDrawer = true;
 		setTimeout(async () => {
 			const response = await fetch('/-users/v', {
 				method: 'GET'
@@ -288,7 +290,7 @@
 
 			if (response) {
 				response.json().then((res) => {
-					loading = false;
+					loadingDrawer = false;
 					const transformedUsers = res.map((user) => ({
 						...user,
 						userlevel_name: (() => {
@@ -310,7 +312,11 @@
 	};
 
 	const fDoa = async (s: string, t: string) => {
-		loading = true;
+		if (s || t) {
+			loadingDrawer = true;
+		} else {
+			loadingDoa = true;
+		}
 		setTimeout(async () => {
 			const response = await fetch('/-doa/v', {
 				method: 'POST',
@@ -319,11 +325,12 @@
 
 			if (response) {
 				response.json().then((res) => {
-					loading = false;
 					if (s || t) {
+						loadingDrawer = false;
 						data = { ...data, doa_selected: res };
 						// console.log(data.doa_selected);
 					} else {
+						loadingDoa = false;
 						data = { ...data, doa: res };
 					}
 				});
@@ -332,6 +339,7 @@
 	};
 
 	let fLogout = async () => {
+		loadingLogout = true;
 		const response = await fetch('/-logout', {
 			method: 'POST'
 		});
@@ -535,7 +543,8 @@
 			fLogout();
 		}}
 	>
-		<img src="power.svg?d" class="w-4 pt-0 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
+		<img src="power.svg?d" class="w-4 pt-0 group-hover:rotate-[90deg] transition-all duration-500 {loadingLogout ? 'hidden' : 'block'}" alt="" />
+		<img src="spinner_color.svg?a" class="h-4! w-4! mt-1 {loadingLogout ? 'block' : 'hidden'}" alt="" />
 	</div>
 </div>
 
@@ -583,7 +592,7 @@
 	<div class="bg-white/25 flex items-center justify-center w-11/12 h-3/4">
 		<div class="bg-white/50 h-full w-full mx-4 my-4 flex flex-col min-h-[50dvh] relative">
 			<div class="p-4">
-				<img src="spinner_color.svg?a" class=" h-5! w-5! mt-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 {loading && !mbukakDoa && !mbukakTambahDoa && !mbukakUsers && !mbukakEditUser ? 'block' : 'hidden'}" alt="" />
+				<img src="spinner_color.svg?a" class=" h-5! w-5! mt-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 {loadingDoa ? 'block' : 'hidden'}" alt="" />
 				<div class="flex justify-between w-full bg-[#F3EBE0] p-4 px-6 mb-2">
 					<p class="font-medium">Daftar DOA</p>
 					<p class="font-medium">Jumlah</p>
@@ -660,7 +669,7 @@
 	}}
 >
 	<Drawer.Content class="bg-[#FAF8F4]! min-h-[95dvh]! flex! items-center!">
-		<div class="h-screen w-screen z-50 absolute {loading ? 'block' : 'hidden'}"><img src="spinner_color.svg?a" class=" h-5! w-5! absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" alt="" /></div>
+		<div class="h-screen w-screen z-50 absolute {loadingDrawer ? 'block' : 'hidden'}"><img src="spinner_color.svg?a" class=" h-5! w-5! absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" alt="" /></div>
 		<div class="w-11/12 pt-12 gap-2 flex-col flex">
 			<div class="w-full flex justify-between">
 				<div class="flex gap-2">
@@ -709,12 +718,12 @@
 					<div
 						class="flex gap-2"
 						onclick={() => {
-									$mainTitle = group.find((t) => t.value === value)?.label || '';
-									mbukakDoa = false;
-								}}
-							>
-							<div>
-								<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
+							$mainTitle = group.find((t) => t.value === value)?.label || '';
+							mbukakDoa = false;
+						}}
+					>
+						<div>
+							<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
 								<img src="minimize.svg?a" class="w-3 group-hover:rotate-[180deg] transition-all duration-500" alt="" />
 							</div>
 						</div>
@@ -784,7 +793,7 @@
 							<!-- <Table.Head class="text-end pr-4">-</Table.Head> -->
 						</Table.Row>
 					</Table.Header>
-					<Table.Body class={loading ? 'hidden' : 'visible'}>
+					<Table.Body class={loadingDrawer ? 'hidden' : 'visible'}>
 						{#if filteredDoa}
 							{#each filteredDoa as doa (doa.no)}
 								<Table.Row class="group relative! border-0! hover:bg-secondary/10! hover:scale-[100.5%]! transition-all!">
@@ -808,10 +817,7 @@
 											<img src="edit.svg" class="w-3.5" alt="" />
 										</div>
 										{#if doa.nmpath}
-											<div
-												onclick={() => window.open(selectedDoaTitle && selectedDoaTitle.toUpperCase().includes('FORM') ? `http://portalditek.indonesian-aerospace.com/webdoa/${doa.pdf || doa.nmpath}` : `http://portalditek.indonesian-aerospace.com/webdoa/tcpdf/edm/watermark.php?ndm=${doa.nmpath.split('/').pop()}&nmpath=${doa.nmpath}&jdl=${encodeURIComponent(doa.title)}&kuid=${data.user.kuid}`, '_blank')}
-												class="bg-primary flex p-1.5 aspect-square border-1 border-secondary cursor-pointer"
-											>
+											<div onclick={() => window.open(selectedDoaTitle && selectedDoaTitle.toUpperCase().includes('FORM') ? `http://portalditek.indonesian-aerospace.com/webdoa/${doa.pdf || doa.nmpath}` : `http://portalditek.indonesian-aerospace.com/webdoa/tcpdf/edm/watermark.php?ndm=${doa.nmpath.split('/').pop()}&nmpath=${doa.nmpath}&jdl=${encodeURIComponent(doa.title)}&kuid=${data.user.kuid}`, '_blank')} class="bg-primary flex p-1.5 aspect-square border-1 border-secondary cursor-pointer">
 												<img src="download.svg" class="w-3.5" alt="" />
 											</div>
 										{/if}
@@ -1014,7 +1020,7 @@
 	}}
 >
 	<Drawer.Content class="bg-[#FAF8F4]! min-h-[95dvh]! flex! items-center!">
-		<div class="h-screen w-screen z-50 absolute {loading ? 'block' : 'hidden'}"><img src="spinner_color.svg?a" class=" h-5! w-5! absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" alt="" /></div>
+		<div class="h-screen w-screen z-50 absolute {loadingDrawer ? 'block' : 'hidden'}"><img src="spinner_color.svg?a" class=" h-5! w-5! absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" alt="" /></div>
 		<div class="w-11/12 pt-12 gap-2 flex flex-col">
 			<div class="w-full flex justify-between">
 				<div>
@@ -1097,7 +1103,7 @@
 							</Table.Head>
 						</Table.Row>
 					</Table.Header>
-					<Table.Body class={loading ? 'hidden' : 'visible'}>
+					<Table.Body class={loadingDrawer ? 'hidden' : 'visible'}>
 						{#if filteredUsers}
 							{#each filteredUsers as userx (userx.kuid)}
 								<!-- {"username":"160238","kuid":"c054e296693e2c4eb00c371ad632fdc4","password":"6d2f4baaaee3f763980805bad0363546","userlevel":1,"provinsi":"","configPenghasil":"Dimas Septa","activated":"Y"}, -->
