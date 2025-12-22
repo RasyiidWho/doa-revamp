@@ -65,6 +65,16 @@
 		{ icon: 'helic.svg', value: 'non-aircraft', label: 'Non Aircraft' }
 	];
 
+	selectedDoa = {
+		no: '',
+		type: '',
+		number: '',
+		revision: '',
+		date: '',
+		date2: '',
+		title: ''
+	};
+
 	// const user = {
 	// 	nik: '',
 	// 	userlevel: '',
@@ -521,6 +531,15 @@
 		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group"
 		onclick={() => {
 			anyar = true;
+			selectedDoa = {
+				no: '',
+				type: '',
+				number: '',
+				revision: '',
+				date: '',
+				date2: '',
+				title: ''
+			};
 			mbukakTambahDoa = true;
 		}}
 	>
@@ -756,6 +775,15 @@
 					<div
 						onclick={() => {
 							anyar = true;
+							selectedDoa = {
+								no: '',
+								type: '',
+								number: '',
+								revision: '',
+								date: '',
+								date2: '',
+								title: ''
+							};
 							$mainTitle = 'Tambah DOA';
 							mbukakTambahDoa = true;
 						}}
