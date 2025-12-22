@@ -4,7 +4,7 @@ import { db } from '$lib/server/db';
 import { useraccounts } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import * as yup from 'yup';
-import md5 from 'blueimp-md5'
+import md5 from 'blueimp-md5';
 
 export const POST: RequestHandler = async ({ request }) => {
 	const data = await request.json();
@@ -22,6 +22,16 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 
 	if (data.e) {
+		if (data.d) {
+			return await db
+				.delete(useraccounts)
+				.where(eq(useraccounts.username, data.e.username))
+				.then(() => json({ success: true }))
+				.catch((error) => {
+					console.error(error);
+					return json({ success: false, error: error.message }, { status: 400 });
+				});
+		}
 		const updateData = data.e.password
 			? {
 					userlevel: data.e.userlevel,

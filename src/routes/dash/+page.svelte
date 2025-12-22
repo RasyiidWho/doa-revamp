@@ -318,18 +318,15 @@
 		}, 1000);
 	};
 
-	const fUser = async () => {
+	const fUser = async (d: boolean = false) => {
 		loadingInput = true;
 		setTimeout(async () => {
 			const response = await fetch('/-users/w', {
 				method: 'POST',
-				body: JSON.stringify({ e: selectedUser })
+				body: JSON.stringify({ e: selectedUser, d })
 			});
 
 			if (response.ok) {
-				// response.json().then((res) => {
-				// 	console.log(res);
-				// });
 				loadingInput = false;
 				mbukakEditUser = false;
 				fUsers();
@@ -1294,10 +1291,14 @@
 				</div>
 			</ScrollArea>
 			<div class="flex">
-				<div class="flex w-1/3 justify-center items-center py-4 text-center bg-red-900 p-2 px-3 gap-2 group">
-					<p class="font-medium !text-white">Hapus</p>
+				<div class="flex w-1/3 justify-center items-center py-4 text-center bg-red-900 p-2 px-3 gap-2 group" onclick={() => fUser(true)}>
+					{#if loadingInput}
+						<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
+					{:else}
+						<p class="font-medium !text-white">Hapus</p>
+					{/if}
 				</div>
-				<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group" onclick={fUser}>
+				<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group" onclick={() => fUser(false)}>
 					{#if loadingInput}
 						<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
 					{:else}
