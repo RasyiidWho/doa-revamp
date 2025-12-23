@@ -658,7 +658,7 @@
 
 <div class="h-full w-full flex z-50 flex-col justify-center items-center gap-4 pt-12 pb-12">
 	<div class="w-11/12 h-1/4 flex justify-between">
-		<div class="flex flex-row w-1/2 gap-2">
+		<div class="flex flex-row w-1/2 gap-2 pointer-events-none">
 			<div class="w-20 flex items-center justify-center aspect-square bg-white/0 p-4">
 				<img src="logo.png" class="" />
 			</div>

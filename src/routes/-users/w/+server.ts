@@ -109,9 +109,9 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			}
 
 			const out = zip.generate({ type: 'nodebuffer' });
-			fs.writeFileSync('pdf/'+data.r.nik+'.docx', out);
-			await topdf.convert('pdf/'+data.r.nik+'.docx', 'pdf/'+data.r.nik+'.pdf');
-			fs.unlinkSync('pdf/'+data.r.nik+'.docx');
+			fs.writeFileSync('pdf/' + data.r.nik + '.docx', out);
+			await topdf.convert('pdf/' + data.r.nik + '.docx', 'pdf/' + data.r.nik + '.pdf');
+			fs.unlinkSync('pdf/' + data.r.nik + '.docx');
 
 			const transporter = nodemailer.createTransport({
 				service: 'gmail',
@@ -123,14 +123,35 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 			await transporter.sendMail({
 				from: 'jaminankelaikan@gmail.com',
-				to: [data.r.email, data.r.mgr_email, 'tiaraertina@indonesian-aerospace.com', 'hi@rasyiid.com'],
-				subject: 'Nyobo Email',
-				text: 'Nyobo email tok',
-				html: '<b>HTML NYOBO</b>',
+				to: [data.r.mgr_email, 'tiaraertina@indonesian-aerospace.com'],
+				subject: 'Surat Pernyataan ' + data.r.nama + ' (' + data.r.nik + ')',
 				attachments: [
 					{
-						filename: data.r.nik+'.pdf',
-						content: fs.createReadStream('pdf/'+data.r.nik+'.pdf')
+						filename: 'Surat Pernyataan ' + data.r.nama + ' (' + data.r.nik + ')' + '.pdf',
+						content: fs.createReadStream('pdf/' + data.r.nik + '.pdf')
+					}
+				]
+			});
+
+			await transporter.sendMail({
+				from: 'jaminankelaikan@gmail.com',
+				to: [data.r.email],
+				subject: 'Surat Pernyataan ' + data.r.nama + ' (' + data.r.nik + ')',
+				html: `
+					<p>Hai ${data.r.nama},</p>
+					<p>Terima kasih telah mendaftar di aplikasi PTDI Design Organization.</p>
+					</br>
+					<p>Silahkan gunakan identitas berikut untuk login:</p>
+					<p>NIK: <b>${data.r.nik}</b></p>
+					<p>Password: <b>${data.r.password}</b></p>
+					</br>
+					<p>Terima kasih,</p>
+					<p>PTDI Design Organization</p>
+				`,
+				attachments: [
+					{
+						filename: 'Surat Pernyataan ' + data.r.nama + ' (' + data.r.nik + ')' + '.pdf',
+						content: fs.createReadStream('pdf/' + data.r.nik + '.pdf')
 					}
 				]
 			});
