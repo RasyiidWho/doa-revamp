@@ -109,7 +109,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				mgrNama: data.r.mgr_nama,
 				mgrNik: data.r.mgr_nik
 			});
-			
+
 			const content = fs.readFileSync('template.docx');
 			const zip = new PizZip(content);
 
@@ -178,7 +178,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				subject: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik,
 				html: `
 					<p>Hai ${data.r.nama},</p>
-					<p>Terima kasih telah mendaftar di aplikasi PTDI Design Organization.</p>
+					<p>Terimakasih telah mendaftar di aplikasi PTDI Design Organization.</p>
 					</br>
 					<p>Silahkan gunakan identitas berikut untuk login:</p>
 					<p>NIK: <b>${data.r.nik}</b></p>

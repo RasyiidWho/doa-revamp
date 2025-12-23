@@ -576,6 +576,7 @@
 					date2: '',
 					title: ''
 				};
+				$mainTitle = 'Tambah DOA';
 				mbukakTambahDoa = true;
 			}}
 		>
