@@ -610,7 +610,7 @@
 					placeholder="Cari..."
 					class="w-full rounded-none bg-transparent border-transparent! placeholder:text-secondary/35 h-full pl-11! pr-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0"
 					autofocus={true}
-					bind:value={searchDoa}
+					bind:value={searchDoa}	
 					onkeydown={async (event) => {
 						if (event.key === 'Enter') {
 							await fDoas(searchDoa, '');
@@ -803,7 +803,7 @@
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] items-center group">
 							<div class="bg-secondary p-2 px-3">
-								<p class="text-white! min-w-6 min-h-7 flex items-center justify-center text-center">
+								<p class="text-white! min-w-6 min-h-6 flex items-center justify-center text-center">
 									{#if loadingDrawer}
 										<img src="spinner.svg?a" class="h-3.5! w-3.5!" alt="" />
 									{:else}
@@ -1175,7 +1175,7 @@
 						<div>
 							<div class="flex flex-row bg-[#F3EBE0] items-center group">
 								<div class="bg-secondary p-2 px-3">
-								<p class="text-white! min-w-6 min-h-7 flex items-center justify-center text-center">
+								<p class="text-white! min-w-6 min-h-6 flex items-center justify-center text-center">
 									{#if loadingDrawer}
 										<img src="spinner.svg?a" class="h-3.5! w-3.5!" alt="" />
 									{:else}
