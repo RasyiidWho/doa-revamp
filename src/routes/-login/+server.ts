@@ -33,8 +33,10 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		return json({ error: "NIK Atau Password Salah." }, { status: 400 });
 	}
 
-	if (user.userlevel === 0) {
-		return json({ error: "Tunggu akunmu diaktivasi oleh admin." }, { status: 400 });
+	console.log(user)
+
+	if (user.userlevel === 0 || user.activated === 'N') {
+		return json({ error: "Akunmu belum diaktivasi oleh admin." }, { status: 400 });
 	}
 
 	const session = await lucia.createSession(user.username, {});
