@@ -608,7 +608,7 @@
 				<Input
 					type="text"
 					placeholder="Cari..."
-					class="w-full rounded-none bg-transparent border-transparent! placeholder:text-secondary/35 h-full pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0"
+					class="w-full rounded-none bg-transparent border-transparent! placeholder:text-secondary/35 h-full pl-11! pr-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0"
 					autofocus={true}
 					bind:value={searchDoa}
 					onkeydown={async (event) => {
