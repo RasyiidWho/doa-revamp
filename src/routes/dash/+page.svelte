@@ -1013,7 +1013,7 @@
 					<div class="flex flex-col gap-1">
 						<p class="font-medium">Nomor</p>
 						<div class="relative w-full items-center">
-							<img src="number.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+							<img src="number.svg?b" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
 							<Input type="text" placeholder="Nomor" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedDoa.number} />
 						</div>
 					</div>
