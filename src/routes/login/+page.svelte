@@ -112,7 +112,7 @@
 		if (response.ok) {
 			// mbukakTambahUser = false;
 		} else {
-			tos('beat.svg', 'Registrasi Gagal', res.message || 'Periksa kembali data yang kamu diisi.');
+			tos('beat.svg', 'Registrasi Gagal', res.error || 'Periksa kembali data yang kamu diisi.');
 			setTimeout(async () => {
 				loadingRegister = false;
 			}, 500);
@@ -141,8 +141,8 @@
 				await goto('/dash', { replaceState: true, invalidateAll: true });
 			}, 500);
 		} else {
-			// errorMessage = res.message || 'Login failed';
-			tos('beat.svg', 'Login Gagal', res.message || 'Login failed');
+			// errorMessage = res.error || 'Login failed';
+			tos('beat.svg', 'Login Gagal', res.error || 'Login failed');
 			setTimeout(async () => {
 				loadingLogin = false;
 			}, 500);
