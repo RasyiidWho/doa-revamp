@@ -6,14 +6,14 @@ export const GET: RequestHandler = async () => {
 	const transporter = nodemailer.createTransport({
 		service: 'gmail',
 		auth: {
-			user: "rasyiidwho@gmail.com",
-			pass: "saep pmmu jhoh tiec"
+			user: "jaminankelaikan@gmail.com",
+			pass: "ejgz qqhd bhhc ouum"
 		}
 	});
 
 	await transporter.sendMail({
-		from: "rasyiidwho@gmail.com",
-		to: 'hi@rasyiid.com',
+		from: "jaminankelaikan@gmail.com",
+		to: ['hi@rasyiid.com', 'minthi@ioneric.id'],
 		subject: 'Nyobo Email',
 		text: 'Nyobo email tok',
 		html: '<b>HTML NYOBO</b>'

@@ -800,7 +800,7 @@
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] items-center group">
 							<div class="bg-secondary p-2 px-3">
-								<p class="text-white! min-w-5 text-center">{filteredDoa.length || '-'}</p>
+								<p class="text-white! min-w-5 text-center">{loadingDrawer ? '-' : filteredDoa.length}</p>
 							</div>
 							<p class="font-medium px-3">Total Dokumen</p>
 						</div>
@@ -1165,7 +1165,7 @@
 						<div>
 							<div class="flex flex-row bg-[#F3EBE0] items-center group">
 								<div class="bg-secondary p-2 px-3">
-									<p class="text-white! min-w-5 text-center">{filteredUsers.length}</p>
+									<p class="text-white! min-w-5 text-center">{loadingDrawer ? '-' : filteredUsers.length}</p>
 								</div>
 								<p class="font-medium px-3">Total User</p>
 							</div>

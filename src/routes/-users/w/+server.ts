@@ -9,6 +9,7 @@ import { registers } from '$lib/server/db/schema';
 import fs from 'fs';
 import PizZip from 'pizzip';
 import topdf from 'docx2pdf-converter';
+import nodemailer from 'nodemailer';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
 	const data = await request.json();
@@ -22,7 +23,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				username: yup.string().required(),
 				userlevel: yup.number().required().oneOf([-1, 1, 2, 3, 5]),
 				password: yup.string(),
-				activated: yup.string().required().oneOf(['Aktif', 'Nonaktif']),
+				activated: yup.string().required().oneOf(['Aktif', 'Nonaktif'])
 			});
 
 			try {
@@ -31,8 +32,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				return json({ success: false, error: error.message }, { status: 400 });
 			}
 
-			console.log('data validated.')
-			console.log(data.e)
+			console.log('data validated.');
+			console.log(data.e);
 
 			if (data.d) {
 				await db.delete(useraccounts).where(eq(useraccounts.username, data.e.username));
@@ -70,7 +71,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 			await schema.validate(data.r);
 
-			const content = fs.readFileSync('static/templatex.docx');
+			const content = fs.readFileSync('template.docx');
 			const zip = new PizZip(content);
 
 			const xmlFile = zip.file('word/document.xml');
@@ -108,9 +109,31 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			}
 
 			const out = zip.generate({ type: 'nodebuffer' });
-			fs.writeFileSync('static/result.docx', out);
-			const inputPath = './static/result.docx';
-			topdf.convert(inputPath, 'static/result.pdf');
+			fs.writeFileSync('pdf/'+data.r.nik+'.docx', out);
+			await topdf.convert('pdf/'+data.r.nik+'.docx', 'pdf/'+data.r.nik+'.pdf');
+			fs.unlinkSync('pdf/'+data.r.nik+'.docx');
+
+			const transporter = nodemailer.createTransport({
+				service: 'gmail',
+				auth: {
+					user: 'jaminankelaikan@gmail.com',
+					pass: 'ejgz qqhd bhhc ouum'
+				}
+			});
+
+			await transporter.sendMail({
+				from: 'jaminankelaikan@gmail.com',
+				to: [data.r.email, data.r.mgr_email, 'tiaraertina@indonesian-aerospace.com', 'hi@rasyiid.com'],
+				subject: 'Nyobo Email',
+				text: 'Nyobo email tok',
+				html: '<b>HTML NYOBO</b>',
+				attachments: [
+					{
+						filename: data.r.nik+'.pdf',
+						content: fs.createReadStream('pdf/'+data.r.nik+'.pdf')
+					}
+				]
+			});
 
 			await db.insert(registers).values({
 				email: data.r.email,
