@@ -98,8 +98,8 @@
 		});
 	});
 
-	let username = $state('155160');
-	let password = $state('sim4st3k123');
+	let username = $state('');
+	let password = $state('');
 	let errorMessage = $state('');
 
 	let fRegister = async () => {
@@ -121,6 +121,10 @@
 
 		if (response.ok) {
 			tos('beat.svg', 'Registrasi Berhasil', 'Tunggu admin untuk mengaktifkan akunmu.');
+			mbukakTambahUser = false;
+			setTimeout(async () => {
+				loadingRegister = false;
+			}, 500);
 		} else {
 			tos('beat.svg', 'Registrasi Gagal', res.error || 'Periksa kembali data yang kamu diisi.');
 			setTimeout(async () => {
@@ -151,8 +155,7 @@
 				await goto('/dash', { replaceState: true, invalidateAll: true });
 			}, 500);
 		} else {
-			// errorMessage = res.error || 'Login failed';
-			tos('beat.svg', 'Login Gagal', res.error || 'Login failed');
+			tos('beat.svg', 'Login Gagal', res.error || 'Periksa kembali data yang kamu masukkan.');
 			setTimeout(async () => {
 				loadingLogin = false;
 			}, 500);
