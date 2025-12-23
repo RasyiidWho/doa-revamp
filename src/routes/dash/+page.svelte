@@ -20,6 +20,8 @@
 	import Calendar from '$lib/components/ui/calendar/calendar.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { today, type CalendarDate, parseDate } from '@internationalized/date';
+	import { tos } from '$lib/utils';
+	import { Toaster } from '$lib/components/ui/sonner/index';
 
 	const id = $props.id();
 
@@ -353,6 +355,9 @@
 				loadingInput = false;
 				mbukakEditUser = false;
 				fUsers();
+			} else {
+				loadingInput = false;
+				tos('beat.svg', 'Gagal', 'Periksa kembali data yang kamu masukkan.');
 			}
 		}, 1000);
 	};
@@ -477,6 +482,20 @@
 			})
 	);
 </script>
+
+<Toaster
+	position="top-left"
+	richColors={false}
+	duration={3000}
+	visibleToasts={1}
+	class="!z-[99999] [--width:340px]! xl:[--width:400px]!"
+	toastOptions={{
+		unstyled: true,
+		classes: {
+			toast: 'xl:absolute xl:left-0 mb-14 xl:mb-4 !z-[99999]'
+		}
+	}}
+/>
 
 <img class="fixed bottom-0 left-0 -z-50 h-1/2 opacity-75" src="grad.svg" alt="" />
 <img class="fixed top-0 right-0 -z-50 h-1/2 -rotate-180" src="grad.svg" alt="" />

@@ -20,12 +20,19 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 			const schema = yup.object({
 				username: yup.string().required(),
-				userlevel: yup.number().required(),
+				userlevel: yup.number().required().oneOf([-1, 1, 2, 3, 5]),
 				password: yup.string(),
-				activated: yup.string().required()
+				activated: yup.string().required().oneOf(['Aktif', 'Nonaktif']),
 			});
 
-			await schema.validate(data.e);
+			try {
+				await schema.validate(data.e);
+			} catch (error: any) {
+				return json({ success: false, error: error.message }, { status: 400 });
+			}
+
+			console.log('data validated.')
+			console.log(data.e)
 
 			if (data.d) {
 				await db.delete(useraccounts).where(eq(useraccounts.username, data.e.username));
@@ -104,48 +111,44 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			const inputPath = './static/result.docx';
 			topdf.convert(inputPath, 'static/result.pdf');
 
-			await db
-				.insert(registers)
-				.values({
-					email: data.r.email,
-					nama: data.r.nama,
-					nik: data.r.nik,
-					org: data.r.org,
-					orgLokasi: data.r.org_lokasi,
-					mgrEmail: data.r.mgr_email,
-					mgrNama: data.r.mgr_nama,
-					mgrNik: data.r.mgr_nik
-				})
-				// .onDuplicateKeyUpdate({
-				// 	set: {
-				// 		email: data.r.email,
-				// 		nama: data.r.nama,
-				// 		org: data.r.org,
-				// 		orgLokasi: data.r.org_lokasi,
-				// 		mgrEmail: data.r.mgr_email,
-				// 		mgrNama: data.r.mgr_nama,
-				// 		mgrNik: data.r.mgr_nik
-				// 	}
-				// });
+			await db.insert(registers).values({
+				email: data.r.email,
+				nama: data.r.nama,
+				nik: data.r.nik,
+				org: data.r.org,
+				orgLokasi: data.r.org_lokasi,
+				mgrEmail: data.r.mgr_email,
+				mgrNama: data.r.mgr_nama,
+				mgrNik: data.r.mgr_nik
+			});
+			// .onDuplicateKeyUpdate({
+			// 	set: {
+			// 		email: data.r.email,
+			// 		nama: data.r.nama,
+			// 		org: data.r.org,
+			// 		orgLokasi: data.r.org_lokasi,
+			// 		mgrEmail: data.r.mgr_email,
+			// 		mgrNama: data.r.mgr_nama,
+			// 		mgrNik: data.r.mgr_nik
+			// 	}
+			// });
 
-			await db
-				.insert(useraccounts)
-				.values({
-					username: data.r.nik,
-					kuid: md5(data.r.nik),
-					password: md5(data.r.password),
-					userlevel: 0,
-					configPenghasil: data.r.nama,
-					activated: 'N',
-					provinsi: ''
-				})
-				// .onDuplicateKeyUpdate({
-				// 	set: {
-				// 		kuid: md5(data.r.nik),
-				// 		password: md5(data.r.password),
-				// 		configPenghasil: data.r.nama
-				// 	}
-				// });
+			await db.insert(useraccounts).values({
+				username: data.r.nik,
+				kuid: md5(data.r.nik),
+				password: md5(data.r.password),
+				userlevel: 0,
+				configPenghasil: data.r.nama,
+				activated: 'N',
+				provinsi: ''
+			});
+			// .onDuplicateKeyUpdate({
+			// 	set: {
+			// 		kuid: md5(data.r.nik),
+			// 		password: md5(data.r.password),
+			// 		configPenghasil: data.r.nama
+			// 	}
+			// });
 
 			return json({ success: true });
 		}
@@ -156,4 +159,3 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		return json({ success: false, error: error.message }, { status: 400 });
 	}
 };
-
