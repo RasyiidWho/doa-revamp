@@ -22,18 +22,21 @@
 
 	let loadingLogin = $state(false);
 	let loadingRegister = $state(false);
+	let tos1 = $state(false);
+	let tos2 = $state(false);
+	let tos3 = $state(false);
 
 	// import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 	// gsap.registerPlugin(ScrollTrigger);
 
 	let register = $state({
-		email: '',
+		email: '@indonesian-aerospace.com',
 		nama: '',
 		nik: '',
 		org: '',
 		org_lokasi: '',
-		mgr_email: '',
+		mgr_email: '@indonesian-aerospace.com',
 		mgr_nama: '',
 		mgr_nik: ''
 	});
@@ -102,6 +105,13 @@
 	let fRegister = async () => {
 		loadingRegister = true;
 		errorMessage = '';
+		if (!tos1 || !tos2 || !tos3) {
+			tos('beat.svg', 'Registrasi Gagal', 'Harap baca dan setujui persyaratan.');
+			setTimeout(async () => {
+				loadingRegister = false;
+			}, 500);
+			return;
+		}
 		const response = await fetch('/-users/w', {
 			method: 'POST',
 			body: JSON.stringify({ r: register })
@@ -110,7 +120,7 @@
 		const res = await response.json();
 
 		if (response.ok) {
-			// mbukakTambahUser = false;
+			tos('beat.svg', 'Registrasi Berhasil', 'Tunggu admin untuk mengaktifkan akunmu.');
 		} else {
 			tos('beat.svg', 'Registrasi Gagal', res.error || 'Periksa kembali data yang kamu diisi.');
 			setTimeout(async () => {
@@ -181,7 +191,7 @@
 							<p class="font-medium">NIK</p>
 							<div class="relative w-full items-center">
 								<img src="nik.svg" class=" h-5! w-5! absolute left-3 top-1/2 -translate-y-1/2" alt="" />
-								<Input type="text" bind:value={username} placeholder="Masukkan NIK" class="text-base! shadow-none! w-full rounded-none border-transparent! bg-primary/50 py-7! pl-11! placeholder:text-secondary/35 focus:!border-transparent focus:!ring-transparent focus:!ring-offset-0 {loadingLogin ? 'pointer-events-none' : ''}" autofocus={false} />
+								<Input type="text" bind:value={username} placeholder="Masukkan NIK" class="text-base! shadow-none! w-full rounded-none border-transparent! bg-primary/50 py-7! pl-11! placeholder:text-secondary/35 focus:!border-transparent focus:!ring-transparent focus:!ring-offset-0 {loadingLogin ? 'pointer-events-none' : ''}" autofocus={false} onkeydown={(e) => e.key === 'Enter' && fLogin()} />
 							</div>
 						</div>
 
@@ -247,7 +257,7 @@
 	}}
 >
 	<Drawer.Content class="bg-[#FAF8F4]! !min-h-0">
-		<ScrollArea scrollbarYClasses="hidden" class="el relative flex items-center px-4 gap-2 h-full !min-h-0 flex-col " orientation="vertical" type="scroll">
+		<ScrollArea scrollbarYClasses="hidden" class="el relative flex items-center px-4 gap-2 h-full !min-h-0 flex-col " orientation="vertical" type="scroll" data-vaul-no-drag>
 			<div class="w-full flex justify-between pt-4" data-vaul-no-drag>
 				<div>
 					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
@@ -281,7 +291,7 @@
 							<p class="font-medium">Email</p>
 							<div class="relative w-full items-center">
 								<img src="mail.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input bind:value={register.email} type="text" placeholder="Masukkan Email" class="w-full rounded-none border-transparent! bg-primary/75 placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.email} type="text" placeholder="Masukkan Email" class="w-full rounded-none border-transparent! bg-primary/75 placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} onfocus={(e) => e.target.setSelectionRange(0, 0)} />
 							</div>
 						</div>
 
@@ -355,7 +365,7 @@
 							<p class="font-medium">Email Manager</p>
 							<div class="relative w-full items-center">
 								<img src="mail.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input bind:value={register.mgr_email} type="text" placeholder="Masukkan Email Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.mgr_email} type="text" placeholder="Masukkan Email Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} onfocus={(e) => e.target.setSelectionRange(0, 0)} />
 							</div>
 						</div>
 					</div>
@@ -363,7 +373,7 @@
 					<div class="flex w-full flex-col justify-center gap-1 text-left pt-4">
 						<p class="font-medium">Dengan ini, saya tidak akan:</p>
 						<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
-							<Checkbox id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-none" />
+							<Checkbox bind:checked={tos1} id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-none" />
 							<div class="grid gap-1.5 font-normal">
 								<p class="text-sm leading-none font-medium">Duplikasi Data</p>
 								<p class="text-secondary/75! text-sm">Saya tidak akan menduplikat/mencetak semua/sebagian data dan informasi yang ada di website/portal.</p>
@@ -371,7 +381,7 @@
 						</Label>
 
 						<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
-							<Checkbox id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-none" />
+							<Checkbox bind:checked={tos2} id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-none" />
 							<div class="grid gap-1.5 font-normal">
 								<p class="text-sm leading-none font-medium">Sharing Akun</p>
 								<p class="text-secondary/75! text-sm">Saya tidak akan memberikan kewenangan kepada orang lain.</p>
@@ -379,7 +389,7 @@
 						</Label>
 
 						<Label class="flex items-start gap-3 rounded-none border p-3 border-black/10 has-[[aria-checked=true]]:border-secondary has-[[aria-checked=true]]:bg-primary/50">
-							<Checkbox id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-none" />
+							<Checkbox bind:checked={tos3} id="toggle-2" class="data-[state=checked]:bg-secondary data-[state=checked]:text-white shadow-none! border-none! bg-black/10 rounded-none" />
 							<div class="grid gap-1.5 font-normal">
 								<p class="text-sm leading-none font-medium">Distribusi Data</p>
 								<p class="text-secondary/75! text-sm">Saya tidak mendistribusikan/membawa keluar area kerja/keluar kawasan perusahaan semua/sebagian data dan informasi yang ada di website/portal kepada pihak lain (pihak ketiga).</p>
