@@ -36,6 +36,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 			if (data.d) {
 				await db.delete(useraccounts).where(eq(useraccounts.username, data.e.username));
+				await db.delete(registers).where(eq(registers.nik, data.e.username));
 				return json({ success: true });
 			} else {
 				const updateData = data.e.password
