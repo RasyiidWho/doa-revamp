@@ -71,6 +71,45 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 			await schema.validate(data.r);
 
+			const existingUser = await db.query.useraccounts.findFirst({
+				where: eq(useraccounts.username, data.r.nik)
+			});
+
+			const existingRegister = await db.query.registers.findFirst({
+				where: eq(registers.nik, data.r.nik)
+			});
+
+			if (existingUser || existingRegister) {
+				return json(
+					{
+						success: false,
+						error: 'Akun atau data diri kamu sudah terdaftar, mohon hubungi admin.'
+					},
+					{ status: 400 }
+				);
+			}
+
+			await db.insert(useraccounts).values({
+				username: data.r.nik,
+				kuid: md5(data.r.nik),
+				password: md5(data.r.password),
+				userlevel: 0,
+				configPenghasil: data.r.nama,
+				activated: 'N',
+				provinsi: ''
+			});
+
+			await db.insert(registers).values({
+				email: data.r.email,
+				nama: data.r.nama,
+				nik: data.r.nik,
+				org: data.r.org,
+				orgLokasi: data.r.org_lokasi,
+				mgrEmail: data.r.mgr_email,
+				mgrNama: data.r.mgr_nama,
+				mgrNik: data.r.mgr_nik
+			});
+			
 			const content = fs.readFileSync('template.docx');
 			const zip = new PizZip(content);
 
@@ -124,10 +163,10 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			await transporter.sendMail({
 				from: 'jaminankelaikan@gmail.com',
 				to: [data.r.mgr_email, 'tiaraertina@indonesian-aerospace.com'],
-				subject: 'Surat Pernyataan ' + data.r.nama + ' (' + data.r.nik + ')',
+				subject: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik,
 				attachments: [
 					{
-						filename: 'Surat Pernyataan ' + data.r.nama + ' (' + data.r.nik + ')' + '.pdf',
+						filename: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik + '.pdf',
 						content: fs.createReadStream('pdf/' + data.r.nik + '.pdf')
 					}
 				]
@@ -136,7 +175,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			await transporter.sendMail({
 				from: 'jaminankelaikan@gmail.com',
 				to: [data.r.email],
-				subject: 'Surat Pernyataan ' + data.r.nama + ' (' + data.r.nik + ')',
+				subject: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik,
 				html: `
 					<p>Hai ${data.r.nama},</p>
 					<p>Terima kasih telah mendaftar di aplikasi PTDI Design Organization.</p>
@@ -150,50 +189,11 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				`,
 				attachments: [
 					{
-						filename: 'Surat Pernyataan ' + data.r.nama + ' (' + data.r.nik + ')' + '.pdf',
+						filename: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik + '.pdf',
 						content: fs.createReadStream('pdf/' + data.r.nik + '.pdf')
 					}
 				]
 			});
-
-			await db.insert(registers).values({
-				email: data.r.email,
-				nama: data.r.nama,
-				nik: data.r.nik,
-				org: data.r.org,
-				orgLokasi: data.r.org_lokasi,
-				mgrEmail: data.r.mgr_email,
-				mgrNama: data.r.mgr_nama,
-				mgrNik: data.r.mgr_nik
-			});
-			// .onDuplicateKeyUpdate({
-			// 	set: {
-			// 		email: data.r.email,
-			// 		nama: data.r.nama,
-			// 		org: data.r.org,
-			// 		orgLokasi: data.r.org_lokasi,
-			// 		mgrEmail: data.r.mgr_email,
-			// 		mgrNama: data.r.mgr_nama,
-			// 		mgrNik: data.r.mgr_nik
-			// 	}
-			// });
-
-			await db.insert(useraccounts).values({
-				username: data.r.nik,
-				kuid: md5(data.r.nik),
-				password: md5(data.r.password),
-				userlevel: 0,
-				configPenghasil: data.r.nama,
-				activated: 'N',
-				provinsi: ''
-			});
-			// .onDuplicateKeyUpdate({
-			// 	set: {
-			// 		kuid: md5(data.r.nik),
-			// 		password: md5(data.r.password),
-			// 		configPenghasil: data.r.nama
-			// 	}
-			// });
 
 			return json({ success: true });
 		}
