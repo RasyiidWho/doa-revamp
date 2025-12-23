@@ -616,8 +616,9 @@
 							search = '';
 							selectedDoaGroup = '';
 							selectedDoaIcon = 'search';
-							selectedDoaTitle = 'Hasil Pencarian: ' + searchDoa;
+							selectedDoaTitle = 'Pencarian: ' + searchDoa;
 							$mainTitle = 'Pencarian: ' + searchDoa;
+							mbukakSearch = false;
 							mbukakDoa = true;
 						}
 					}}
@@ -631,8 +632,9 @@
 						search = '';
 						selectedDoaGroup = '';
 						selectedDoaIcon = 'search';
-						selectedDoaTitle = 'Hasil Pencarian: ' + searchDoa;
+						selectedDoaTitle = 'Pencarian: ' + searchDoa;
 						$mainTitle = 'Pencarian: ' + searchDoa;
+						mbukakSearch = false;
 						mbukakDoa = true;
 					}}
 				/>
@@ -802,7 +804,7 @@
 							<div class="bg-secondary p-2 px-3">
 								<p class="text-white! min-w-6 min-h-7 flex items-center justify-center text-center">
 									{#if loadingDrawer}
-										<img src="spinner.svg?a" class="h-4! w-4!" alt="" />
+										<img src="spinner.svg?a" class="h-3.5! w-3.5!" alt="" />
 									{:else}
 										{filteredDoa.length}
 									{/if}
@@ -1174,7 +1176,7 @@
 								<div class="bg-secondary p-2 px-3">
 								<p class="text-white! min-w-6 min-h-7 flex items-center justify-center text-center">
 									{#if loadingDrawer}
-										<img src="spinner.svg?a" class="h-4! w-4!" alt="" />
+										<img src="spinner.svg?a" class="h-3.5! w-3.5!" alt="" />
 									{:else}
 										{filteredUsers.length}
 									{/if}
