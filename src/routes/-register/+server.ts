@@ -1,13 +1,10 @@
-import { lucia } from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import { registers } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
-import crypto from 'crypto';
 import fs from 'fs';
 import PizZip from 'pizzip';
-import Docxtemplater from 'docxtemplater';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import topdf from 'docx2pdf-converter';
 
 // export function docx() {
 // 	const content = fs.readFileSync('template.docx');
@@ -65,6 +62,8 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
 	const out = zip.generate({ type: 'nodebuffer' });
 	fs.writeFileSync('static/result.docx', out);
+	const inputPath = './static/result.docx';
+	topdf.convert(inputPath, 'static/result.pdf');
 
 	return await db
 		.insert(registers)

@@ -20,7 +20,8 @@
 	import { tos } from '$lib/utils';
 	import { mainTitle } from '$lib/store';
 
-	let disabled = $state(false);
+	let loadingLogin = $state(false);
+	let loadingRegister = $state(false);
 
 	// import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -99,11 +100,11 @@
 	let errorMessage = $state('');
 
 	let fRegister = async () => {
-		disabled = true;
+		loadingRegister = true;
 		errorMessage = '';
-		const response = await fetch('/-register', {
+		const response = await fetch('/-users/w', {
 			method: 'POST',
-			body: JSON.stringify({ register })
+			body: JSON.stringify({ r: register })
 		});
 
 		const res = await response.json();
@@ -111,15 +112,15 @@
 		if (response.ok) {
 			// mbukakTambahUser = false;
 		} else {
-			tos('beat.svg', 'Register Gagal', res.message || 'Register failed');
+			tos('beat.svg', 'Registrasi Gagal', res.message || 'Periksa kembali data yang kamu diisi.');
 			setTimeout(async () => {
-				disabled = false;
+				loadingRegister = false;
 			}, 500);
 		}
 	};
 
 	let fLogin = async () => {
-		disabled = true;
+		loadingLogin = true;
 		errorMessage = '';
 		const response = await fetch('/-login', {
 			method: 'POST',
@@ -143,7 +144,7 @@
 			// errorMessage = res.message || 'Login failed';
 			tos('beat.svg', 'Login Gagal', res.message || 'Login failed');
 			setTimeout(async () => {
-				disabled = false;
+				loadingLogin = false;
 			}, 500);
 		}
 	};
@@ -180,7 +181,7 @@
 							<p class="font-medium">NIK</p>
 							<div class="relative w-full items-center">
 								<img src="nik.svg" class=" h-5! w-5! absolute left-3 top-1/2 -translate-y-1/2" alt="" />
-								<Input type="text" bind:value={username} placeholder="Masukkan NIK" class="text-base! shadow-none! w-full rounded-none border-transparent! bg-primary/50 py-7! pl-11! placeholder:text-secondary/35 focus:!border-transparent focus:!ring-transparent focus:!ring-offset-0 {disabled ? 'pointer-events-none' : ''}" autofocus={false} />
+								<Input type="text" bind:value={username} placeholder="Masukkan NIK" class="text-base! shadow-none! w-full rounded-none border-transparent! bg-primary/50 py-7! pl-11! placeholder:text-secondary/35 focus:!border-transparent focus:!ring-transparent focus:!ring-offset-0 {loadingLogin ? 'pointer-events-none' : ''}" autofocus={false} />
 							</div>
 						</div>
 
@@ -188,7 +189,7 @@
 							<p class="font-medium">Password</p>
 							<div class="relative w-full items-center">
 								<img src="pass.svg" class=" h-5! w-5! absolute left-3 top-1/2 -translate-y-1/2" alt="" />
-								<Input type="password" bind:value={password} placeholder="Masukkan Password" class="text-base! shadow-none! w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! focus:!border-transparent focus:!ring-transparent focus:!ring-offset-0 {disabled ? 'pointer-events-none' : ''}" autofocus={false} onkeydown={(e) => e.key === 'Enter' && fLogin()} />
+								<Input type="password" bind:value={password} placeholder="Masukkan Password" class="text-base! shadow-none! w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! focus:!border-transparent focus:!ring-transparent focus:!ring-offset-0 {loadingLogin ? 'pointer-events-none' : ''}" autofocus={false} onkeydown={(e) => e.key === 'Enter' && fLogin()} />
 							</div>
 						</div>
 
@@ -202,8 +203,8 @@
 							>
 								<p class="font-medium">Daftar</p>
 							</div>
-							<div class="group flex w-2/3 items-center justify-center gap-2 bg-secondary p-2 px-3 py-4 text-center cursor-pointer {disabled ? 'pointer-events-none' : ''}" onclick={fLogin}>
-								{#if disabled}
+							<div class="group flex w-2/3 items-center justify-center gap-2 bg-secondary p-2 px-3 py-4 text-center cursor-pointer {loadingLogin ? 'pointer-events-none' : ''}" onclick={fLogin}>
+								{#if loadingLogin}
 									<img src="spinner.svg?a" class=" h-5! w-5!" alt="" />
 								{:else}
 									<p class="font-medium !text-white">Login</p>
@@ -309,7 +310,7 @@
 							<p class="font-medium">NIK</p>
 							<div class="relative w-full items-center">
 								<img src="nik.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input bind:value={register.nik} type="text" placeholder="Masukkan NIK" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.nik} type="text" placeholder="Masukkan NIK" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} oninput={(e) => (e.target.value = e.target.value.replace(/[^0-9]/g, ''))} />
 							</div>
 						</div>
 
@@ -317,7 +318,7 @@
 							<p class="font-medium">Kode Organisasi</p>
 							<div class="relative w-full items-center">
 								<img src="engineering standard.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input bind:value={register.org} type="text" placeholder="Masukkan Kode Organisasi" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.org} type="text" placeholder="Masukkan Kode Organisasi" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} oninput={(e) => (e.target.value = e.target.value.toUpperCase())} />
 							</div>
 						</div>
 
@@ -346,7 +347,7 @@
 							<p class="font-medium">NIK Manager</p>
 							<div class="relative w-full items-center">
 								<img src="nik.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-								<Input bind:value={register.mgr_nik} type="text" placeholder="Masukkan NIK Manager" class="w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
+								<Input bind:value={register.mgr_nik} type="text" placeholder="Masukkan NIK Manager" class="nik w-full rounded-none bg-primary/75 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} oninput={(e) => (e.target.value = e.target.value.replace(/[^0-9]/g, ''))} />
 							</div>
 						</div>
 
@@ -394,7 +395,11 @@
 			}}
 		>
 			<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
-				<p class="font-medium !text-white">Daftar</p>
+				{#if loadingRegister}
+					<img src="spinner.svg?a" class=" h-6! w-5!" alt="" />
+				{:else}
+					<p class="font-medium !text-white">Daftar</p>
+				{/if}
 			</div>
 		</div>
 	</Drawer.Content>

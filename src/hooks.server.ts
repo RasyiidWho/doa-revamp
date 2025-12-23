@@ -77,7 +77,7 @@ const luciaAuth: Handle = async ({ event, resolve }) => {
 };
 
 const authGuard: Handle = async ({ event, resolve }) => {
-	const protectedPaths = ['/dash', '/logout', '/-users', '/-doa', '/-logout'];
+	const protectedPaths = ['/dash', '/logout', '/-users/r', '/-doa', '/-logout'];
 	const isProtected = protectedPaths.some((p) => event.url.pathname.startsWith(p));
 	
 	if (!event.locals.session && isProtected) {
