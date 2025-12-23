@@ -11,7 +11,7 @@
 <Alert.Root class="hover-zoom relative right-0 m-0 rounded-none !border-1 border-secondary! bg-white !py-3 pr-3 !pl-5 !drop-shadow-[0px_0px_10px_rgba(0,0,0,0.1)] will-change-transform" onclick={onClick}>
 	<Alert.Description>
 		<div class="flex items-center gap-4">
-			<div class="absolute -left-2 -top-2 bg-white p-1 rounded-full !border-1 border-secondary!">
+			<div class="absolute -left-2 -top-2 bg-white p-0.5 rounded-none !border-1 border-secondary!">
 				<img src={icon} class="h-4 w-4" />
 			</div>
 			<div>

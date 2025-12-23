@@ -106,7 +106,7 @@
 		loadingRegister = true;
 		errorMessage = '';
 		if (!tos1 || !tos2 || !tos3) {
-			tos('beat.svg', 'Registrasi Gagal', 'Harap baca dan setujui persyaratan.');
+			tos('exclamation.svg', 'Registrasi Gagal', 'Harap baca dan setujui persyaratan.');
 			setTimeout(async () => {
 				loadingRegister = false;
 			}, 500);
@@ -120,13 +120,13 @@
 		const res = await response.json();
 
 		if (response.ok) {
-			tos('beat.svg', 'Registrasi Berhasil', 'Tunggu admin untuk mengaktifkan akunmu.');
+			tos('exclamation.svg', 'Registrasi Berhasil', 'Tunggu admin untuk mengaktifkan akunmu.');
 			mbukakTambahUser = false;
 			setTimeout(async () => {
 				loadingRegister = false;
 			}, 500);
 		} else {
-			tos('beat.svg', 'Registrasi Gagal', res.error || 'Periksa kembali data yang kamu diisi.');
+			tos('exclamation.svg', 'Registrasi Gagal', res.error || 'Periksa kembali data yang kamu diisi.');
 			setTimeout(async () => {
 				loadingRegister = false;
 			}, 500);
@@ -155,7 +155,7 @@
 				await goto('/dash', { replaceState: true, invalidateAll: true });
 			}, 500);
 		} else {
-			tos('beat.svg', 'Login Gagal', res.error || 'Periksa kembali data yang kamu masukkan.');
+			tos('exclamation.svg', 'Login Gagal', res.error || 'Periksa kembali data yang kamu masukkan.');
 			setTimeout(async () => {
 				loadingLogin = false;
 			}, 500);
@@ -186,7 +186,7 @@
 		<div class="bg-white/50 h-full w-auto mx-4 my-4 flex flex-row">
 			<div class="w-1/3 m-[3vw] flex items-center">
 				<div class="w-full pt-4 flex items-center flex-col gap-2 pb-4">
-					<div class="w-20 flex items-center justify-center aspect-square mb-6">
+					<div class="w-20 flex items-center justify-center aspect-square mb-6 pointer-events-none">
 						<img src="logo.png" class="" />
 					</div>
 					<div class="flex w-full flex-col gap-2">
@@ -240,12 +240,12 @@
 				<div class="cloud cloud-5 absolute pointer-events-none z-10 rounded-full blur-lg w-[140px] h-[70px]"></div>
 				<!-- Center cloud -->
 				<div class="cloud cloud-6 absolute pointer-events-none z-50 rounded-full blur-md w-[190px] h-[95px]"></div>
-				<div class="planex absolute inset-0 flex items-center justify-center z-40">
+				<div class="planex absolute inset-0 flex items-center justify-center z-40 pointer-events-none">
 					<div class="plane opacity-0">
 						<img src="plane.svg?v=2" class="plane-img w-60" alt="" />
 					</div>
 				</div>
-				<img src="bg.jpg" class="w-full" />
+				<img src="bg.jpg" class="w-full pointer-events-none" />
 			</div>
 		</div>
 	</div>

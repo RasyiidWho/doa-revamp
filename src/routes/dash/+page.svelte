@@ -357,7 +357,7 @@
 				fUsers();
 			} else {
 				loadingInput = false;
-				tos('beat.svg', 'Gagal', 'Periksa kembali data yang kamu masukkan.');
+				tos('exclamation.svg', 'Gagal', 'Periksa kembali data yang kamu masukkan.');
 			}
 		}, 1000);
 	};
