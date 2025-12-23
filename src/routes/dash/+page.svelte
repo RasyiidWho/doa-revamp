@@ -254,7 +254,7 @@
 		});
 
 		gsap.to('.heli-img', {
-			x: 3,
+			x: 4,
 			// y: 5,
 			duration: 1,
 			repeat: -1,
