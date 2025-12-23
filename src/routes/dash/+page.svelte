@@ -69,10 +69,10 @@
 		{ icon: 'helic.svg', value: 'non_aircraft', label: 'Non Aircraft' }
 	];
 
-	if(data.user.userlevel == -1){
+	if (data.user.userlevel == -1) {
 		roleEditDoa = true;
 		roleUser = true;
-	} else if(data.user.userlevel == 5){
+	} else if (data.user.userlevel == 5) {
 		roleEditDoa = true;
 		roleUser = false;
 	} else {
@@ -405,7 +405,7 @@
 						loadingDoa = false;
 						data = { ...data, doa: res };
 						value = res.def;
-						console.log(data)
+						console.log(data);
 					}
 				});
 			}
@@ -563,25 +563,25 @@
 		</Select.Content>
 	</Select.Root>
 	{#if roleEditDoa}
-	<div
-		class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group"
-		onclick={() => {
-			anyar = true;
-			selectedDoa = {
-				no: '',
-				type: '',
-				number: '',
-				revision: '',
-				date: '',
-				date2: '',
-				title: ''
-			};
-			mbukakTambahDoa = true;
-		}}
-	>
-		<img src="plus.svg" class="w-4 group-hover:rotate-[180deg] transition-all duration-1000" alt="" />
-		<p class="">Tambah</p>
-	</div>
+		<div
+			class="flex flex-row bg-[#fef8f0] p-2 px-3 gap-2 group"
+			onclick={() => {
+				anyar = true;
+				selectedDoa = {
+					no: '',
+					type: '',
+					number: '',
+					revision: '',
+					date: '',
+					date2: '',
+					title: ''
+				};
+				mbukakTambahDoa = true;
+			}}
+		>
+			<img src="plus.svg" class="w-4 group-hover:rotate-[180deg] transition-all duration-1000" alt="" />
+			<p class="">Tambah</p>
+		</div>
 	{/if}
 	{#if roleUser}
 		<div
@@ -599,7 +599,7 @@
 	<Popover.Root bind:open={mbukakSearch}>
 		<Popover.Trigger class="flex! flex-row! bg-[#fef8f0]! p-2! px-3! gap-2! group">
 			<img src="search.svg" class="w-4 group-hover:rotate-[90deg] transition-all duration-500" alt="" />
-			<p class="{roleUser || roleEditDoa ? 'hidden' : ''}">Pencarian</p>
+			<p class={roleUser || roleEditDoa ? 'hidden' : ''}>Pencarian</p>
 		</Popover.Trigger>
 		<Popover.Content preventScroll={true} class="mb-3! rounded-none! shadow-none! bg-[#fef8f0]! w-80!  border-1! border-[#e1d5c5]! p-2!">
 			<div class="relative w-full items-center group h-full">
@@ -743,7 +743,7 @@
 								class="nonsub flex justify-between w-full p-2 px-6 hover:underline cursor-pointer hover:scale-[100.5%] transition-all"
 								onclick={async () => {
 									await fDoas('', item.type);
-									search = '';	
+									search = '';
 									selectedDoaType = item.type;
 									selectedDoaGroup = value.toUpperCase().replace('_', ' ');
 									selectedDoaIcon = item.name.toLowerCase();
@@ -800,7 +800,13 @@
 					<div>
 						<div class="flex flex-row bg-[#F3EBE0] items-center group">
 							<div class="bg-secondary p-2 px-3">
-								<p class="text-white! min-w-5 text-center">{loadingDrawer ? '-' : filteredDoa.length}</p>
+								<p class="text-white! min-w-6 min-h-7 flex items-center justify-center text-center">
+									{#if loadingDrawer}
+										<img src="spinner.svg?a" class="h-4! w-4!" alt="" />
+									{:else}
+										{filteredDoa.length}
+									{/if}
+								</p>
 							</div>
 							<p class="font-medium px-3">Total Dokumen</p>
 						</div>
@@ -825,7 +831,8 @@
 							};
 							$mainTitle = 'Tambah DOA';
 							mbukakTambahDoa = true;
-						}} class="{roleEditDoa ? '' : 'hidden'}"
+						}}
+						class={roleEditDoa ? '' : 'hidden'}
 					>
 						<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
 							<img src="plus.svg" class="w-3 group-hover:rotate-[180deg] transition-all duration-1000" alt="" />
@@ -950,196 +957,196 @@
 </Drawer.Root>
 
 <!-- @b tambah doa -->
- {#if roleEditDoa}
-<Drawer.Root
-	bind:open={mbukakTambahDoa}
-	direction="right"
-	onClose={() => {
-		if (mbukakDoa) {
-			$mainTitle = selectedDoaTitle;
-		} else {
-			$mainTitle = group.find((t) => t.value === value)?.label || '';
-		}
-	}}
->
-	<Drawer.Content class="bg-[#FAF8F4]! min-h-0!">
-		<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll" data-vaul-no-drag>
-			<div class="w-full flex justify-between pt-4">
-				<div>
-					<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
-						<img src="plus.svg?f" class="w-4" alt="" />
-						<p class="font-medium">Tambah DOA</p>
-					</div>
-				</div>
-
-				<div
-					class="flex gap-2"
-					onclick={() => {
-						if (mbukakDoa) {
-							$mainTitle = selectedDoaTitle;
-						} else {
-							$mainTitle = group.find((t) => t.value === value)?.label || '';
-						}
-						mbukakTambahDoa = false;
-					}}
-				>
+{#if roleEditDoa}
+	<Drawer.Root
+		bind:open={mbukakTambahDoa}
+		direction="right"
+		onClose={() => {
+			if (mbukakDoa) {
+				$mainTitle = selectedDoaTitle;
+			} else {
+				$mainTitle = group.find((t) => t.value === value)?.label || '';
+			}
+		}}
+	>
+		<Drawer.Content class="bg-[#FAF8F4]! min-h-0!">
+			<ScrollArea scrollbarYClasses="hidden" class="el relative! flex! items-center! px-4! gap-2! h-full! min-h-0! flex-col!" orientation="vertical" type="scroll" data-vaul-no-drag>
+				<div class="w-full flex justify-between pt-4">
 					<div>
-						<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
-							<img src="minimize.svg?a" class="w-3 group-hover:rotate-[180deg] transition-all duration-500" alt="" />
+						<div class="flex flex-row bg-[#F3EBE0] p-2 px-3 gap-2 group">
+							<img src="plus.svg?f" class="w-4" alt="" />
+							<p class="font-medium">Tambah DOA</p>
+						</div>
+					</div>
+
+					<div
+						class="flex gap-2"
+						onclick={() => {
+							if (mbukakDoa) {
+								$mainTitle = selectedDoaTitle;
+							} else {
+								$mainTitle = group.find((t) => t.value === value)?.label || '';
+							}
+							mbukakTambahDoa = false;
+						}}
+					>
+						<div>
+							<div class="flex flex-row bg-[#F3EBE0] p-3.5 group">
+								<img src="minimize.svg?a" class="w-3 group-hover:rotate-[180deg] transition-all duration-500" alt="" />
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="w-full pt-4 flex flex-col gap-2 pb-4">
-				<div class="flex flex-col gap-1">
-					<p class="font-medium">Judul</p>
-					<div class="relative w-full items-center">
-						<img src="document.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-						<Input type="text" placeholder="Masukkan Judul" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedDoa.title} />
+				<div class="w-full pt-4 flex flex-col gap-2 pb-4">
+					<div class="flex flex-col gap-1">
+						<p class="font-medium">Judul</p>
+						<div class="relative w-full items-center">
+							<img src="document.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+							<Input type="text" placeholder="Masukkan Judul" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedDoa.title} />
+						</div>
 					</div>
-				</div>
 
-				<div class="flex flex-col gap-1">
-					<p class="font-medium">Nomor</p>
-					<div class="relative w-full items-center">
-						<img src="number.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-						<Input type="text" placeholder="Nomor" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedDoa.number} />
+					<div class="flex flex-col gap-1">
+						<p class="font-medium">Nomor</p>
+						<div class="relative w-full items-center">
+							<img src="number.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+							<Input type="text" placeholder="Nomor" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedDoa.number} />
+						</div>
 					</div>
-				</div>
 
-				<div class="flex flex-col gap-1">
-					<p class="font-medium">Revisi</p>
-					<div class="relative w-full items-center">
-						<img src="beat.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-						<Input type="text" placeholder="Revisi" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedDoa.revision} />
+					<div class="flex flex-col gap-1">
+						<p class="font-medium">Revisi</p>
+						<div class="relative w-full items-center">
+							<img src="beat.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+							<Input type="text" placeholder="Revisi" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} bind:value={selectedDoa.revision} />
+						</div>
 					</div>
-				</div>
 
-				<div class="flex flex-col gap-1">
-					<p class="font-medium">Dokumen</p>
-					<div class="relative w-full items-center w-full! rounded-none! bg-primary/50! flex! items-center! border-transparent! placeholder:text-secondary/35 py-2.5! pl-8! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0">
-						<img src="clip.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-						<Input type="file" placeholder="Upload Dokumen" class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent pt-2 focus:!ring-offset-0" autofocus={false} />
+					<div class="flex flex-col gap-1">
+						<p class="font-medium">Dokumen</p>
+						<div class="relative w-full items-center w-full! rounded-none! bg-primary/50! flex! items-center! border-transparent! placeholder:text-secondary/35 py-2.5! pl-8! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0">
+							<img src="clip.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+							<Input type="file" placeholder="Upload Dokumen" class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent pt-2 focus:!ring-offset-0" autofocus={false} />
+						</div>
 					</div>
-				</div>
 
-				<div class="flex flex-col gap-3">
-					<p class="font-medium">Tanggal</p>
-					<Popover.Root bind:open={openTanggal}>
-						<Popover.Trigger id="{id}-date" class="relative w-full items-center w-full! rounded-none! bg-primary/50! flex! items-center! border-transparent! placeholder:text-secondary/35 py-4! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0">
-							{#snippet child({ props })}
-								<div {...props}>
-									<img src="date.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-									<div class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0 {selectedDoa.date ? '' : 'text-secondary/25!'}">{selectedDoa.date ? selectedDoa.date.toString() : 'Pilih Tanggal'}</div>
-								</div>
-							{/snippet}
-						</Popover.Trigger>
-						<Popover.Content class="mb-3! rounded-none! shadow-none! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-2!">
-							<Calendar
-								type="single"
-								bind:value={selectedDoa.date}
-								captionLayout="dropdown"
-								locale="id"
-								onValueChange={() => {
-									openTanggal = false;
-								}}
-							/>
-						</Popover.Content>
-					</Popover.Root>
-				</div>
+					<div class="flex flex-col gap-3">
+						<p class="font-medium">Tanggal</p>
+						<Popover.Root bind:open={openTanggal}>
+							<Popover.Trigger id="{id}-date" class="relative w-full items-center w-full! rounded-none! bg-primary/50! flex! items-center! border-transparent! placeholder:text-secondary/35 py-4! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0">
+								{#snippet child({ props })}
+									<div {...props}>
+										<img src="date.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+										<div class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0 {selectedDoa.date ? '' : 'text-secondary/25!'}">{selectedDoa.date ? selectedDoa.date.toString() : 'Pilih Tanggal'}</div>
+									</div>
+								{/snippet}
+							</Popover.Trigger>
+							<Popover.Content class="mb-3! rounded-none! shadow-none! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-2!">
+								<Calendar
+									type="single"
+									bind:value={selectedDoa.date}
+									captionLayout="dropdown"
+									locale="id"
+									onValueChange={() => {
+										openTanggal = false;
+									}}
+								/>
+							</Popover.Content>
+						</Popover.Root>
+					</div>
 
-				<div class="flex flex-col gap-3">
-					<p class="font-medium">Valid</p>
-					<Popover.Root bind:open={openValid}>
-						<Popover.Trigger id="{id}-date" class="relative w-full items-center w-full! rounded-none! bg-primary/50! flex! items-center! border-transparent! placeholder:text-secondary/35 py-4! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0">
-							{#snippet child({ props })}
-								<div {...props}>
-									<img src="date valid.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
-									<div class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0 {selectedDoa.date2 ? '' : 'text-secondary/25!'}">{selectedDoa.date2 ? selectedDoa.date2.toString() : 'Pilih Tanggal'}</div>
-								</div>
-							{/snippet}
-						</Popover.Trigger>
-						<Popover.Content class="mb-3! rounded-none! shadow-none! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-2!">
-							<Calendar
-								type="single"
-								bind:value={selectedDoa.date2}
-								captionLayout="dropdown"
-								locale="id"
-								onValueChange={() => {
-									openValid = false;
-								}}
-							/>
-						</Popover.Content>
-					</Popover.Root>
-				</div>
+					<div class="flex flex-col gap-3">
+						<p class="font-medium">Valid</p>
+						<Popover.Root bind:open={openValid}>
+							<Popover.Trigger id="{id}-date" class="relative w-full items-center w-full! rounded-none! bg-primary/50! flex! items-center! border-transparent! placeholder:text-secondary/35 py-4! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0">
+								{#snippet child({ props })}
+									<div {...props}>
+										<img src="date valid.svg" class=" absolute top-1/2 left-3 h-5! w-5! -translate-y-1/2" alt="" />
+										<div class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0 {selectedDoa.date2 ? '' : 'text-secondary/25!'}">{selectedDoa.date2 ? selectedDoa.date2.toString() : 'Pilih Tanggal'}</div>
+									</div>
+								{/snippet}
+							</Popover.Trigger>
+							<Popover.Content class="mb-3! rounded-none! shadow-none! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-2!">
+								<Calendar
+									type="single"
+									bind:value={selectedDoa.date2}
+									captionLayout="dropdown"
+									locale="id"
+									onValueChange={() => {
+										openValid = false;
+									}}
+								/>
+							</Popover.Content>
+						</Popover.Root>
+					</div>
 
-				<div class="flex flex-col gap-1">
-					<p class="font-medium">Tipe</p>
-					<!-- <div class="relative w-full items-center">
+					<div class="flex flex-col gap-1">
+						<p class="font-medium">Tipe</p>
+						<!-- <div class="relative w-full items-center">
 						<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
 						<Input type="text" placeholder="Pilih Tipe" class="w-full rounded-none bg-primary/50 border-transparent! placeholder:text-secondary/35 py-7! pl-11! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0" autofocus={false} />
 					</div> -->
 
-					<Select.Root type="single" name="favoriteFruit" bind:value={selectedDoa.type}>
-						<Select.Trigger placeholder="Pilih Tipe" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none!">
-							<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-							<p title={subtypes.find((t) => t.value === selectedDoa.type)?.label || 'Pilih Tipe'} class="text-base max-w-[19dvw] truncate {selectedDoa.type === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{subtypes.find((t) => t.value === selectedDoa.type)?.label || 'Pilih Tipe'}</p>
-							<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
-						</Select.Trigger>
-						<Select.Content class="mb-2! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
-							<Select.Group>
-								<!-- <Select.Label>Fruits</Select.Label> -->
-								{#each subtypes as subtypes (subtypes.value)}
-									<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={subtypes.value} label={subtypes.label}>
-										<img src="type.svg" class="w-3 ml-2 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
-										<p class="text-base max-w-[19dvw] truncate" title={subtypes.label}>{subtypes.label}</p>
-									</Select.Item>
-								{/each}
-							</Select.Group>
-						</Select.Content>
-					</Select.Root>
-				</div>
+						<Select.Root type="single" name="favoriteFruit" bind:value={selectedDoa.type}>
+							<Select.Trigger placeholder="Pilih Tipe" class="flex! relative! pl-11! flex-row! bg-primary/50! py-7! px-3! w-full! gap-3! group shadow-none! overflow-hidden! border-0! rounded-none!">
+								<img src="type.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
+								<p title={subtypes.find((t) => t.value === selectedDoa.type)?.label || 'Pilih Tipe'} class="text-base max-w-[19dvw] truncate {selectedDoa.type === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{subtypes.find((t) => t.value === selectedDoa.type)?.label || 'Pilih Tipe'}</p>
+								<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
+							</Select.Trigger>
+							<Select.Content class="mb-2! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
+								<Select.Group>
+									<!-- <Select.Label>Fruits</Select.Label> -->
+									{#each subtypes as subtypes (subtypes.value)}
+										<Select.Item class="rounded-none shadow-none px-3 py-3 border-0 hover:bg-transparent! bg-transparent active:bg-transparent!" value={subtypes.value} label={subtypes.label}>
+											<img src="type.svg" class="w-3 ml-2 mr-2 group-hover:rotate-[-45deg] transition-all duration-500" alt="" />
+											<p class="text-base max-w-[19dvw] truncate" title={subtypes.label}>{subtypes.label}</p>
+										</Select.Item>
+									{/each}
+								</Select.Group>
+							</Select.Content>
+						</Select.Root>
+					</div>
 
-				<!-- <div class="flex w-full flex-col justify-center gap-1 text-left">
+					<!-- <div class="flex w-full flex-col justify-center gap-1 text-left">
 					<p class="font-medium">Remarks</p>
 					<div class="relative w-full items-center">
 						<img src="note.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
 						<Textarea placeholder="Tambahkan Remarks" class="resize-none! bg-primary/50 border-transparent! rounded-none placeholder:text-secondary/35 py-4! pr-4! pl-12! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0   xl:text-base" autofocus={false} />
 					</div>
 				</div> -->
-			</div>
-		</ScrollArea>
-		{#if anyar}
-			<div>
-				<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
-					{#if loadingInput}
-						<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
-					{:else}
-						<p class="font-medium !text-white">Tambah</p>
-					{/if}
 				</div>
-			</div>
-		{:else}
-			<div class="flex">
-				<div class="flex w-1/3 justify-center items-center py-4 text-center bg-red-900 p-2 px-3 gap-2 group" onclick={() => fDoa(true)}>
-					{#if loadingInput}
-						<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
-					{:else}
-						<p class="font-medium !text-white">Hapus</p>
-					{/if}
+			</ScrollArea>
+			{#if anyar}
+				<div>
+					<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
+						{#if loadingInput}
+							<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
+						{:else}
+							<p class="font-medium !text-white">Tambah</p>
+						{/if}
+					</div>
 				</div>
-				<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group" onclick={() => fDoa(false)}>
-					{#if loadingInput}
-						<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
-					{:else}
-						<p class="font-medium !text-white">Ubah</p>
-					{/if}
+			{:else}
+				<div class="flex">
+					<div class="flex w-1/3 justify-center items-center py-4 text-center bg-red-900 p-2 px-3 gap-2 group" onclick={() => fDoa(true)}>
+						{#if loadingInput}
+							<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
+						{:else}
+							<p class="font-medium !text-white">Hapus</p>
+						{/if}
+					</div>
+					<div class="flex w-2/3 justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group" onclick={() => fDoa(false)}>
+						{#if loadingInput}
+							<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
+						{:else}
+							<p class="font-medium !text-white">Ubah</p>
+						{/if}
+					</div>
 				</div>
-			</div>
-		{/if}
-	</Drawer.Content>
-</Drawer.Root>
+			{/if}
+		</Drawer.Content>
+	</Drawer.Root>
 {/if}
 <!-- @b users -->
 {#if roleUser}
@@ -1165,7 +1172,13 @@
 						<div>
 							<div class="flex flex-row bg-[#F3EBE0] items-center group">
 								<div class="bg-secondary p-2 px-3">
-									<p class="text-white! min-w-5 text-center">{loadingDrawer ? '-' : filteredUsers.length}</p>
+								<p class="text-white! min-w-6 min-h-7 flex items-center justify-center text-center">
+									{#if loadingDrawer}
+										<img src="spinner.svg?a" class="h-4! w-4!" alt="" />
+									{:else}
+										{filteredUsers.length}
+									{/if}
+								</p>
 								</div>
 								<p class="font-medium px-3">Total User</p>
 							</div>
