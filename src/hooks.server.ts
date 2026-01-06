@@ -93,5 +93,5 @@ const authGuard: Handle = async ({ event, resolve }) => {
 export const handle: Handle = sequence(
 	luciaAuth,
 	authGuard,
-	...(process.env.NODE_ENV === 'production' ? [minifyHtml] : [])
+	minifyHtml
 );
