@@ -212,7 +212,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			total: fmt(getCount('qp1') + getCount('QP1'))
 		},
 		{
-			name: 'LIBRARY',
+			name: 'SPECIFICATION',
 			type: 'lib',
 			total: fmt(getCount('lib'))
 		},
