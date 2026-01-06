@@ -59,6 +59,7 @@
 	let loadingDoa = $state(false);
 	let loadingDrawer = $state(false);
 	let loadingInput = $state(false);
+	let fileInputDoa = $state<FileList | null>(null);
 	let roleEditDoa = $state(false);
 	let roleUser = $state(false);
 	// let dateNow = $state();
@@ -282,6 +283,7 @@
 			tanggal = undefined;
 			valid = undefined;
 			selectedSubtype = '';
+			fileInputDoa = null;
 		} else if (selectedDoa && Object.keys(selectedDoa).length > 0) {
 			// judul = selectedDoa.title || '';
 			// nomor = selectedDoa.number || '';
@@ -363,25 +365,42 @@
 	const fDoa = async (d: boolean = false) => {
 		loadingInput = true;
 		setTimeout(async () => {
+			let body: any;
+			// let headers: any = {};
+
+			if (fileInputDoa && fileInputDoa.length > 0) {
+				const formData = new FormData();
+				formData.append('data', JSON.stringify({ e: selectedDoa, d }));
+				formData.append('file', fileInputDoa[0]);
+				body = formData;
+			} else {
+				body = JSON.stringify({ e: selectedDoa, d });
+				// headers['Content-Type'] = 'application/json';
+			}
+
 			const response = await fetch('/-doa/w', {
 				method: 'POST',
-				body: JSON.stringify({ e: selectedDoa, d })
+				// headers,
+				body: body
 			});
 
 			if (response.ok) {
 				loadingInput = false;
 				mbukakTambahDoa = false;
-				fDoas();
+				fDoas('', '');
 				if (mbukakDoa) {
 					fDoas('', selectedDoaType);
 				} else if (mbukakSearch) {
 					fDoas(searchDoa, '');
 				}
+			} else {
+				loadingInput = false;
+				tos('exclamation.svg', 'Gagal', 'Periksa kembali data yang kamu masukkan.');
 			}
 		}, 1000);
 	};
 
-	const fDoas = async (s: string, t: string) => {
+	const fDoas = async (s: string = '', t: string = '') => {
 		if (s || t) {
 			loadingDrawer = true;
 		} else {
@@ -1028,7 +1047,7 @@
 						<p class="font-medium">Dokumen</p>
 						<div class="relative w-full items-center w-full! rounded-none! bg-primary/50! flex! items-center! border-transparent! placeholder:text-secondary/35 py-2.5! pl-8! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0">
 							<img src="clip.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-							<Input type="file" placeholder="Upload Dokumen" class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent pt-2 focus:!ring-offset-0" autofocus={false} />
+							<Input type="file" placeholder="Upload Dokumen" class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent pt-2 focus:!ring-offset-0" autofocus={false} bind:files={fileInputDoa} />
 						</div>
 					</div>
 

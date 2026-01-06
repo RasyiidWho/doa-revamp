@@ -22,7 +22,7 @@ const config = {
 	},
 
 	vitePlugin: {
-		inspector: true
+		inspector: false
 	}
 };
 
