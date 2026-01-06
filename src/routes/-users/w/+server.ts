@@ -8,7 +8,7 @@ import md5 from 'blueimp-md5';
 import { registers } from '$lib/server/db/schema';
 import fs from 'fs';
 import PizZip from 'pizzip';
-import topdf from 'docx2pdf-converter';
+// import topdf from 'docx2pdf-converter';
 import nodemailer from 'nodemailer';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
@@ -148,9 +148,9 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			}
 
 			const out = zip.generate({ type: 'nodebuffer' });
-			fs.writeFileSync('pdf/' + data.r.nik + '.docx', out);
-			await topdf.convert('pdf/' + data.r.nik + '.docx', 'pdf/' + data.r.nik + '.pdf');
-			fs.unlinkSync('pdf/' + data.r.nik + '.docx');
+			fs.writeFileSync('docx/' + data.r.nik + '.docx', out);
+			// await topdf.convert('pdf/' + data.r.nik + '.docx', 'pdf/' + data.r.nik + '.pdf');
+			// fs.unlinkSync('pdf/' + data.r.nik + '.docx');
 
 			const transporter = nodemailer.createTransport({
 				service: 'gmail',
@@ -166,8 +166,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				subject: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik,
 				attachments: [
 					{
-						filename: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik + '.pdf',
-						content: fs.createReadStream('pdf/' + data.r.nik + '.pdf')
+						filename: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik + '.docx',
+						content: fs.createReadStream('docx/' + data.r.nik + '.docx')
 					}
 				]
 			});
@@ -189,8 +189,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				`,
 				attachments: [
 					{
-						filename: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik + '.pdf',
-						content: fs.createReadStream('pdf/' + data.r.nik + '.pdf')
+						filename: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik + '.docx',
+						content: fs.createReadStream('docx/' + data.r.nik + '.docx')
 					}
 				]
 			});
