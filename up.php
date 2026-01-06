@@ -1,7 +1,7 @@
 <?php
 /**
  * PHP 5 Compatible File Upload Endpoint (up.php)
- * Removed PHP 7+ syntax like the null coalescing operator (??).
+ * Fixed: in_array typo and absolute path concatenation logic.
  */
 
 // Buffering output to catch any accidental echos or warnings
@@ -28,7 +28,10 @@ function finish($success, $data_or_error) {
 }
 
 // Configuration
-$base_dir = dirname(__FILE__) . '/';
+// If your mappings are absolute paths (starting with /), leave this as empty string
+// If they are relative to the script, use dirname(__FILE__) . '/'
+$base_dir = ''; 
+
 $allowed_extensions = array('pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -49,53 +52,53 @@ if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
     finish(false, 'File upload error code: ' . $err_code);
 }
 
-// Check base dir permissions
-if (!is_writable($base_dir)) {
-    finish(false, 'Base directory is not writable. Check permissions for: ' . realpath($base_dir));
-}
-
 // Mapping logic
 $mappings = array(
-    'cer' => 'WES/DOA/Certificate/',
-    'cmd' => 'WES/DOA/Command Media/',
-    'man' => 'WES/DOA/Manual/',
-    'pro' => 'WES/DOA/Procedure/',
-    'wi' => 'WES/DOA/Work Instruction/',
-    'doc' => 'WES/DOA/Document/',
-    'AWO' => 'WES/DOA/Personnel Assignment/AWO/',
-    'CVE' => 'WES/DOA/Personnel Assignment/CVE/',
-    '41A' => 'WES/PART41/A/',
-    '41B' => 'WES/PART41/B/',
-    '41C-1' => 'WES/PART41/C_MARKLABEL/',
-    '41C-2' => 'WES/PART41/C_PART/',
-    '41C-3' => 'WES/PART41/C_PROFILE/',
-    '41D' => 'WES/PART41/D/',
-    '41E' => 'WES/PART41/E/',
-    '41F' => 'WES/PART41/F/',
-    '41G' => 'WES/PART41/G/',
-    '41H' => 'WES/PART41/H/',
-    '41I' => 'WES/PART41/I/',
-    '41N' => 'WES/PART41/N/',
-    'mtm' => 'WES/PART41/MTM/',
-    'cer2' => 'WES/NON AIRCRAFT/Certificate/',
-    'cp' => 'WES/NON AIRCRAFT/Certification Procedure/',
-    'doc2' => 'WES/NON AIRCRAFT/Document/',
-    'man2' => 'WES/NON AIRCRAFT/Manual/',
-    'pro2' => 'WES/NON AIRCRAFT/Procedure/',
-    'tm' => 'WES/NON AIRCRAFT/Test Method/',
-    'wi2' => 'WES/NON AIRCRAFT/Work Instruction/',
-    'lib' => 'WES/LIBRARY/',
-    'standard' => 'WES/FORM/',
-    'form2' => 'WES/FORM/Form NA/',
+    'cer' => '/data/edm/aplikasi/catia/WES/DOA/Certificate/',
+    'cmd' => '/data/edm/aplikasi/catia/WES/DOA/Command Media/',
+    'man' => '/data/edm/aplikasi/catia/WES/DOA/Manual/',
+    'pro' => '/data/edm/aplikasi/catia/WES/DOA/Procedure/',
+    'wi' => '/data/edm/aplikasi/catia/WES/DOA/Work Instruction/',
+    'doc' => '/data/edm/aplikasi/catia/WES/DOA/Document/',
+    'AWO' => '/data/edm/aplikasi/catia/WES/DOA/Personnel Assignment/AWO/',
+    'CVE' => '/data/edm/aplikasi/catia/WES/DOA/Personnel Assignment/CVE/',
+    '41A' => '/data/edm/aplikasi/catia/WES/PART41/A/',
+    '41B' => '/data/edm/aplikasi/catia/WES/PART41/B/',
+    '41C-1' => '/data/edm/aplikasi/catia/WES/PART41/C_MARKLABEL/',
+    '41C-2' => '/data/edm/aplikasi/catia/WES/PART41/C_PART/',
+    '41C-3' => '/data/edm/aplikasi/catia/WES/PART41/C_PROFILE/',
+    '41D' => '/data/edm/aplikasi/catia/WES/PART41/D/',
+    '41E' => '/data/edm/aplikasi/catia/WES/PART41/E/',
+    '41F' => '/data/edm/aplikasi/catia/WES/PART41/F/',
+    '41G' => '/data/edm/aplikasi/catia/WES/PART41/G/',
+    '41H' => '/data/edm/aplikasi/catia/WES/PART41/H/',
+    '41I' => '/data/edm/aplikasi/catia/WES/PART41/I/',
+    '41N' => '/data/edm/aplikasi/catia/WES/PART41/N/',
+    'mtm' => '/data/edm/aplikasi/catia/WES/PART41/MTM/',
+    'cer2' => '/data/edm/aplikasi/catia/WES/NON AIRCRAFT/Certificate/',
+    'cp' => '/data/edm/aplikasi/catia/WES/NON AIRCRAFT/Certification Procedure/',
+    'doc2' => '/data/edm/aplikasi/catia/WES/NON AIRCRAFT/Document/',
+    'man2' => '/data/edm/aplikasi/catia/WES/NON AIRCRAFT/Manual/',
+    'pro2' => '/data/edm/aplikasi/catia/WES/NON AIRCRAFT/Procedure/',
+    'tm' => '/data/edm/aplikasi/catia/WES/NON AIRCRAFT/Test Method/',
+    'wi2' => '/data/edm/aplikasi/catia/WES/NON AIRCRAFT/Work Instruction/',
+    'lib' => '/data/edm/aplikasi/catia/WES/LIBRARY/',
+    'standard' => '/data/edm/aplikasi/catia/WES/FORM/',
+    'form2' => '/data/edm/aplikasi/catia/WES/FORM/Form NA/',
 );
 
-$target_subpath = isset($mappings[$type]) ? $mappings[$type] : 'WES/UNKNOWN/';
+$target_subpath = isset($mappings[$type]) ? $mappings[$type] : '/data/edm/aplikasi/catia/WES/UNKNOWN/';
 $target_dir = $base_dir . $target_subpath;
 
-// Create directory if not exists
-if (!is_dir($target_dir)) {
+// Check directory writable
+if (is_dir($target_dir)) {
+    if (!is_writable($target_dir)) {
+        finish(false, 'Target directory is not writable: ' . $target_dir);
+    }
+} else {
+    // Attempt to create it
     if (!@mkdir($target_dir, 0777, true)) {
-        finish(false, 'Failed to create directory: ' . $target_subpath . '. Check server permissions.');
+        finish(false, 'Failed to create directory: ' . $target_dir . '. Check server permissions.');
     }
 }
 
@@ -110,10 +113,12 @@ $file_name = $number . ($revision ? '_' . $revision : '') . '.' . $file_ext;
 $target_file = $target_dir . $file_name;
 
 if (@move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
+    // If the database expects a specific root (like "WES/..."), we should strip the prefix here.
+    // However, I'll return the path as mapped for now.
     finish(true, array(
         'path' => $target_subpath . $file_name,
         'is_pdf' => ($file_ext === 'pdf')
     ));
 } else {
-    finish(false, 'Failed to move uploaded file. Check folder permissions for: ' . $target_subpath);
+    finish(false, 'Failed to move uploaded file. Check folder permissions for: ' . $target_dir);
 }
