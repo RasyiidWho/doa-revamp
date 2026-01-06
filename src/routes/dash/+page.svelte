@@ -11,7 +11,6 @@
 	import * as ToggleGroup from '$lib/components/ui/toggle-group/index.js';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
-	import Headroom from 'headroom.js';
 	import { gsap } from 'gsap';
 	import { onMount, tick } from 'svelte';
 	import { goto } from '$app/navigation';
@@ -203,7 +202,15 @@
 		}
 	});
 
-	onMount(() => {
+	onMount(async () => {
+		const Headroom = (await import('headroom.js')).default;
+		new Headroom(navbar, {
+			tolerance: {
+				up: 0,
+				down: 0
+			}
+			// scroller: scroller
+		}).init();
 		document.addEventListener('keydown', async (e) => {
 			if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
 				searchRef?.focus();
@@ -266,15 +273,6 @@
 		fDoas();
 	});
 
-	$effect(() => {
-		const headroom = new Headroom(navbar, {
-			tolerance: {
-				up: 0,
-				down: 0
-			}
-			// scroller: scroller
-		}).init();
-	});
 
 	$effect(() => {
 		if (anyar) {
