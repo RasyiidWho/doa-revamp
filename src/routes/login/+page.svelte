@@ -186,9 +186,10 @@
 		<div class="bg-white/50 h-full w-auto mx-4 my-4 flex flex-row">
 			<div class="w-1/3 m-[3vw] flex items-center">
 				<div class="w-full pt-4 flex items-center flex-col gap-2 pb-4">
-					<div class="w-20 flex items-center justify-center aspect-square mb-6 pointer-events-none">
+					<div class="w-20 flex flex-col gap-2 items-center justify-center aspect-square mb-6 pointer-events-none">
 						<img src="logo.png" class="" />
 					</div>
+					<p class="text-center font-medium">Gunakan identitas dari akun WEB DOA lama untuk login.</p>
 					<div class="flex w-full flex-col gap-2">
 						<div class="flex w-full flex-col gap-1">
 							<p class="font-medium">NIK</p>
