@@ -162,7 +162,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 			await transporter.sendMail({
 				from: 'jaminankelaikan@gmail.com',
-				to: [data.r.mgr_email, 'tiaraertina@indonesian-aerospace.com'],
+				to: [data.r.mgr_email, 'das@indonesian-aerospace.com'],
 				subject: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik,
 				attachments: [
 					{
