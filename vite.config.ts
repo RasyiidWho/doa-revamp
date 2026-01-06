@@ -7,6 +7,7 @@ import removeConsole from 'vite-plugin-svelte-console-remover';
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit(), utwm(), removeConsole()],
 	ssr: {
-		noExternal: true
+		noExternal: true,
+		external: ['mysql2', 'html-minifier']
 	}
 });
