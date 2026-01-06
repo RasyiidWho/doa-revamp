@@ -47,25 +47,35 @@ export const POST: RequestHandler = async ({ request }) => {
 				uploadFormData.append('number', data.e.number);
 				uploadFormData.append('revision', data.e.revision);
 
-				const uploadRes = await fetch('http://localhost:8000', {
-
+				const uploadRes = await fetch('http://10.1.95.76/webdoa/up.php', {
 					method: 'POST',
 					body: uploadFormData
 				});
 
-				const uploadResult = await uploadRes.json();
+				const rawResponse = await uploadRes.clone().text();
+				let uploadResult: any;
+				try {
+					uploadResult = await uploadRes.json();
+				} catch (e) {
+					return json({ 
+						success: false, 
+						error: 'Upload server returned invalid JSON. Raw response: ' + rawResponse 
+					}, { status: 500 });
+				}
+
 				if (uploadResult.success) {
 					nmpath = uploadResult.path;
 					if (uploadResult.is_pdf) {
-						pdf = nmpath; // or just the filename as per existing logic? User says "pdf (if its pdf)"
+						pdf = nmpath;
 					}
 				} else {
 					return json({ success: false, error: 'File upload failed: ' + uploadResult.error }, { status: 500 });
 				}
 			} catch (error: any) {
-				return json({ success: false, error: 'Upload server error: ' + error.message }, { status: 500 });
+				return json({ success: false, error: 'Upload server connection error: ' + error.message }, { status: 500 });
 			}
 		}
+
 
 		if (data.d) {
 			const updateData = {
