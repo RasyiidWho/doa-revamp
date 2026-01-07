@@ -1,14 +1,14 @@
 <?php
 /**
  * PHP 5 Compatible File Upload Endpoint (up.php)
- * Fixed: in_array typo and absolute path concatenation logic.
+ * Enhanced with overwrite handling and detailed error reporting.
  */
 
 // Buffering output to catch any accidental echos or warnings
 ob_start();
 
-error_reporting(0);
-ini_set('display_errors', 0);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 header('Content-Type: application/json');
 
 function finish($success, $data_or_error) {
@@ -28,10 +28,7 @@ function finish($success, $data_or_error) {
 }
 
 // Configuration
-// If your mappings are absolute paths (starting with /), leave this as empty string
-// If they are relative to the script, use dirname(__FILE__) . '/'
 $base_dir = ''; 
-
 $allowed_extensions = array('pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -41,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $type = isset($_POST['type']) ? $_POST['type'] : '';
 $raw_number = isset($_POST['number']) ? $_POST['number'] : '';
 $number = str_replace(array('/', '\\'), '-', strtoupper($raw_number));
-$revision = isset($_POST['revision']) ? $_POST['revision'] : '';
+$raw_revision = isset($_POST['revision']) ? $_POST['revision'] : '';
+$revision = str_replace(array('/', '\\'), '_', $raw_revision);
 
 if (!$type || !$number) {
     finish(false, 'Missing type or number');
@@ -83,8 +81,8 @@ $mappings = array(
     'tm' => '/data/edm/aplikasi/catia/WES/NON AIRCRAFT/Test Method/',
     'wi2' => '/data/edm/aplikasi/catia/WES/NON AIRCRAFT/Work Instruction/',
     'lib' => '/data/edm/aplikasi/catia/WES/LIBRARY/',
-    'standard' => '/data/aplikasi/webdoa/WES/FORM/Office/',
-    'form2' => '/data/aplikasi/webdoa/WES/FORM/Form NA/',
+    'standard' => '/data/aplikasi/webdoa/WES/FORM/Form NA/',
+    'form2' => '/data/aplikasi/webdoa/WES/FORM/Office/',
 );
 
 $target_subpath = isset($mappings[$type]) ? $mappings[$type] : '/data/edm/aplikasi/catia/WES/UNKNOWN/';
@@ -112,13 +110,26 @@ if (!in_array($file_ext, $allowed_extensions)) {
 $file_name = $number . ($revision ? '_' . $revision : '') . '.' . $file_ext;
 $target_file = $target_dir . $file_name;
 
+// Handle overwrite
+if (file_exists($target_file)) {
+    if (!@unlink($target_file)) {
+        finish(false, 'Cannot overwrite existing file (owned by another user?): ' . $file_name);
+    }
+}
+
 if (@move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
-    // If the database expects a specific root (like "WES/..."), we should strip the prefix here.
-    // However, I'll return the path as mapped for now.
+    @chmod($target_file, 0666);
     finish(true, array(
         'path' => $target_subpath . $file_name,
         'is_pdf' => ($file_ext === 'pdf')
     ));
 } else {
-    finish(false, 'Failed to move uploaded file. Check folder permissions for: ' . $target_dir);
+    $last_err = error_get_last();
+    $msg = 'Failed to move uploaded file. ';
+    if ($last_err) {
+        $msg .= 'System says: ' . $last_err['message'];
+    } else {
+        $msg .= 'Check folder permissions for: ' . $target_dir;
+    }
+    finish(false, $msg);
 }

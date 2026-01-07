@@ -1141,7 +1141,7 @@
 			</ScrollArea>
 			{#if anyar}
 				<div>
-					<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group">
+					<div class="flex w-full justify-center items-center py-4 text-center bg-secondary p-2 px-3 gap-2 group" onclick={() => fDoa(false)}>
 						{#if loadingInput}
 							<img src="spinner.svg?a" class="h-5! w-5! mt-1" alt="" />
 						{:else}

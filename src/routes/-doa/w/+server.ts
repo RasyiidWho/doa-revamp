@@ -23,7 +23,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	if (data.e) {
 		const schema = yup.object({
-			no: yup.number().required(),
+			// no: yup.string().required(),
 			type: yup.string().required(),
 			number: yup.string().required(),
 			revision: yup.string().required(),
@@ -45,7 +45,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				uploadFormData.append('file', file);
 				uploadFormData.append('type', data.e.type);
 				uploadFormData.append('number', data.e.number);
-				uploadFormData.append('revision', data.e.revision);
+				uploadFormData.append('revision', data.e.revision.replace('/', '_'));
 
 				const uploadRes = await fetch('http://10.1.95.76/webdoa/up.php', {
 					method: 'POST',
