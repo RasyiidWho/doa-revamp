@@ -2,11 +2,10 @@ import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { standard } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import * as yup from 'yup';
-import md5 from 'blueimp-md5';
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, locals }) => {
 	let data: any;
 	let file: File | null = null;
 
@@ -21,9 +20,10 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	console.log(data);
 
-	if (data.e) {
+	const entry = data.e || data.i;
+
+	if (entry) {
 		const schema = yup.object({
-			// no: yup.string().required(),
 			type: yup.string().required(),
 			number: yup.string().required(),
 			revision: yup.string().required(),
@@ -31,21 +31,30 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 
 		try {
-			await schema.validate(data.e);
+			await schema.validate(entry);
 		} catch (error: any) {
 			return json({ success: false, error: error.message }, { status: 400 });
 		}
 
-		let nmpath = data.e.nmpath;
-		let pdf = data.e.pdf;
+		if (data.i) {
+			const existing = await db.query.standard.findFirst({
+				where: and(eq(standard.type, entry.type), eq(standard.number, entry.number))
+			});
+			if (existing) {
+				return json({ success: false, error: 'Data yang kamu masukkan sudah ada!' }, { status: 400 });
+			}
+		}
+
+		let nmpath = entry.nmpath;
+		let pdf = entry.pdf;
 
 		if (file) {
 			try {
 				const uploadFormData = new FormData();
 				uploadFormData.append('file', file);
-				uploadFormData.append('type', data.e.type);
-				uploadFormData.append('number', data.e.number);
-				uploadFormData.append('revision', data.e.revision.replace('/', '_'));
+				uploadFormData.append('type', entry.type);
+				uploadFormData.append('number', entry.number);
+				uploadFormData.append('revision', entry.revision.replace(/\//g, '_'));
 
 				const uploadRes = await fetch('http://10.1.95.76/webdoa/up.php', {
 					method: 'POST',
@@ -57,14 +66,17 @@ export const POST: RequestHandler = async ({ request }) => {
 				try {
 					uploadResult = await uploadRes.json();
 				} catch (e) {
-					return json({ 
-						success: false, 
-						error: 'Upload server returned invalid JSON. Raw response: ' + rawResponse 
-					}, { status: 500 });
+					return json(
+						{
+							success: false,
+							error: 'Upload server returned invalid JSON. Raw response: ' + rawResponse
+						},
+						{ status: 500 }
+					);
 				}
 
 				if (uploadResult.success) {
-					nmpath = uploadResult.path;
+					nmpath = uploadResult.path.replace('/data/edm/aplikasi/catia/', '');
 					if (uploadResult.is_pdf) {
 						pdf = nmpath;
 					}
@@ -76,47 +88,43 @@ export const POST: RequestHandler = async ({ request }) => {
 			}
 		}
 
+		const standardData: any = {
+			type: entry.type,
+			number: entry.number,
+			revision: entry.revision,
+			title: entry.title,
+			nmpath: nmpath,
+			pdf: pdf
+		};
 
-		if (data.d) {
-			const updateData = {
-				remark: 'D',
-			};
+		if (entry.date) {
+			standardData.date = `${entry.date.year}-${String(entry.date.month).padStart(2, '0')}-${String(entry.date.day).padStart(2, '0')}`;
+		} else {
+			standardData.date = null;
+		}
+
+		if (entry.date2) {
+			standardData.date2 = `${entry.date2.year}-${String(entry.date2.month).padStart(2, '0')}-${String(entry.date2.day).padStart(2, '0')}`;
+		}
+
+		if (data.i) {
+			standardData.panel = '';
+			standardData.nik = locals.user?.id || '';
+			standardData.nama = locals.user?.configPenghasil || '';
 
 			return await db
-				.update(standard)
-				.set(updateData)
-				.where(eq(standard.no, data.e.no))
+				.insert(standard)
+				.values(standardData)
 				.then(() => json({ success: true }))
 				.catch((error) => {
 					console.error(error);
 					return json({ success: false, error: error.message }, { status: 400 });
 				});
-		} else {
-			const updateData: any = {
-				no: data.e.no,
-				type: data.e.type,
-				number: data.e.number,
-				revision: data.e.revision,
-				title: data.e.title,
-				nmpath: nmpath,
-				pdf: pdf
-			};
-
-			if (data.e.date) {
-				updateData.date = `${data.e.date.year}-${String(data.e.date.month).padStart(2, '0')}-${String(data.e.date.day).padStart(2, '0')}`;
-			} else {
-				updateData.date = null;
-			}
-
-			if (data.e.date2) {
-				updateData.date2 = `${data.e.date2.year}-${String(data.e.date2.month).padStart(2, '0')}-${String(data.e.date2.day).padStart(2, '0')}`;
-			}
-
-
+		} else if (data.e) {
 			return await db
 				.update(standard)
-				.set(updateData)
-				.where(eq(standard.no, data.e.no))
+				.set(standardData)
+				.where(eq(standard.no, entry.no))
 				.then(() => json({ success: true }))
 				.catch((error) => {
 					console.error(error);
@@ -125,6 +133,21 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 	}
 
+	if (data.d) {
+		const updateData = {
+			remark: 'D'
+		};
+
+		return await db
+			.update(standard)
+			.set(updateData)
+			.where(eq(standard.no, data.e.no))
+			.then(() => json({ success: true }))
+			.catch((error) => {
+				console.error(error);
+				return json({ success: false, error: error.message }, { status: 400 });
+			});
+	}
+
 	return json({ success: true });
 };
-

@@ -370,11 +370,11 @@
 
 			if (fileInputDoa && fileInputDoa.length > 0) {
 				const formData = new FormData();
-				formData.append('data', JSON.stringify({ e: selectedDoa, d }));
+				formData.append('data', JSON.stringify({ [anyar ? 'i' : 'e']: selectedDoa, d }));
 				formData.append('file', fileInputDoa[0]);
 				body = formData;
 			} else {
-				body = JSON.stringify({ e: selectedDoa, d });
+				body = JSON.stringify({ [anyar ? 'i' : 'e']: selectedDoa, d });
 				// headers['Content-Type'] = 'application/json';
 			}
 
@@ -395,7 +395,8 @@
 				}
 			} else {
 				loadingInput = false;
-				tos('exclamation.svg', 'Gagal', 'Periksa kembali data yang kamu masukkan.');
+				const res = await response.json();
+				tos('exclamation.svg', 'Gagal', res.error || 'Periksa kembali data yang kamu masukkan.');
 			}
 			fileInputDoa = null;
 		}, 200);
