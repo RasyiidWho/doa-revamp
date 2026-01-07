@@ -83,8 +83,8 @@ $mappings = array(
     'tm' => '/data/edm/aplikasi/catia/WES/NON AIRCRAFT/Test Method/',
     'wi2' => '/data/edm/aplikasi/catia/WES/NON AIRCRAFT/Work Instruction/',
     'lib' => '/data/edm/aplikasi/catia/WES/LIBRARY/',
-    'standard' => '/data/edm/aplikasi/catia/WES/FORM/',
-    'form2' => '/data/edm/aplikasi/catia/WES/FORM/Form NA/',
+    'standard' => '/data/aplikasi/webdoa/WES/FORM/Office/',
+    'form2' => '/data/aplikasi/webdoa/WES/FORM/Form NA/',
 );
 
 $target_subpath = isset($mappings[$type]) ? $mappings[$type] : '/data/edm/aplikasi/catia/WES/UNKNOWN/';
