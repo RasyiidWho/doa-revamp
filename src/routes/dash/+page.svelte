@@ -397,7 +397,8 @@
 				loadingInput = false;
 				tos('exclamation.svg', 'Gagal', 'Periksa kembali data yang kamu masukkan.');
 			}
-		}, 1000);
+			fileInputDoa = null;
+		}, 200);
 	};
 
 	const fDoas = async (s: string = '', t: string = '') => {
@@ -987,6 +988,7 @@
 			} else {
 				$mainTitle = group.find((t) => t.value === value)?.label || '';
 			}
+			fileInputDoa = null;
 		}}
 	>
 		<Drawer.Content class="bg-[#FAF8F4]! min-h-0!">
@@ -1047,7 +1049,7 @@
 						<p class="font-medium">Dokumen</p>
 						<div class="relative w-full items-center w-full! rounded-none! bg-primary/50! flex! items-center! border-transparent! placeholder:text-secondary/35 py-2.5! pl-8! text-base! focus:!border-transparent shadow-none! focus:!ring-transparent focus:!ring-offset-0">
 							<img src="clip.svg" class=" absolute top-1/2 left-3 h-4! w-4! -translate-y-1/2" alt="" />
-							<Input type="file" placeholder="Upload Dokumen" class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent pt-2 focus:!ring-offset-0" autofocus={false} bind:files={fileInputDoa} />
+							<Input accept=".doc,.docx,.pdf" type="file" placeholder="Upload Dokumen" class="border-0! rounded-0! focus:!border-transparent shadow-none! focus:!ring-transparent pt-2 focus:!ring-offset-0" autofocus={false} bind:files={fileInputDoa} />
 						</div>
 					</div>
 
