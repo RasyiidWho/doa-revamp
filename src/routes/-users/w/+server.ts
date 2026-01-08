@@ -32,14 +32,18 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				return json({ success: false, error: error.message }, { status: 400 });
 			}
 
-			console.log('data validated.');
-			console.log(data.e);
 
 			if (data.d) {
 				await db.delete(useraccounts).where(eq(useraccounts.username, data.e.username));
 				await db.delete(registers).where(eq(registers.nik, data.e.username));
 				return json({ success: true });
 			} else {
+				const previousUser = await db.query.useraccounts.findFirst({
+					where: eq(useraccounts.username, data.e.username)
+				});
+
+				const previousUserLevel = previousUser?.userlevel;
+
 				const updateData = data.e.password
 					? {
 							userlevel: data.e.userlevel,
@@ -52,6 +56,37 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 						};
 
 				await db.update(useraccounts).set(updateData).where(eq(useraccounts.username, data.e.username));
+
+				if (previousUserLevel === 0 && data.e.userlevel !== 0) {
+					const registerInfo = await db.query.registers.findFirst({
+						where: eq(registers.nik, data.e.username)
+					});
+
+					if (registerInfo) {
+						const transporter = nodemailer.createTransport({
+							service: 'gmail',
+							auth: {
+								user: 'jaminankelaikan@gmail.com',
+								pass: 'ejgz qqhd bhhc ouum'
+							}
+						});
+
+						await transporter.sendMail({
+							from: 'jaminankelaikan@gmail.com',
+							to: [registerInfo.email],
+							subject: 'Akun Teraktivasi - PTDI Design Organization',
+							html: `
+								<p>Hai ${registerInfo.nama},</p>
+								<p>Selamat! Akun kamu di aplikasi PTDI Design Organization telah diaktivasi.</p>
+								<p>Sekarang kamu sudah bisa login menggunakan NIK dan password yang telah didaftarkan.</p>
+								</br>
+								<p>Terima kasih,</p>
+								<p>PTDI Design Organization</p>
+							`
+						});
+					}
+				}
+
 				return json({ success: true });
 			}
 		}
@@ -175,7 +210,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			await transporter.sendMail({
 				from: 'jaminankelaikan@gmail.com',
 				to: [data.r.email],
-				subject: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik,
+				subject: 'Surat Pernyataan ' + data.r.nama + ' - ' + data.r.nik + ' - PTDI Design Organization',
 				html: `
 					<p>Hai ${data.r.nama},</p>
 					<p>Terimakasih telah mendaftar di aplikasi PTDI Design Organization.</p>
