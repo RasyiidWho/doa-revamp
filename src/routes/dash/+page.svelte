@@ -1117,7 +1117,7 @@
 								<p title={subtypes.find((t) => t.value === selectedDoa.type)?.label || 'Pilih Tipe'} class="text-base max-w-[19dvw] truncate {selectedDoa.type === '0' ? 'text-secondary/35!' : 'text-secondary!'}">{subtypes.find((t) => t.value === selectedDoa.type)?.label || 'Pilih Tipe'}</p>
 								<!-- <img src="down.svg" class="w-2 pt-1" alt="" /> -->
 							</Select.Trigger>
-							<Select.Content class="mb-2! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
+							<Select.Content class="mb-2! h-[50dvh]! rounded-none! shadow-none! border-0! bg-[#f4efe7]! border-1! border-[#e1d5c5]! p-0! z-[100]!">
 								<Select.Group>
 									<!-- <Select.Label>Fruits</Select.Label> -->
 									{#each subtypes as subtypes (subtypes.value)}
