@@ -48,3 +48,11 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
 	return json({ success: true });
 };
+
+
+export const GET: RequestHandler = async ({ locals }) => {
+	if (!locals.session) {
+		return json({ authenticated: false }, { status: 401 });
+	}
+	return json({ authenticated: true });
+};

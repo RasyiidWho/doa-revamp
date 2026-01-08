@@ -81,6 +81,16 @@ const authGuard: Handle = async ({ event, resolve }) => {
 	const isProtected = protectedPaths.some((p) => event.url.pathname.startsWith(p));
 	
 	if (!event.locals.session && isProtected) {
+		const isFetch = event.request.headers.get('accept')?.includes('application/json') || 
+		                event.request.headers.get('x-sveltekit-action') === 'true';
+
+		if (isFetch) {
+			return new Response(JSON.stringify({ success: false, error: 'Session expired' }), {
+				status: 401,
+				headers: { 'content-type': 'application/json' }
+			});
+		}
+
 		return new Response(null, {
             status: 303,
             headers: { location: "/login" }
